@@ -1,0 +1,2731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#080c14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>FinTwin — AI Financial Digital Twin</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080c14;--bg2:rgba(255,255,255,0.035);--bg3:rgba(255,255,255,0.06);
+  --br:rgba(255,255,255,0.08);--tx:#f0f4ff;--mu:#8899b0;--dm:#4a5568;
+  --bl:#63b3ed;--pu:#9f7aea;--te:#38b2ac;--gr:#68d391;--am:#f6ad55;--re:#fc8181;
+}
+html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,sans-serif;height:100%;overflow:hidden}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
+
+#app{display:flex;height:100vh;overflow:hidden;max-width:440px;margin:0 auto;position:relative;background:var(--bg);box-shadow:0 0 90px rgba(0,0,0,0.65);border-left:1px solid rgba(255,255,255,0.05);border-right:1px solid rgba(255,255,255,0.05)}
+#sidebar{width:220px;min-width:220px;height:100vh;position:sticky;top:0;display:flex;flex-direction:column;padding:20px 12px;border-right:1px solid var(--br);background:rgba(8,12,20,0.8);backdrop-filter:blur(20px);overflow-y:auto}
+#main{flex:1;overflow-y:auto;min-width:0}
+
+.glass{background:var(--bg2);border:1px solid var(--br);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:16px}
+.lbl{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--mu)}
+.tag{display:inline-flex;align-items:center;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.pb{height:3px;border-radius:2px;background:rgba(255,255,255,0.08);overflow:hidden}
+.pf{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(0.16,1,0.3,1)}
+.grad-bl{background:linear-gradient(135deg,#63b3ed,#9f7aea);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes f0{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes f1{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}
+@keyframes f2{0%,100%{transform:translateY(2px)}50%{transform:translateY(-4px)}}
+@keyframes f3{0%,100%{transform:translateY(-4px)}50%{transform:translateY(2px)}}
+@keyframes f4{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.a-pulse{animation:pulse 3s ease infinite}
+.a-fadeUp{animation:fadeUp 0.6s ease forwards}
+
+.nav-i{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.nav-i:hover{background:rgba(255,255,255,0.06);color:var(--tx)}
+.nav-i.on{background:rgba(99,179,237,0.12);color:var(--bl)}
+
+.ring{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.ring svg{transform:rotate(-90deg)}
+.ring-lbl{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center}
+
+.sc-card{background:var(--bg2);border:1px solid var(--br);border-radius:14px;padding:13px;cursor:pointer;transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1)}
+.sc-card:hover{background:var(--bg3);transform:scale(1.03) translateY(-3px);box-shadow:0 20px 40px rgba(0,0,0,0.3)}
+.sc-card.on{box-shadow:0 0 30px rgba(99,179,237,0.2)}
+
+.cat-tab{padding:8px 14px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s;border:1px solid var(--br);background:rgba(255,255,255,0.03);color:var(--mu)}
+.cat-tab:hover{background:rgba(255,255,255,0.06);color:var(--tx)}
+.cat-tab.on{color:var(--tx)}
+
+.ins-chip{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:11px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);transition:all 0.25s}
+.ins-chip:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1)}
+
+#topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:rgba(8,12,20,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--br)}
+
+.hg{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:16px}
+.sg{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.hmg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+
+#compare-bar,#sc-banner{display:none}
+#compare-bar.on,#sc-banner.on{display:block}
+#sim-tag,#clear-btn{display:none}
+#sim-tag.on,#clear-btn.on{display:inline-flex}
+#clear-btn.on{display:block}
+
+/* ===== ONBOARDING ===== */
+#onboarding{position:fixed;top:0;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;z-index:1000;background:#080c14;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow-y:auto;box-shadow:0 0 90px rgba(0,0,0,0.65);border-left:1px solid rgba(255,255,255,0.05);border-right:1px solid rgba(255,255,255,0.05)}
+#onboarding::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(99,179,237,0.07) 0%,transparent 70%);pointer-events:none}
+.ob-topbar{position:absolute;top:0;left:0;right:0;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;z-index:2}
+.ob-pw{position:absolute;top:0;left:0;right:0;height:2px;background:rgba(255,255,255,0.06)}
+.ob-pf{height:100%;background:linear-gradient(90deg,#63b3ed,#9f7aea);transition:width 0.6s cubic-bezier(0.22,1,0.36,1);border-radius:0 2px 2px 0}
+.ob-body{width:100%;max-width:600px;padding:100px 32px 48px;position:relative;z-index:2}
+@keyframes obIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes obOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-20px)}}
+.ob-step{animation:obIn 0.45s cubic-bezier(0.22,1,0.36,1) forwards}
+.ob-step.out{animation:obOut 0.28s ease forwards;pointer-events:none}
+.ob-lbl{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#4a5568;margin-bottom:14px}
+.ob-q{font-size:30px;font-weight:800;color:#f0f4ff;letter-spacing:-0.8px;line-height:1.2;margin-bottom:10px}
+.ob-sub{font-size:14px;color:#8899b0;line-height:1.6;margin-bottom:32px}
+.ob-iw{display:flex;align-items:baseline;gap:6px;margin-bottom:8px;border-bottom:2px solid rgba(255,255,255,0.12);transition:border-color 0.3s}
+.ob-iw:focus-within{border-bottom-color:#63b3ed}
+.ob-cs{font-size:28px;font-weight:700;color:rgba(255,255,255,0.25)}
+.ob-inp{flex:1;background:transparent;border:none;color:#f0f4ff;font-size:28px;font-weight:700;font-family:'Inter',sans-serif;padding:8px 0;outline:none;letter-spacing:-0.5px;caret-color:#63b3ed;min-width:0}
+.ob-inp::placeholder{color:rgba(255,255,255,0.18)}
+.ob-unit{font-size:16px;color:#4a5568;white-space:nowrap}
+.ob-ctabs{display:flex;gap:8px;margin-bottom:18px}
+.ob-cb{padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#4a5568;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif}
+.ob-cb.on{border-color:rgba(99,179,237,0.4);background:rgba(99,179,237,0.1);color:#63b3ed}
+.ob-hint{font-size:12px;color:#4a5568;margin:14px 0 28px}
+.ob-hint kbd{padding:2px 6px;border-radius:4px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);font-size:10px;font-family:'Inter',sans-serif;color:#8899b0}
+.ob-footer{display:flex;justify-content:flex-end}
+.ob-cont{display:flex;align-items:center;gap:8px;padding:14px 30px;border-radius:14px;background:linear-gradient(135deg,#63b3ed,#9f7aea);color:#fff;font-size:15px;font-weight:700;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;font-family:'Inter',sans-serif}
+.ob-cont:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(99,179,237,0.3)}
+.ob-cont:active{transform:none}
+.ob-choices{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.ob-ch{display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);cursor:pointer;transition:all 0.25s;text-align:left;width:100%;font-family:'Inter',sans-serif}
+.ob-ch:hover{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15)}
+.ob-ch-ic{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.ob-ch-t{font-size:15px;font-weight:700;color:#f0f4ff;margin-bottom:2px}
+.ob-ch-s{font-size:12px;color:#8899b0}
+.ob-back{background:transparent;border:1px solid rgba(255,255,255,0.1);color:#8899b0;font-size:13px;font-weight:600;padding:8px 16px;border-radius:10px;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif}
+.ob-back:hover{background:rgba(255,255,255,0.06);color:#f0f4ff}
+#ob-welcome{text-align:center;padding:32px 24px 0;animation:obIn 0.7s cubic-bezier(0.22,1,0.36,1) forwards;position:relative;z-index:2}
+.ob-logo-big{width:76px;height:76px;border-radius:22px;background:linear-gradient(135deg,#63b3ed,#9f7aea);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:900;color:#fff;margin:0 auto 26px;box-shadow:0 0 60px rgba(99,179,237,0.25),0 0 100px rgba(159,122,234,0.12)}
+.ob-h1{font-size:40px;font-weight:900;letter-spacing:-1.5px;line-height:1.1;margin-bottom:14px}
+.ob-wsub{font-size:15px;color:#8899b0;line-height:1.7;max-width:420px;margin:0 auto 36px}
+.ob-start{display:inline-flex;align-items:center;gap:10px;padding:17px 38px;border-radius:16px;background:linear-gradient(135deg,#63b3ed,#9f7aea);color:#fff;font-size:16px;font-weight:800;border:none;cursor:pointer;letter-spacing:-0.3px;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 8px 32px rgba(99,179,237,0.25);font-family:'Inter',sans-serif}
+.ob-start:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(99,179,237,0.35)}
+.ob-feats{display:flex;gap:20px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.ob-feat{font-size:12px;color:#4a5568;display:flex;align-items:center;gap:5px}
+.ob-feat::before{content:'✓';color:#68d391;font-weight:700}
+#ob-loading{position:fixed;top:0;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;z-index:999;background:#080c14;display:none;align-items:center;justify-content:center;flex-direction:column;box-shadow:0 0 90px rgba(0,0,0,0.65);border-left:1px solid rgba(255,255,255,0.05);border-right:1px solid rgba(255,255,255,0.05)}
+.ob-lr{width:120px;height:120px;position:relative;margin-bottom:32px}
+.ob-lr svg{animation:spin 2s linear infinite;transform-origin:60px 60px}
+.ob-ls-list{list-style:none;display:flex;flex-direction:column;gap:10px;width:290px}
+.ob-ls{display:flex;align-items:center;gap:12px;font-size:13px;color:#4a5568;transition:color 0.4s}
+.ob-ls.done{color:#c8d8e8}
+.ob-ls-ic{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;transition:all 0.4s;color:#4a5568}
+.ob-ls.done .ob-ls-ic{background:rgba(104,211,145,0.15);border-color:rgba(104,211,145,0.3);color:#68d391}
+
+/* ===== MOBILE APP LAYOUT ===== */
+#mob-nav{display:none}
+
+/* ── Premium card hover/tap ── */
+.glass{transition:border-color 0.2s}
+.sc-card{transition:all 0.25s cubic-bezier(0.34,1.2,0.64,1)}
+
+/* ===== MOBILE-ONLY: styles always apply (phone layout on every screen) ===== */
+@media all{
+  html,body{overflow:hidden}
+  #sidebar{display:none!important}
+  #main{padding-bottom:76px!important}
+
+  /* Topbar — slim on mobile */
+  #topbar{padding:10px 16px!important;min-height:unset!important}
+  #tb-sub{display:none!important}
+  #topbar>div:last-child>div:first-child{display:none!important} /* hide date */
+
+  /* Section padding resets */
+  #sec-overview{padding:0!important}
+  #sec-twin{padding:10px 16px 0!important}
+  #sec-scenarios{padding:10px 16px 0!important}
+  #sec-timeline{padding:10px 16px 0!important}
+  #sec-health{padding:10px 16px 0!important}
+  #health-radar-wrap{display:none!important}
+  #sec-live{padding:10px 16px 0!important}
+  #sec-compare{padding:10px 16px 0!important}
+
+  /* Grid overrides */
+  .hg{grid-template-columns:1fr!important}
+  .sg{grid-template-columns:repeat(2,1fr)!important}
+  .hmg{grid-template-columns:repeat(2,1fr)!important}
+
+  /* Scenario impact tiles 4→2 col */
+  #sc-impact-tiles{grid-template-columns:repeat(2,1fr)!important}
+
+  /* Onboarding */
+  .ob-body{padding:80px 18px 36px!important}
+  .ob-q{font-size:22px!important}
+  .ob-h1{font-size:28px!important}
+  .ob-start{padding:14px 28px!important;font-size:15px!important}
+
+  /* Live sim baseline row: wrap */
+  #live-baseline-row{flex-wrap:wrap!important;gap:8px!important}
+
+  /* ── MOBILE NAV ── */
+  #mob-nav{
+    display:flex;
+    position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;z-index:300;
+    height:auto;
+    background:rgba(6,10,18,0.97);
+    border-top:1px solid rgba(255,255,255,0.09);
+    backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);
+    padding-top:8px;
+    padding-bottom:max(8px,env(safe-area-inset-bottom));
+    align-items:flex-start;
+    justify-content:space-around;
+  }
+  .mob-tab{
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+    flex:1;padding:0 4px;
+    font-size:9px;font-weight:600;letter-spacing:0.3px;
+    color:#3a4a5e;cursor:pointer;
+    transition:color 0.15s,transform 0.15s;
+    -webkit-tap-highlight-color:transparent;
+    user-select:none;text-align:center;
+  }
+  .mob-tab .mt-ic{
+    font-size:22px;line-height:1;
+    transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .mob-tab.on{color:#63b3ed}
+  .mob-tab.on .mt-ic{
+    transform:scale(1.15) translateY(-1px);
+    filter:drop-shadow(0 0 6px rgba(99,179,237,0.5));
+  }
+  .mob-tab:active .mt-ic{transform:scale(0.9)}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== ONBOARDING ===== -->
+<div id="onboarding">
+  <div class="ob-pw"><div class="ob-pf" id="ob-prog" style="width:0%"></div></div>
+  <div class="ob-topbar">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#63b3ed,#9f7aea);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff">FT</div>
+      <span style="font-size:13px;font-weight:700;color:#f0f4ff">FinTwin</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <span id="ob-counter" style="font-size:12px;color:#4a5568;font-weight:600"></span>
+      <button id="ob-back-btn" class="ob-back" onclick="obBack()" style="display:none">&#8592; Back</button>
+    </div>
+  </div>
+  <div id="ob-welcome">
+    <div class="ob-logo-big">FT</div>
+    <h1 class="ob-h1">Build your<br><span class="grad-bl">Financial Twin</span></h1>
+    <p class="ob-wsub">Réponds à 10 questions. Obtiens un jumeau financier IA personnalisé. Teste chaque grande décision de vie avant de la prendre.</p>
+    <button class="ob-start" onclick="startOnboarding()">Commencer &#8594;</button>
+    <div class="ob-feats">
+      <span class="ob-feat">100% personnalisé</span>
+      <span class="ob-feat">90 scénarios de vie</span>
+      <span class="ob-feat">2 minutes</span>
+      <span class="ob-feat">Données privées</span>
+    </div>
+  </div>
+  <div id="ob-steps" class="ob-body" style="display:none"></div>
+</div>
+
+<!-- ===== LOADING ===== -->
+<div id="ob-loading">
+  <div class="ob-lr">
+    <svg width="120" height="120" viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3"/>
+      <circle cx="60" cy="60" r="50" fill="none" stroke="url(#lg1)" stroke-width="3" stroke-dasharray="80 235" stroke-linecap="round"/>
+      <defs><linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#63b3ed"/><stop offset="100%" stop-color="#9f7aea"/></linearGradient></defs>
+    </svg>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+      <div style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#63b3ed,#9f7aea);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff">FT</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-bottom:32px">
+    <div style="font-size:20px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">Construction de ton jumeau financier</div>
+    <div style="font-size:13px;color:#4a5568;margin-top:6px">Analyse de tes données en cours...</div>
+  </div>
+  <ul class="ob-ls-list">
+    <li class="ob-ls"><div class="ob-ls-ic">1</div><span>Profil personnel créé</span></li>
+    <li class="ob-ls"><div class="ob-ls-ic">2</div><span>Revenus &amp; cashflow mappés</span></li>
+    <li class="ob-ls"><div class="ob-ls-ic">3</div><span id="ob-nw-step">Patrimoine net calculé</span></li>
+    <li class="ob-ls"><div class="ob-ls-ic">4</div><span>2 847 simulations lancées...</span></li>
+    <li class="ob-ls"><div class="ob-ls-ic">5</div><span>Insights IA générés</span></li>
+    <li class="ob-ls"><div class="ob-ls-ic">&#8594;</div><span>Lancement de ton Financial Twin</span></li>
+  </ul>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="app" style="display:none">
+
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div style="padding:4px 6px 20px;margin-bottom:8px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#63b3ed,#9f7aea);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0">FT</div>
+      <div>
+        <div style="font-weight:800;font-size:14px;color:#f0f4ff;letter-spacing:-0.3px">FinTwin</div>
+        <div style="font-size:9px;color:#4a5568;letter-spacing:0.8px;font-weight:600;text-transform:uppercase">AI Financial Twin</div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div id="sb-avatar" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#9f7aea,#63b3ed);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0">?</div>
+      <div>
+        <div id="sb-name" style="font-size:13px;font-weight:600;color:#f0f4ff">Toi</div>
+        <div id="sb-role" style="font-size:11px;color:#8899b0">Ton Financial Twin</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="padding:8px;border-radius:8px;background:rgba(104,211,145,0.08)">
+        <div style="font-size:9px;color:#68d391;letter-spacing:0.5px;font-weight:600;text-transform:uppercase">Score</div>
+        <div id="sb-score" style="font-size:16px;font-weight:800;color:#68d391">—</div>
+      </div>
+      <div style="padding:8px;border-radius:8px;background:rgba(99,179,237,0.08)">
+        <div style="font-size:9px;color:#63b3ed;letter-spacing:0.5px;font-weight:600;text-transform:uppercase">Âge</div>
+        <div id="sb-age" style="font-size:16px;font-weight:800;color:#63b3ed">—</div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:2px;flex:1">
+    <div class="lbl" style="padding:0 6px;margin-bottom:8px;font-size:10px">Navigation</div>
+    <div class="nav-i on" onclick="setNav('overview',this)"><span style="font-size:14px">&#9672;</span><span>Overview</span></div>
+    <div class="nav-i" onclick="setNav('twin',this)"><span style="font-size:14px">&#9678;</span><span>My Twin</span></div>
+    <div class="nav-i" onclick="setNav('scenarios',this)"><span style="font-size:14px">&#11041;</span><span>Simulations</span></div>
+    <div class="nav-i" onclick="setNav('live',this)" style="position:relative"><span style="font-size:14px">&#9889;</span><span>Live Sim</span><span style="margin-left:auto;font-size:9px;font-weight:700;background:linear-gradient(135deg,#63b3ed,#9f7aea);color:#fff;padding:2px 6px;border-radius:4px;letter-spacing:0.3px">NEW</span></div>
+    <div class="nav-i" onclick="setNav('timeline',this)"><span style="font-size:14px">&#9711;</span><span>Timeline</span></div>
+    <div class="nav-i" onclick="setNav('compare',this)"><span style="font-size:14px">&#9878;</span><span>Mon Plan</span></div>
+    <div class="nav-i" onclick="setNav('insights',this)"><span style="font-size:14px">&#10022;</span><span>AI Insights</span></div>
+  </div>
+  <div style="margin-top:auto;padding-top:16px">
+    <div style="padding:10px 12px;border-radius:10px;background:rgba(104,211,145,0.06);border:1px solid rgba(104,211,145,0.15);display:flex;align-items:center;gap:8px">
+      <div class="a-pulse" style="width:6px;height:6px;border-radius:50%;background:#68d391"></div>
+      <span style="font-size:11px;color:#68d391;font-weight:600">Twin Active</span>
+    </div>
+    <div style="margin-top:8px;font-size:10px;color:#4a5568;text-align:center">Last synced just now</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div id="main">
+  <!-- TOPBAR -->
+  <header id="topbar">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div>
+        <div id="tb-title" style="font-size:16px;font-weight:700;color:#f0f4ff;letter-spacing:-0.3px">Financial Overview</div>
+        <div id="tb-sub" style="font-size:12px;color:#8899b0">Baseline &mdash; current trajectory</div>
+      </div>
+      <span id="sim-tag" class="tag"></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button id="clear-btn" onclick="clearSim()" style="font-size:11px;font-weight:600;color:#8899b0;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px 12px;cursor:pointer">Clear simulation</button>
+      <div id="tb-date" style="font-size:11px;color:#4a5568">Juin 2026</div>
+      <div id="tb-avatar" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#9f7aea,#63b3ed);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;cursor:pointer">?</div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div style="padding-bottom:40px">
+
+    <!-- HERO -->
+    <div id="sec-overview" style="padding:0">
+
+      <!-- ═══════════ HERO ═══════════ -->
+      <div style="padding:22px 20px 0;position:relative;overflow:hidden">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse 140% 100% at 20% -20%,rgba(99,179,237,0.07),transparent 55%),radial-gradient(ellipse 80% 60% at 90% 80%,rgba(159,122,234,0.05),transparent 50%);pointer-events:none"></div>
+
+        <!-- Greeting row -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;position:relative">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div id="pf-avatar" style="width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,#9f7aea,#63b3ed);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 4px 16px rgba(99,179,237,0.2)">?</div>
+            <div>
+              <div id="pf-hello" style="font-size:16px;font-weight:800;color:#f0f4ff;letter-spacing:-0.4px">Bonjour —</div>
+              <div id="pf-location" style="font-size:11px;color:#8899b0;margin-top:2px">📍 —</div>
+            </div>
+          </div>
+          <div id="pf-score-badge" style="padding:7px 14px;border-radius:20px;background:rgba(104,211,145,0.1);border:1px solid rgba(104,211,145,0.2);font-size:12px;font-weight:700;color:#68d391">— pts</div>
+        </div>
+
+        <!-- Net worth BIG -->
+        <div style="margin-bottom:18px;position:relative">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#3a4a5e;margin-bottom:8px">Patrimoine net</div>
+          <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+            <div id="nw-display" class="grad-bl" style="font-size:48px;font-weight:900;letter-spacing:-2.5px;line-height:1">£108k</div>
+            <span class="tag" style="background:rgba(104,211,145,0.12);color:#68d391;border:1px solid rgba(104,211,145,0.2);font-size:11px">+12.4% cette année</span>
+          </div>
+        </div>
+
+        <!-- Projection pill bar -->
+        <div style="display:flex;margin-bottom:22px;border-radius:14px;border:1px solid rgba(255,255,255,0.07);overflow:hidden;background:rgba(255,255,255,0.025)">
+          <div style="flex:1;padding:13px 12px;text-align:center;border-right:1px solid rgba(255,255,255,0.06)">
+            <div style="font-size:9px;color:#3a4a5e;text-transform:uppercase;letter-spacing:0.8px;font-weight:700;margin-bottom:5px">5 ans</div>
+            <div id="p5" style="font-size:16px;font-weight:800;color:#63b3ed;letter-spacing:-0.5px">£340k</div>
+          </div>
+          <div style="flex:1;padding:13px 12px;text-align:center;border-right:1px solid rgba(255,255,255,0.06)">
+            <div style="font-size:9px;color:#3a4a5e;text-transform:uppercase;letter-spacing:0.8px;font-weight:700;margin-bottom:5px">10 ans</div>
+            <div id="p10" style="font-size:16px;font-weight:800;color:#9f7aea;letter-spacing:-0.5px">£720k</div>
+          </div>
+          <div style="flex:1;padding:13px 12px;text-align:center">
+            <div style="font-size:9px;color:#3a4a5e;text-transform:uppercase;letter-spacing:0.8px;font-weight:700;margin-bottom:5px">25 ans</div>
+            <div id="p25" style="font-size:16px;font-weight:800;color:#38b2ac;letter-spacing:-0.5px">£2.4M</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ WEALTH CHART ═══════════ -->
+      <div style="padding:0 20px;margin-bottom:22px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#3a4a5e;text-transform:uppercase">Ta trajectoire · 25 ans</div>
+          <div style="display:flex;gap:10px">
+            <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:2px;background:#9f7aea;border-radius:1px"></div><span style="font-size:9px;color:#4a5568">Optimiste</span></div>
+            <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:2px;background:#63b3ed;border-radius:1px"></div><span style="font-size:9px;color:#4a5568">Base</span></div>
+            <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:2px;background:#38b2ac;border-radius:1px"></div><span style="font-size:9px;color:#4a5568">Prudent</span></div>
+          </div>
+        </div>
+        <canvas id="wealth-chart" height="185"></canvas>
+      </div>
+
+      <!-- ═══════════ 3 MÉTRIQUES CLÉS ═══════════ -->
+      <div style="padding:0 20px;margin-bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+        <div class="glass" style="padding:16px 8px;text-align:center;position:relative;overflow:hidden">
+          <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f6ad55 50%,transparent)"></div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#f6ad55;margin-bottom:8px">Retraite</div>
+          <div id="ai-age" style="font-size:28px;font-weight:900;color:#f0f4ff;letter-spacing:-1px;line-height:1">52</div>
+          <div style="font-size:10px;color:#4a5568;margin-top:4px">ans</div>
+        </div>
+        <div class="glass" style="padding:16px 8px;text-align:center;position:relative;overflow:hidden">
+          <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#68d391 50%,transparent)"></div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#68d391;margin-bottom:8px">Confiance</div>
+          <div id="ai-conf" style="font-size:28px;font-weight:900;color:#f0f4ff;letter-spacing:-1px;line-height:1">79%</div>
+          <div style="font-size:10px;color:#4a5568;margin-top:4px">proba.</div>
+        </div>
+        <div class="glass" style="padding:16px 8px;text-align:center;position:relative;overflow:hidden">
+          <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#9f7aea 50%,transparent)"></div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#9f7aea;margin-bottom:8px">Score</div>
+          <div id="home-score" style="font-size:28px;font-weight:900;color:#f0f4ff;letter-spacing:-1px;line-height:1">—</div>
+          <div style="font-size:10px;color:#4a5568;margin-top:4px">/ 100</div>
+        </div>
+      </div>
+
+      <!-- ═══════════ SITUATION ACTUELLE 2×2 ═══════════ -->
+      <div style="padding:0 20px;margin-bottom:18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3a4a5e">Situation actuelle</div>
+          <div id="pf-risk" style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px;background:rgba(252,129,129,0.08);color:#fc8181;border:1px solid rgba(252,129,129,0.12)">—</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="padding:16px;border-radius:16px;background:rgba(104,211,145,0.04);border:1px solid rgba(104,211,145,0.09)">
+            <div style="font-size:9px;color:#68d391;letter-spacing:0.8px;font-weight:700;text-transform:uppercase;margin-bottom:6px">Revenus</div>
+            <div id="pf-income" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
+            <div style="font-size:10px;color:#4a5568;margin-top:3px">par an</div>
+          </div>
+          <div style="padding:16px;border-radius:16px;background:rgba(246,173,85,0.04);border:1px solid rgba(246,173,85,0.09)">
+            <div style="font-size:9px;color:#f6ad55;letter-spacing:0.8px;font-weight:700;text-transform:uppercase;margin-bottom:6px">Dépenses</div>
+            <div id="pf-exp" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
+            <div style="font-size:10px;color:#4a5568;margin-top:3px">par mois</div>
+          </div>
+          <div style="padding:16px;border-radius:16px;background:rgba(99,179,237,0.04);border:1px solid rgba(99,179,237,0.09)">
+            <div style="font-size:9px;color:#63b3ed;letter-spacing:0.8px;font-weight:700;text-transform:uppercase;margin-bottom:6px">Épargne nette</div>
+            <div id="pf-save" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
+            <div style="font-size:10px;color:#4a5568;margin-top:3px">par mois</div>
+          </div>
+          <div style="padding:16px;border-radius:16px;background:rgba(159,122,234,0.04);border:1px solid rgba(159,122,234,0.09)">
+            <div style="font-size:9px;color:#9f7aea;letter-spacing:0.8px;font-weight:700;text-transform:uppercase;margin-bottom:6px">Investissements</div>
+            <div id="pf-inv" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
+            <div style="font-size:10px;color:#4a5568;margin-top:3px">portefeuille</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ STRESS + HEALTH ═══════════ -->
+      <div style="padding:0 20px;margin-bottom:20px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="glass" style="padding:16px">
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#3a4a5e;margin-bottom:12px">Stress</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div id="stress-lbl" style="font-size:15px;font-weight:800;color:#f6ad55">Moderate</div>
+            <div style="font-size:26px;font-weight:900;color:#f6ad55;letter-spacing:-1px" id="stress-val">45</div>
+          </div>
+          <div style="display:flex;gap:3px">
+            <div id="ss0" style="height:3px;flex:1;border-radius:2px;background:rgba(255,255,255,0.08)"></div>
+            <div id="ss1" style="height:3px;flex:1;border-radius:2px;background:rgba(255,255,255,0.08)"></div>
+            <div id="ss2" style="height:3px;flex:1;border-radius:2px;background:rgba(255,255,255,0.08)"></div>
+            <div id="ss3" style="height:3px;flex:1;border-radius:2px;background:rgba(255,255,255,0.08)"></div>
+          </div>
+        </div>
+        <div class="glass" style="padding:16px">
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#3a4a5e;margin-bottom:12px">Santé</div>
+          <div id="health-mini" style="display:flex;flex-direction:column;gap:7px"></div>
+        </div>
+      </div>
+
+      <!-- ═══════════ CTA ═══════════ -->
+      <div style="padding:0 20px 28px">
+        <button onclick="setNav('scenarios',null)" style="width:100%;padding:18px;border-radius:16px;background:linear-gradient(135deg,#63b3ed,#9f7aea);color:#fff;font-size:15px;font-weight:800;border:none;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:-0.3px;box-shadow:0 8px 32px rgba(99,179,237,0.22);display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent">
+          <span>⚡</span><span>Simule un changement</span><span style="opacity:0.7;margin-left:2px">→</span>
+        </button>
+      </div>
+
+      <!-- ═══ Legacy JS compat (hidden) ═══ -->
+      <div style="display:none" aria-hidden="true">
+        <svg><circle id="conf-ring" cx="32" cy="32" r="26" fill="none" stroke="#9f7aea" stroke-dasharray="163" stroke-dashoffset="47"/></svg>
+        <span id="conf-ring-lbl"></span>
+        <svg><circle id="stress-ring" cx="32" cy="32" r="26" fill="none" stroke="#f6ad55" stroke-dasharray="163" stroke-dashoffset="74"/></svg>
+        <div id="sc-banner"><span id="bn-flag"></span><span id="bn-title"></span><span id="bn-insight"></span><div id="bn-wealth"></div><div id="bn-retire"></div></div>
+        <span id="ai-txt"></span>
+        <span id="active-sc-tag" class="tag"></span>
+      </div>
+    </div>
+
+    <!-- TWIN + WEALTH -->
+    <div id="sec-twin" style="padding:16px 28px 0;display:grid;grid-template-columns:240px 1fr;gap:16px">
+      <!-- Financial Twin -->
+      <div class="glass" style="padding:24px;display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+          <div>
+            <div class="lbl" style="margin-bottom:4px">Financial Twin</div>
+            <div style="font-size:12px;color:#8899b0">Live asset mapping</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="a-pulse" style="width:6px;height:6px;border-radius:50%;background:#68d391"></div>
+            <span style="font-size:11px;color:#68d391;font-weight:600">Live</span>
+          </div>
+        </div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center">
+          <svg width="180" height="180" viewBox="0 0 200 200" style="overflow:visible">
+            <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="50" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(99,179,237,0.15)" stroke-width="1.2"
+              stroke-dasharray="6 4" style="transform-origin:100px 100px;animation:spin 25s linear infinite"/>
+            <line x1="100" y1="100" x2="100" y2="25" stroke="#68d391" stroke-width="0.8" stroke-opacity="0.3"/>
+            <line x1="100" y1="100" x2="171" y2="147" stroke="#63b3ed" stroke-width="0.8" stroke-opacity="0.3"/>
+            <line x1="100" y1="100" x2="29" y2="147" stroke="#fc8181" stroke-width="0.8" stroke-opacity="0.3"/>
+            <line x1="100" y1="100" x2="142" y2="27" stroke="#9f7aea" stroke-width="0.8" stroke-opacity="0.3"/>
+            <line x1="100" y1="100" x2="58" y2="27" stroke="#f6ad55" stroke-width="0.8" stroke-opacity="0.3"/>
+            <g style="animation:f0 4s ease-in-out infinite">
+              <circle cx="100" cy="25" r="17" fill="rgba(104,211,145,0.15)" stroke="#68d391" stroke-width="1" stroke-opacity="0.4"/>
+              <circle cx="100" cy="25" r="4.5" fill="#68d391"/>
+              <text x="100" y="4" text-anchor="middle" fill="#68d391" font-size="8" font-weight="700">Salary</text>
+              <text id="twin-salary-val" x="100" y="50" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="7.5" font-weight="600">£95k</text>
+            </g>
+            <g style="animation:f1 4.5s ease-in-out infinite">
+              <circle cx="171" cy="147" r="17" fill="rgba(99,179,237,0.15)" stroke="#63b3ed" stroke-width="1" stroke-opacity="0.4"/>
+              <circle cx="171" cy="147" r="4.5" fill="#63b3ed"/>
+              <text x="171" y="126" text-anchor="middle" fill="#63b3ed" font-size="8" font-weight="700">Invest</text>
+              <text id="twin-invest-val" x="171" y="172" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="7.5" font-weight="600">£78k</text>
+            </g>
+            <g style="animation:f3 4.2s ease-in-out infinite">
+              <circle cx="29" cy="147" r="17" fill="rgba(252,129,129,0.15)" stroke="#fc8181" stroke-width="1" stroke-opacity="0.4"/>
+              <circle cx="29" cy="147" r="4.5" fill="#fc8181"/>
+              <text x="29" y="126" text-anchor="middle" fill="#fc8181" font-size="8" font-weight="700">Debt</text>
+              <text id="twin-debt-val" x="29" y="172" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="7.5" font-weight="600">-£12k</text>
+            </g>
+            <g style="animation:f2 3.8s ease-in-out infinite">
+              <circle cx="142" cy="27" r="17" fill="rgba(159,122,234,0.15)" stroke="#9f7aea" stroke-width="1" stroke-opacity="0.4"/>
+              <circle cx="142" cy="27" r="4.5" fill="#9f7aea"/>
+              <text x="142" y="6" text-anchor="middle" fill="#9f7aea" font-size="8" font-weight="700">Savings</text>
+              <text id="twin-savings-val" x="142" y="52" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="7.5" font-weight="600">£42k</text>
+            </g>
+            <g style="animation:f4 3.5s ease-in-out infinite">
+              <circle cx="58" cy="27" r="17" fill="rgba(246,173,85,0.15)" stroke="#f6ad55" stroke-width="1" stroke-opacity="0.4"/>
+              <circle cx="58" cy="27" r="4.5" fill="#f6ad55"/>
+              <text x="58" y="6" text-anchor="middle" fill="#f6ad55" font-size="8" font-weight="700">Spend</text>
+              <text id="twin-spend-val" x="58" y="52" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="7.5" font-weight="600">£3.8k</text>
+            </g>
+            <circle cx="100" cy="100" r="28" fill="rgba(99,179,237,0.08)" stroke="rgba(99,179,237,0.25)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="18" fill="rgba(99,179,237,0.15)"/>
+            <text x="100" y="95" text-anchor="middle" fill="#63b3ed" font-size="9" font-weight="800" letter-spacing="0.5">NET</text>
+            <text id="twin-net-val" x="100" y="108" text-anchor="middle" fill="#f0f4ff" font-size="10" font-weight="800">£108k</text>
+          </svg>
+        </div>
+        <div style="margin-top:16px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <div style="font-size:11px;color:#8899b0;width:80px">Investments</div>
+            <div class="pb" style="flex:1"><div class="pf" style="width:72%;background:#63b3ed"></div></div>
+            <div style="font-size:11px;font-weight:700;color:#63b3ed;width:36px;text-align:right">£78k</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="font-size:11px;color:#8899b0;width:80px">Savings</div>
+            <div class="pb" style="flex:1"><div class="pf" style="width:39%;background:#9f7aea"></div></div>
+            <div style="font-size:11px;font-weight:700;color:#9f7aea;width:36px;text-align:right">£42k</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SCENARIOS -->
+    <div id="sec-scenarios" style="padding:16px 20px 0">
+
+      <!-- Header compact -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div>
+          <div style="font-size:15px;font-weight:800;color:#f0f4ff;letter-spacing:-0.3px">Simulateur</div>
+          <div style="font-size:11px;color:#4a5568;margin-top:1px">Combine des scénarios · impact en temps réel</div>
+        </div>
+        <span id="sc-count" style="font-size:10px;color:#3a4a5e;padding:4px 10px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)">15</span>
+      </div>
+
+      <!-- Category tabs -->
+      <div style="display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch" id="cat-tabs"></div>
+
+      <!-- Active chips bar -->
+      <div id="sc-active-chips" style="display:none;flex-wrap:wrap;gap:6px;margin-bottom:14px;padding:10px 14px;background:rgba(99,179,237,0.04);border-radius:12px;border:1px solid rgba(99,179,237,0.12)"></div>
+
+      <!-- IMPACT PANEL — apparaît au-dessus de la grille dès qu'un scénario est sélectionné -->
+      <div id="sc-impact" style="display:none;margin-bottom:16px">
+        <div id="sc-impact-glass" class="glass" style="padding:24px;border:1px solid rgba(99,179,237,0.2)">
+          <!-- Header row -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div id="si-flag" style="font-size:28px;line-height:1"></div>
+              <div>
+                <div id="si-title" style="font-size:15px;font-weight:700;color:#f0f4ff;margin-bottom:3px"></div>
+                <div id="si-sub" style="font-size:11px;color:#8899b0;line-height:1.4;max-width:480px"></div>
+              </div>
+            </div>
+            <button onclick="clearSim()" style="font-size:11px;font-weight:600;color:#8899b0;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:7px 14px;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap">✕ Effacer</button>
+          </div>
+
+          <!-- HERO: évolution initiale vs avec tes choix (25 ans) -->
+          <div id="si-hero" style="position:relative;overflow:hidden;border-radius:16px;padding:18px;margin-bottom:20px;background:linear-gradient(135deg,rgba(104,211,145,0.08),rgba(99,179,237,0.05));border:1px solid rgba(104,211,145,0.18)">
+            <div style="font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#68d391;margin-bottom:14px">Ton patrimoine dans 25 ans</div>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <div style="flex:1;min-width:90px">
+                <div style="font-size:9px;color:#8899b0;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px">Sans changement</div>
+                <div id="si-hero-base" style="font-size:24px;font-weight:800;color:#8899b0;letter-spacing:-1px;line-height:1">—</div>
+              </div>
+              <div style="font-size:22px;color:#4a5568;font-weight:300">→</div>
+              <div style="flex:1;min-width:90px">
+                <div style="font-size:9px;color:#68d391;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px;font-weight:700">Avec tes choix</div>
+                <div id="si-hero-new" class="grad-bl" style="font-size:28px;font-weight:900;letter-spacing:-1.2px;line-height:1">—</div>
+              </div>
+              <div id="si-hero-delta" style="padding:8px 14px;border-radius:12px;background:rgba(104,211,145,0.15);border:1px solid rgba(104,211,145,0.3);font-size:15px;font-weight:800;color:#68d391;white-space:nowrap">—</div>
+            </div>
+          </div>
+
+          <!-- 4 KPI comparison tiles -->
+          <div id="sc-impact-tiles" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px">
+            <!-- Patrimoine -->
+            <div style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
+              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Patrimoine net</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+                <span style="font-size:10px;color:#8899b0">Actuel</span>
+                <span id="si-nw-base" style="font-size:13px;font-weight:700;color:#f0f4ff"></span>
+              </div>
+              <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:5px"></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <span id="si-nw-label" style="font-size:10px;font-weight:600"></span>
+                <span id="si-nw" style="font-size:13px;font-weight:700"></span>
+              </div>
+              <div id="si-nw-d" style="font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px"></div>
+            </div>
+            <!-- Retraite -->
+            <div style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
+              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Retraite</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+                <span style="font-size:10px;color:#8899b0">Actuel</span>
+                <span id="si-ret-base" style="font-size:13px;font-weight:700;color:#f0f4ff"></span>
+              </div>
+              <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:5px"></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <span id="si-ret-label" style="font-size:10px;font-weight:600"></span>
+                <span id="si-ret" style="font-size:13px;font-weight:700"></span>
+              </div>
+              <div id="si-ret-d" style="font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px"></div>
+            </div>
+            <!-- Confiance -->
+            <div style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
+              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Confiance</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+                <span style="font-size:10px;color:#8899b0">Actuel</span>
+                <span id="si-conf-base" style="font-size:13px;font-weight:700;color:#f0f4ff"></span>
+              </div>
+              <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:5px"></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <span id="si-conf-label" style="font-size:10px;font-weight:600"></span>
+                <span id="si-conf" style="font-size:13px;font-weight:700"></span>
+              </div>
+              <div id="si-conf-d" style="font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px"></div>
+            </div>
+            <!-- Stress -->
+            <div style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
+              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Stress financier</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+                <span style="font-size:10px;color:#8899b0">Actuel</span>
+                <span id="si-str-base" style="font-size:13px;font-weight:700;color:#f0f4ff"></span>
+              </div>
+              <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:5px"></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <span id="si-str-label" style="font-size:10px;font-weight:600"></span>
+                <span id="si-str" style="font-size:13px;font-weight:700"></span>
+              </div>
+              <div id="si-str-d" style="font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px"></div>
+            </div>
+          </div>
+
+          <!-- Wealth projection chart -->
+          <div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4a5568;margin-bottom:10px">Projection patrimoine — 25 ans</div>
+            <canvas id="sc-impact-chart" height="120"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scenario grid — EN DESSOUS du panel d'impact -->
+      <div class="sg" id="sc-grid" style="padding-bottom:8px"></div>
+    </div>
+
+    <!-- 3-COL: Timeline | Insights | Investment -->
+    <div id="sec-timeline" style="padding:16px 28px 0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+
+      <!-- Timeline -->
+      <div class="glass" style="padding:24px;display:flex;flex-direction:column">
+        <div style="margin-bottom:16px">
+          <div class="lbl" style="margin-bottom:4px">Future Timeline</div>
+          <div style="font-size:12px;color:#8899b0">15 projected milestones</div>
+        </div>
+        <div id="timeline-list" style="flex:1;overflow-y:auto;max-height:380px;position:relative;padding-left:20px">
+          <div style="position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,rgba(99,179,237,0.5),rgba(99,179,237,0.02));border-radius:1px"></div>
+        </div>
+      </div>
+
+      <!-- AI Insights -->
+      <div class="glass" style="padding:24px;display:flex;flex-direction:column;box-shadow:0 0 40px rgba(159,122,234,0.12)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div>
+            <div class="lbl" style="margin-bottom:4px">AI Insights</div>
+            <div style="font-size:12px;color:#8899b0">15 real-time signals</div>
+          </div>
+          <span class="tag" style="background:rgba(159,122,234,0.1);color:#9f7aea;border:1px solid rgba(159,122,234,0.2)">&#10022; FinTwin AI</span>
+        </div>
+        <div style="padding:12px 14px;border-radius:12px;margin-bottom:12px;background:rgba(159,122,234,0.06);border:1px solid rgba(159,122,234,0.15);font-size:12px;line-height:1.7;color:#c8d8e8;min-height:68px">
+          <span style="color:#9f7aea;font-weight:600">&#9678; FinTwin AI</span> <span style="color:#4a5568;font-size:11px">&middot;</span>
+          <span id="ai-type"></span><span id="ai-cur" style="display:inline-block;width:2px;height:12px;background:#9f7aea;margin-left:2px;animation:blink 0.8s ease infinite;vertical-align:middle"></span>
+        </div>
+        <div id="insights-list-twin" style="flex:1;overflow-y:auto;max-height:310px;display:flex;flex-direction:column;gap:7px"></div>
+      </div>
+
+      <!-- Investment Projection -->
+      <div class="glass" style="padding:24px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+          <div>
+            <div class="lbl" style="margin-bottom:4px">Investment Projection</div>
+            <div style="font-size:12px;color:#8899b0">Portfolio growth over 10 years</div>
+          </div>
+          <div style="text-align:right">
+            <div id="inv-total" style="font-size:20px;font-weight:800;color:#63b3ed;letter-spacing:-0.5px">£312k</div>
+            <div style="font-size:10px;color:#8899b0">at 10 years</div>
+          </div>
+        </div>
+        <canvas id="invest-chart" height="180"></canvas>
+        <div style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+          <div style="padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);text-align:center">
+            <div style="font-size:8px;color:#4a5568;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px">Bear (10%)</div>
+            <div id="inv-bear" style="font-size:15px;font-weight:800;color:#fc8181">£172k</div>
+          </div>
+          <div style="padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);text-align:center">
+            <div style="font-size:8px;color:#4a5568;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px">Base (50%)</div>
+            <div id="inv-base" style="font-size:15px;font-weight:800;color:#63b3ed">£312k</div>
+          </div>
+          <div style="padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);text-align:center">
+            <div style="font-size:8px;color:#4a5568;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px">Bull (90%)</div>
+            <div id="inv-bull" style="font-size:15px;font-weight:800;color:#68d391">£515k</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INSIGHTS & HEALTH -->
+    <div id="sec-health" style="padding:16px 20px 0">
+
+      <!-- ═══════ AI INSIGHTS SECTION ═══════ -->
+      <div style="margin-bottom:18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#3a4a5e;margin-bottom:4px">Recommandations IA</div>
+            <div style="font-size:11px;color:#8899b0">Basées sur ton profil · mis à jour maintenant</div>
+          </div>
+          <span class="tag" style="background:rgba(159,122,234,0.1);color:#9f7aea;border:1px solid rgba(159,122,234,0.2);font-size:9px">✦ FinTwin AI</span>
+        </div>
+        <!-- AI header description -->
+        <div style="padding:12px 14px;border-radius:12px;margin-bottom:12px;background:rgba(159,122,234,0.06);border:1px solid rgba(159,122,234,0.12);font-size:12px;line-height:1.7;color:#c8d8e8">
+          <span style="color:#9f7aea;font-weight:600">◉ FinTwin AI</span><span style="color:#4a5568;font-size:11px"> · </span><span id="ins-summary">Analyse de ton profil financier en cours…</span>
+        </div>
+        <!-- Insights cards list -->
+        <div id="insights-list" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+
+      <!-- ═══════ HEALTH SCORE ═══════ -->
+      <div class="glass" style="padding:20px;margin-bottom:18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#3a4a5e;margin-bottom:4px">Score de santé</div>
+            <div style="font-size:11px;color:#8899b0">15 métriques de performance</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="text-align:right">
+              <div style="font-size:28px;font-weight:900;color:#f6ad55;letter-spacing:-1px" id="health-score-num">71</div>
+              <div style="font-size:10px;color:#8899b0">/100</div>
+            </div>
+            <div style="width:48px;height:48px;border-radius:50%;background:conic-gradient(#f6ad55 0% 71%,rgba(255,255,255,0.06) 71%);display:flex;align-items:center;justify-content:center">
+              <div style="width:36px;height:36px;border-radius:50%;background:#0d1420"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Radar chart (desktop only) -->
+        <div id="health-radar-wrap" style="margin-bottom:16px">
+          <canvas id="radar-chart" height="180"></canvas>
+        </div>
+        <div id="health-grid" class="hmg"></div>
+      </div>
+
+    </div>
+
+    <!-- LIVE SIMULATOR -->
+    <div id="sec-live" style="padding:16px 28px 0;display:none">
+      <div class="glass" style="padding:24px">
+        <!-- Header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+          <div>
+            <div class="lbl" style="margin-bottom:4px">&#9889; Live Simulator</div>
+            <div style="font-size:12px;color:#8899b0">Modifie ta situation actuelle — chaque curseur représente un changement par rapport à aujourd'hui</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span id="live-count" class="tag" style="background:rgba(99,179,237,0.1);color:#63b3ed;border:1px solid rgba(99,179,237,0.2)">0 choix actifs</span>
+            <button onclick="resetLiveSim()" style="font-size:11px;font-weight:600;color:#8899b0;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:7px 14px;cursor:pointer;font-family:'Inter',sans-serif">Réinitialiser</button>
+          </div>
+        </div>
+
+        <!-- Baseline reference row -->
+        <div id="live-baseline-row" style="display:flex;align-items:center;gap:20px;padding:10px 16px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid rgba(255,255,255,0.06);margin-bottom:14px;font-size:11px">
+          <span style="font-size:9px;font-weight:800;letter-spacing:1.2px;color:#4a5568;text-transform:uppercase;white-space:nowrap">Situation actuelle</span>
+          <span style="color:#8899b0">Patrimoine: <strong id="live-bl-nw" style="color:#f0f4ff">—</strong></span>
+          <span style="color:#8899b0">Retraite: <strong id="live-bl-ret" style="color:#f0f4ff">—</strong></span>
+          <span style="color:#8899b0">Confiance: <strong id="live-bl-conf" style="color:#f0f4ff">—</strong></span>
+          <span style="color:#8899b0">Stress: <strong id="live-bl-str" style="color:#f0f4ff">—</strong></span>
+        </div>
+
+        <!-- Live Impact Cards -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px">
+          <div style="padding:16px;border-radius:14px;background:rgba(99,179,237,0.06);border:1px solid rgba(99,179,237,0.15)">
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#63b3ed;text-transform:uppercase;margin-bottom:8px">Patrimoine net</div>
+            <div id="live-nw" style="font-size:22px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
+            <div id="live-nw-d" style="font-size:12px;margin-top:4px;font-weight:600">vs baseline</div>
+          </div>
+          <div style="padding:16px;border-radius:14px;background:rgba(104,211,145,0.06);border:1px solid rgba(104,211,145,0.15)">
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#68d391;text-transform:uppercase;margin-bottom:8px">Retraite</div>
+            <div id="live-ret" style="font-size:22px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
+            <div id="live-ret-d" style="font-size:12px;margin-top:4px;font-weight:600">vs baseline</div>
+          </div>
+          <div style="padding:16px;border-radius:14px;background:rgba(246,173,85,0.06);border:1px solid rgba(246,173,85,0.15)">
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#f6ad55;text-transform:uppercase;margin-bottom:8px">Stress financier</div>
+            <div id="live-stress" style="font-size:22px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
+            <div id="live-stress-d" style="font-size:12px;margin-top:4px;font-weight:600">niveau</div>
+          </div>
+          <div style="padding:16px;border-radius:14px;background:rgba(159,122,234,0.06);border:1px solid rgba(159,122,234,0.15)">
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#9f7aea;text-transform:uppercase;margin-bottom:8px">Confiance</div>
+            <div id="live-conf" style="font-size:22px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
+            <div id="live-conf-d" style="font-size:12px;margin-top:4px;font-weight:600">probabilité</div>
+          </div>
+        </div>
+
+        <!-- Sliders -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px;padding:16px;background:rgba(255,255,255,0.03);border-radius:12px;border:1px solid rgba(255,255,255,0.06)">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+              <span style="font-size:11px;color:#8899b0;font-weight:600">Épargne additionnelle</span>
+              <span id="live-sv" style="font-size:11px;font-weight:700;color:#68d391"></span>
+            </div>
+            <input type="range" id="sl-savings" min="0" max="5000" step="50" value="500"
+              style="width:100%;accent-color:#68d391;cursor:pointer" oninput="updateLiveSliders()">
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5k/mo</span></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+              <span style="font-size:11px;color:#8899b0;font-weight:600">Investissement additionnel</span>
+              <span id="live-iv" style="font-size:11px;font-weight:700;color:#63b3ed"></span>
+            </div>
+            <input type="range" id="sl-invest" min="0" max="5000" step="50" value="300"
+              style="width:100%;accent-color:#63b3ed;cursor:pointer" oninput="updateLiveSliders()">
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5k/mo</span></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+              <span style="font-size:11px;color:#8899b0;font-weight:600">Âge de retraite cible</span>
+              <span id="live-rv" style="font-size:11px;font-weight:700;color:#9f7aea"></span>
+            </div>
+            <input type="range" id="sl-retire" min="35" max="75" step="1" value="55"
+              style="width:100%;accent-color:#9f7aea;cursor:pointer" oninput="updateLiveSliders()">
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>35</span><span>75 ans</span></div>
+          </div>
+        </div>
+
+        <!-- Category tabs -->
+        <div style="display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px" id="live-cat-tabs"></div>
+
+        <!-- Multi-select scenario grid -->
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px" id="live-sc-grid"></div>
+
+        <!-- Selected chips -->
+        <div id="live-chips" style="display:flex;flex-wrap:wrap;gap:6px;min-height:28px"></div>
+      </div>
+
+      <!-- Live chart -->
+      <div class="glass" style="padding:24px;margin-top:16px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:16px">
+          <div>
+            <div class="lbl" style="margin-bottom:4px">Projection combinée</div>
+            <div style="font-size:12px;color:#8899b0">Trajectoire 25 ans avec tous tes choix actifs</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:2px;background:#68d391;border-radius:1px"></div><span style="font-size:10px;color:#8899b0">Combiné</span></div>
+            <div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:2px;background:rgba(99,179,237,0.4);border-radius:1px;border-top:1px dashed #63b3ed"></div><span style="font-size:10px;color:#8899b0">Baseline</span></div>
+          </div>
+        </div>
+        <canvas id="live-chart" height="200"></canvas>
+      </div>
+    </div>
+
+    <!-- ===== MON PLAN — Comparateur interactif ===== -->
+    <div id="sec-compare" style="padding:16px 28px 0;display:none">
+
+      <!-- TOP: BARRE DE COMPARAISON -->
+      <div style="display:grid;grid-template-columns:1fr 110px 1fr;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);margin-bottom:16px">
+        <!-- MAINTENANT -->
+        <div style="padding:20px 24px;background:rgba(255,255,255,0.02)">
+          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4a5568;margin-bottom:14px">📍 Maintenant</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">PATRIMOINE</div><div id="cnow-nw" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">RETRAITE</div><div id="cnow-ret" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">PROJ. 10 ANS</div><div id="cnow-p10" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">CONFIANCE</div><div id="cnow-conf" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
+          </div>
+        </div>
+        <!-- FLÈCHE + DELTA -->
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:rgba(104,211,145,0.04);border-left:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);padding:12px 0">
+          <div style="font-size:22px;color:#68d391">→</div>
+          <div id="cmp-delta-badge" style="font-size:9px;font-weight:700;padding:3px 8px;border-radius:12px;background:rgba(104,211,145,0.15);color:#68d391;text-align:center"></div>
+        </div>
+        <!-- AVEC TES CHOIX -->
+        <div style="padding:20px 24px;background:rgba(104,211,145,0.03)">
+          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#68d391;margin-bottom:14px">✨ Avec tes choix</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">PATRIMOINE</div><div id="csc-nw" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-nw-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">RETRAITE</div><div id="csc-ret" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-ret-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">PROJ. 10 ANS</div><div id="csc-p10" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-p10-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">CONFIANCE</div><div id="csc-conf" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-conf-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BUILDER + CHART -->
+      <div style="display:grid;grid-template-columns:380px 1fr;gap:16px;padding-bottom:24px">
+
+        <!-- LEFT: PARAMÈTRES -->
+        <div style="display:flex;flex-direction:column;gap:12px">
+
+          <!-- 🏠 LOGEMENT -->
+          <div class="glass" style="padding:18px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+              <span style="font-size:15px">🏠</span>
+              <span style="font-size:12px;font-weight:700;color:#f0f4ff">Logement</span>
+            </div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:1px;color:#4a5568;text-transform:uppercase;margin-bottom:8px">Résidence</div>
+            <div id="cmp-city-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+              <span style="font-size:11px;color:#8899b0">Loyer / mensualité</span>
+              <span id="cmp-rent-val" style="font-size:12px;font-weight:700;color:#63b3ed"></span>
+            </div>
+            <input type="range" id="cmp-rent" min="0" max="5000" step="50" style="width:100%;accent-color:#63b3ed;cursor:pointer" oninput="updateCompare()">
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5 000/mo</span></div>
+          </div>
+
+          <!-- 📈 INVESTISSEMENTS -->
+          <div class="glass" style="padding:18px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:15px">📈</span>
+                <span style="font-size:12px;font-weight:700;color:#f0f4ff">Investissements</span>
+              </div>
+              <div id="cmp-total-alloc" style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;background:rgba(255,255,255,0.05);color:#8899b0">0% alloué</div>
+            </div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:1px;color:#4a5568;text-transform:uppercase;margin-bottom:10px">% de ton patrimoine</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                  <span style="font-size:11px;color:#8899b0">📊 Bourse / ETF <span style="font-size:9px;color:#4a5568">8.7%/an</span></span>
+                  <span id="cmp-eq-val" style="font-size:12px;font-weight:700;color:#63b3ed"></span>
+                </div>
+                <input type="range" id="cmp-eq" min="0" max="100" step="5" style="width:100%;accent-color:#63b3ed;cursor:pointer" oninput="updateCompare()">
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                  <span style="font-size:11px;color:#8899b0">🏢 Immobilier <span style="font-size:9px;color:#4a5568">5.5%/an</span></span>
+                  <span id="cmp-re-val" style="font-size:12px;font-weight:700;color:#9f7aea"></span>
+                </div>
+                <input type="range" id="cmp-re" min="0" max="100" step="5" style="width:100%;accent-color:#9f7aea;cursor:pointer" oninput="updateCompare()">
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                  <span style="font-size:11px;color:#8899b0">₿ Crypto <span style="font-size:9px;color:#4a5568">20%/an</span></span>
+                  <span id="cmp-cr-val" style="font-size:12px;font-weight:700;color:#f6ad55"></span>
+                </div>
+                <input type="range" id="cmp-cr" min="0" max="50" step="5" style="width:100%;accent-color:#f6ad55;cursor:pointer" oninput="updateCompare()">
+              </div>
+              <div style="padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center">
+                <span style="font-size:11px;color:#8899b0">💵 Liquidités (reste) <span style="font-size:9px;color:#4a5568">2%/an</span></span>
+                <span id="cmp-cash-val" style="font-size:12px;font-weight:700;color:#68d391"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 💼 REVENUS & ÉPARGNE -->
+          <div class="glass" style="padding:18px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+              <span style="font-size:15px">💼</span>
+              <span style="font-size:12px;font-weight:700;color:#f0f4ff">Revenus & Épargne</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                  <span style="font-size:11px;color:#8899b0">Augmentation salaire</span>
+                  <span id="cmp-sal-val" style="font-size:12px;font-weight:700;color:#68d391"></span>
+                </div>
+                <input type="range" id="cmp-sal" min="0" max="100" step="5" style="width:100%;accent-color:#68d391;cursor:pointer" oninput="updateCompare()">
+                <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>+0%</span><span>+100%</span></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                  <span style="font-size:11px;color:#8899b0">Revenu complémentaire</span>
+                  <span id="cmp-side-val" style="font-size:12px;font-weight:700;color:#63b3ed"></span>
+                </div>
+                <input type="range" id="cmp-side" min="0" max="5000" step="100" style="width:100%;accent-color:#63b3ed;cursor:pointer" oninput="updateCompare()">
+                <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5 000/mo</span></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                  <span style="font-size:11px;color:#8899b0">Épargne mensuelle additionnelle</span>
+                  <span id="cmp-save-val" style="font-size:12px;font-weight:700;color:#9f7aea"></span>
+                </div>
+                <input type="range" id="cmp-save" min="0" max="5000" step="100" style="width:100%;accent-color:#9f7aea;cursor:pointer" oninput="updateCompare()">
+                <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5 000/mo</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: CHART + JALONS -->
+        <div style="display:flex;flex-direction:column;gap:12px">
+
+          <!-- Projection chart -->
+          <div class="glass" style="padding:20px">
+            <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4a5568;margin-bottom:12px">Projection patrimoine — 25 ans</div>
+            <canvas id="compare-chart" height="200"></canvas>
+          </div>
+
+          <!-- Jalons clés -->
+          <div class="glass" style="padding:20px">
+            <div style="font-size:11px;font-weight:700;color:#f0f4ff;margin-bottom:12px;letter-spacing:0.3px">Impact de tes choix</div>
+            <div id="cmp-milestones"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:20px 28px 0;text-align:center">
+      <div style="font-size:11px;color:#2d3748">FinTwin simulations are AI-generated projections for educational purposes only. Not financial advice.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+/* ===== DYNAMIC GLOBALS (set by onboarding) ===== */
+let CURRENCY    = '£';
+let NETWORTH    = 108500;
+let RETIRE_AGE  = 52;
+let BASE_STRESS = 45;
+let BASE_CONF   = 71;
+let RISK_MULT   = 1.0;
+let USER_INV    = 78000;
+let MONTHLY_CON = 1200;
+let P5_BASE     = 340000;
+let P10_BASE    = 720000;
+let P25_BASE    = 2400000;
+
+/* ===== DATA ===== */
+
+const CATS = [
+  {id:'relocate',label:'Relocate',e:'&#127758;',c:'#f6ad55',sc:[
+    {id:'dubai',    t:'Dubai',        f:'&#127462;&#127466;',s:'Tax-free living',         w:+23,r:-3,x:-8, c:'#f6ad55',m:1.23,i:'0% income tax saves £28k/yr. Retirement accelerated 3 years.'},
+    {id:'singapore',t:'Singapore',    f:'&#127480;&#127468;',s:'Asia finance hub',         w:+19,r:-2,x:-5, c:'#63b3ed',m:1.19,i:'Top marginal rate 22% vs UK 45%. Finance salary ceiling +35%.'},
+    {id:'zurich',   t:'Zurich',        f:'&#127464;&#127469;',s:'Global finance capital',   w:+22,r:-2,x:-2, c:'#f6ad55',m:1.22,i:'Swiss salaries 2x European average. Strong pension system.'},
+    {id:'hongkong', t:'Hong Kong',    f:'&#127469;&#127472;',s:'Tax capped at 15%',        w:+20,r:-2,x:+3, c:'#fc8181',m:1.20,i:'Max income tax capped at 15%. Global finance hub.'},
+    {id:'lisbon',   t:'Lisbon',        f:'&#127477;&#127481;',s:'NHR 10yr tax regime',      w:+15,r:-2,x:-10,c:'#68d391',m:1.15,i:'NHR flat 20% tax for 10 years. 40% lower cost of living.'},
+    {id:'miami',    t:'Miami',         f:'&#127482;&#127480;',s:'No state income tax',      w:+14,r:-1,x:-4, c:'#fc8181',m:1.14,i:'Florida zero state income tax. Booming tech & finance scene.'},
+    {id:'capetown', t:'Cape Town',    f:'&#127487;&#127462;',s:'Ultra low cost of life',    w:+18,r:-3,x:-15,c:'#68d391',m:1.18,i:'80% cost reduction vs London. Remote income stretches 5x.'},
+    {id:'amsterdam',t:'Amsterdam',    f:'&#127475;&#127473;',s:'30% ruling tax scheme',     w:+10,r:-1,x:-3, c:'#38b2ac',m:1.10,i:'30% of salary tax-free for 5 years under Dutch ruling.'},
+    {id:'newyork',  t:'New York',     f:'&#127482;&#127480;',s:'Highest salary ceiling',    w:+12,r:-1,x:+8, c:'#63b3ed',m:1.12,i:'NYC finance/tech salaries up to 40% higher than London.'},
+    {id:'bali',     t:'Bali',          f:'&#127470;&#127465;',s:'Digital nomad paradise',    w:+11,r:-2,x:-18,c:'#38b2ac',m:1.11,i:'60% cost reduction vs London. Digital nomad visa available.'},
+    {id:'barcelona',t:'Barcelona',    f:'&#127466;&#127480;',s:'Beckham Law tax benefit',    w:+8, r: 0,x:-12,c:'#9f7aea',m:1.08,i:'Beckham Law: flat 24% tax for 6 years. 35% lower COL.'},
+    {id:'berlin',   t:'Berlin',        f:'&#127465;&#127466;',s:'Startup ecosystem',         w:+9, r: 0,x:-6, c:'#9f7aea',m:1.09,i:'Lower COL, strong EU tech market. Visa-friendly for UK.'},
+    {id:'sydney',   t:'Sydney',        f:'&#127462;&#127482;',s:'Superannuation boost',      w:+7, r: 0,x:-7, c:'#38b2ac',m:1.07,i:'Super adds 11% employer contribution to retirement savings.'},
+    {id:'tokyo',    t:'Tokyo',         f:'&#127471;&#127477;',s:'Tech salary premium',       w:+6, r:+1,x:+5, c:'#f6ad55',m:1.06,i:'High tech salary ceiling. Strong yen savings power.'},
+    {id:'toronto',  t:'Toronto',       f:'&#127464;&#127462;',s:'North America tech hub',    w:+9, r: 0,x:-2, c:'#9f7aea',m:1.09,i:'RRSP shelters up to £18k/yr. Strong tech market demand.'},
+  ]},
+  {id:'property',label:'Property',e:'&#127968;',c:'#68d391',sc:[
+    {id:'flat_lon',  t:'London Flat',    f:'&#127748;',s:'10% deposit, zone 2',     w:+8, r:+1,x:+15,c:'#63b3ed',m:1.08,i:'£380k purchase. Equity builds £120k by year 10.'},
+    {id:'house_sub', t:'Suburban House', f:'&#127969;',s:'25% deposit, 3 bed',      w:+14,r:+2,x:+10,c:'#68d391',m:1.14,i:'Lower cost vs renting. Property equity £340k in 15 yrs.'},
+    {id:'country',   t:'Country House',  f:'&#127795;',s:'Rural commuter belt',      w:+12,r:+1,x:+8, c:'#68d391',m:1.12,i:'50% price vs London for equivalent space. 4.8% yield.'},
+    {id:'studio_btl',t:'Studio BTL',     f:'&#127970;',s:'Buy-to-let investment',    w:+13,r:+1,x:+12,c:'#f6ad55',m:1.13,i:'Gross rental yield 5.2%. Adds £800/mo passive income.'},
+    {id:'flat_btl',  t:'Flat BTL',       f:'&#127968;',s:'2-bed buy-to-let',         w:+17,r: 0,x:+10,c:'#f6ad55',m:1.17,i:'Rental income covers mortgage + £400/mo surplus.'},
+    {id:'offplan',   t:'Off-Plan Buy',   f:'&#128208;',s:'New development deal',     w:+16,r:+1,x:+14,c:'#9f7aea',m:1.16,i:'15% below market on completion. £62k day-1 equity.'},
+    {id:'flip',      t:'House Flip',     f:'&#128296;',s:'Renovate and sell',        w:+21,r:-1,x:+22,c:'#fc8181',m:1.21,i:'Average £68k profit per flip. High effort, high return.'},
+    {id:'cobuy',     t:'Co-Buy Partner', f:'&#129309;',s:'Joint purchase 50/50',     w:+12,r: 0,x:+5, c:'#38b2ac',m:1.12,i:'Doubles deposit power. Access prime zones sooner.'},
+    {id:'abroad',    t:'Buy Abroad',     f:'&#127774;',s:'Spain / Portugal',         w:+9, r: 0,x:+6, c:'#f6ad55',m:1.09,i:'Costa del Sol 3-bed £220k. Golden visa available.'},
+    {id:'reit',      t:'REIT Fund',      f:'&#128200;',s:'Real estate trust',        w:+10,r:-1,x:+3, c:'#63b3ed',m:1.10,i:'8.4% avg annual return. No landlord responsibilities.'},
+    {id:'overpay',   t:'Overpay Mortgage',f:'&#128179;',s:'Accelerate payoff',       w:+7, r: 0,x:-5, c:'#68d391',m:1.07,i:'£300/mo overpayment saves £41k interest. Free in 14 yrs.'},
+    {id:'commercial',t:'Commercial',     f:'&#127959;',s:'Commercial property',      w:+15,r: 0,x:+8, c:'#9f7aea',m:1.15,i:'Yield 6-8%. Long-term leases, stable income stream.'},
+    {id:'downsize',  t:'Downsize',       f:'&#127968;',s:'Sell, release equity',     w:+9, r:-2,x:-8, c:'#38b2ac',m:1.09,i:'Release £180k equity. Reduce costs £1,100/mo.'},
+    {id:'holiday_h', t:'Holiday Home',   f:'&#127958;',s:'Abroad leisure asset',     w:+8, r:+1,x:+10,c:'#f6ad55',m:1.08,i:'AirBnB income covers costs + 6% rental yield.'},
+    {id:'rent_inv',  t:'Rent & Invest',  f:'&#128176;',s:'Keep renting, invest gap', w:+6, r:-1,x:-3, c:'#63b3ed',m:1.06,i:'Invest deposit in S&P500. Flexibility + 9% avg return.'},
+  ]},
+  {id:'career',label:'Career',e:'&#128188;',c:'#9f7aea',sc:[
+    {id:'freelance', t:'Go Freelance',    f:'&#128187;',s:'Self-employed contractor', w:+18,r:-1,x:+20,c:'#9f7aea',m:1.18,i:'Day rate £650+ adds £180k to wealth over 10 years.'},
+    {id:'startup',   t:'Start a Startup', f:'&#128640;',s:'Founder equity play',      w:+35,r:+2,x:+35,c:'#fc8181',m:1.35,i:'High risk. 8% chance of £1M+ exit within 7 years.'},
+    {id:'raise',     t:'Negotiate +20%',  f:'&#128172;',s:'Salary negotiation',       w:+15,r:-2,x:-3, c:'#68d391',m:1.15,i:'£19k/yr uplift compounds to £310k additional over 20yrs.'},
+    {id:'tech',      t:'Move to Tech',    f:'&#9889;',  s:'Switch to tech sector',    w:+22,r:-2,x:+5, c:'#63b3ed',m:1.22,i:'Tech PM salaries average £130k. £35k/yr uplift.'},
+    {id:'mba',       t:'Get an MBA',      f:'&#127891;',s:'Top business school',      w:+12,r:+1,x:+15,c:'#9f7aea',m:1.12,i:'£80k cost offset by £25k/yr salary premium in 4 years.'},
+    {id:'sabbat',    t:'Sabbatical',      f:'&#127807;',s:'6-12 month career break',  w:-5, r:+1,x:-20,c:'#38b2ac',m:0.95,i:'£48k income loss. Often leads to £30k+ career uplift.'},
+    {id:'part_time', t:'Go Part-Time',    f:'&#8987;',  s:'4 days / 32hrs week',      w:-18,r:+5,x:-12,c:'#fc8181',m:0.82,i:'20% income reduction. Work-life balance improves.'},
+    {id:'side_inc',  t:'Side Income',     f:'&#128161;',s:'Second revenue stream',    w:+14,r:-1,x:+8, c:'#f6ad55',m:1.14,i:'£2k/mo side income adds £240k over 10 years after tax.'},
+    {id:'remote',    t:'Remote + Move',   f:'&#127758;',s:'Remote work, low COL city',w:+11,r:-1,x:-5, c:'#68d391',m:1.11,i:'Keep London salary, move to lower COL. Save £18k/yr.'},
+    {id:'consult',   t:'Go Consultant',   f:'&#128203;',s:'Boutique consultancy',     w:+20,r:-2,x:+12,c:'#9f7aea',m:1.20,i:'£120k+ consultant rates. Client base built in 18 months.'},
+    {id:'equity_sc', t:'Equity Startup',  f:'&#129412;',s:'0.5-2% equity stake',     w:+28,r:-3,x:+25,c:'#fc8181',m:1.28,i:'Series B exit potential: £400k-£1.2M equity value.'},
+    {id:'gov',       t:'Government Role', f:'&#127963;',s:'Public sector + pension',  w:+5, r:+3,x:-8, c:'#63b3ed',m:1.05,i:'Defined benefit pension worth £800k equivalent.'},
+    {id:'academic',  t:'Academic Career', f:'&#128218;',s:'University lecturer',      w:-10,r:+5,x:-5, c:'#8899b0',m:0.90,i:'Lower income offset by pension, stability, fulfillment.'},
+    {id:'creator',   t:'Content Creator', f:'&#127909;',s:'YouTube / newsletter',    w:+8, r: 0,x:+18,c:'#f6ad55',m:1.08,i:'18 months to profitability. Asymmetric upside if grows.'},
+    {id:'exec',      t:'Executive Track', f:'&#127942;',s:'C-suite progression',      w:+25,r:-1,x:+10,c:'#9f7aea',m:1.25,i:'VP/Director in 3 years. Total comp £180k+ with LTIP.'},
+  ]},
+  {id:'life',label:'Life Events',e:'&#128106;',c:'#fc8181',sc:[
+    {id:'married',   t:'Get Married',    f:'&#128141;',s:'Marriage + shared finances',w:+5, r: 0,x:+5, c:'#f6ad55',m:1.05,i:'Dual income + shared costs. ISA doubles to £40k/yr.'},
+    {id:'child1',    t:'1 Child',        f:'&#128118;',s:'First child, age 33',       w:-9, r:+4,x:+18,c:'#fc8181',m:0.91,i:'£230k modelled cost over 18 years. 6mo parental leave.'},
+    {id:'child2',    t:'2 Children',     f:'&#128103;',s:'Family of 4',               w:-16,r:+6,x:+22,c:'#fc8181',m:0.84,i:'£380k total cost. Retirement delayed 6 years without changes.'},
+    {id:'child3',    t:'3 Children',     f:'&#128106;',s:'Family of 5',               w:-22,r:+8,x:+28,c:'#fc8181',m:0.78,i:'£540k modelled cost. Requires major lifestyle restructure.'},
+    {id:'divorce',   t:'Divorce',        f:'&#9878;',  s:'Asset split scenario',      w:-25,r:+8,x:+35,c:'#fc8181',m:0.75,i:'50% asset split. Net worth drops to £54k. +8yr rebuild.'},
+    {id:'care_par',  t:'Care for Parent',f:'&#10084;', s:'Elderly care responsibility',w:-8,r:+3,x:+20,c:'#f6ad55',m:0.92,i:'£12k/yr direct + reduced work hours. Significant toll.'},
+    {id:'health_ev', t:'Health Event',   f:'&#127973;',s:'Serious illness scenario',  w:-15,r:+4,x:+30,c:'#fc8181',m:0.85,i:'6 months off work. Private cover limits loss to £28k.'},
+    {id:'inherit',   t:'Inheritance',    f:'&#127974;',s:'£150k windfall received',   w:+30,r:-4,x:-15,c:'#68d391',m:1.30,i:'£150k at 8% = £680k additional wealth by retirement.'},
+    {id:'car',       t:'Luxury Car',     f:'&#128663;',s:'£45k depreciating asset',   w:-4, r:+1,x:+3, c:'#8899b0',m:0.96,i:'Opportunity cost: £210k by retirement if invested instead.'},
+    {id:'gap_yr',    t:'Gap Year',       f:'&#9992;',  s:'Travel sabbatical',         w:-6, r:+1,x:-18,c:'#38b2ac',m:0.94,i:'£35k cost including lost income. Life experience priceless.'},
+    {id:'priv_sc',   t:'Private School', f:'&#127890;',s:'£20k/yr per child',         w:-12,r:+4,x:+15,c:'#f6ad55',m:0.88,i:'£240k over 12 years. Salary premium offsets 60% long-term.'},
+    {id:'uni_fund',  t:'Fund University',f:'&#127891;',s:"Children's education fund", w:-8, r:+2,x:+10,c:'#9f7aea',m:0.92,i:'£80k total. Junior ISA covers most cost if started early.'},
+    {id:'wedding',   t:'Wedding',        f:'&#127963;',s:'£30k wedding budget',       w:-5, r:+1,x:+8, c:'#fc8181',m:0.95,i:'One-off £30k. Opportunity cost: £148k at retirement.'},
+    {id:'reno',      t:'Renovation',     f:'&#128295;',s:'Home improvement £60k',     w:+6, r:+1,x:+12,c:'#68d391',m:1.06,i:'£60k kitchen/extension adds £90k to property value.'},
+    {id:'ext_lv',    t:'Extended Leave', f:'&#127800;',s:'12 months parental leave',  w:-11,r:+3,x:+14,c:'#f6ad55',m:0.89,i:'£52k income lost. £8k pension gap. Statutory pay covers 9mo.'},
+  ]},
+  {id:'invest',label:'Investments',e:'&#128200;',c:'#38b2ac',sc:[
+    {id:'isa',       t:'Max ISA',        f:'&#128737;',s:'£20k/yr tax-free',          w:+14,r:-2,x:-5, c:'#68d391',m:1.14,i:'£20k/yr tax-free grows to £920k over 25 years at 8%.'},
+    {id:'sipp',      t:'Max SIPP',       f:'&#127974;',s:'Pension top-up + relief',   w:+18,r:-3,x:-8, c:'#9f7aea',m:1.18,i:'40% tax relief adds £8k/yr free. £1.2M pot by retirement.'},
+    {id:'sp500',     t:'S&P 500 ETF',    f:'&#128202;',s:'Index fund investing',      w:+12,r:-1,x:-3, c:'#63b3ed',m:1.12,i:'Historical 10.5% avg return. Low cost, diversified.'},
+    {id:'tech_stk',  t:'Tech Stocks',    f:'&#128187;',s:'FAANG + growth picks',      w:+8, r:-1,x:+10,c:'#f6ad55',m:1.08,i:'High return potential, 3x volatility vs index.'},
+    {id:'btc',       t:'Bitcoin 5%',     f:'&#8383;',  s:'5% portfolio allocation',   w:+20,r:-2,x:+15,c:'#f6ad55',m:1.20,i:'Asymmetric upside. 5% limits max portfolio loss to 5%.'},
+    {id:'re_fund',   t:'RE Fund',        f:'&#127959;',s:'Real estate investment',    w:+11,r:-1,x:+2, c:'#38b2ac',m:1.11,i:'8.4% avg annual return. Inflation hedge. No hassle.'},
+    {id:'angel',     t:'Angel Investing',f:'&#128124;',s:'Early-stage startups',      w:+25,r:-3,x:+20,c:'#fc8181',m:1.25,i:'Portfolio of 10 startups. 1-2 exits expected. 22% IRR.'},
+    {id:'p2p',       t:'P2P Lending',    f:'&#128279;',s:'Peer-to-peer platform',     w:+7, r:-1,x:+5, c:'#63b3ed',m:1.07,i:'6-8% yield. Diversified across 200+ borrowers.'},
+    {id:'gold',      t:'Gold 10%',       f:'&#129351;',s:'Inflation hedge',           w:+5, r: 0,x:-5, c:'#f6ad55',m:1.05,i:'Safe haven in downturns. Reduces portfolio volatility 18%.'},
+    {id:'bonds',     t:'Bonds Defensive',f:'&#128220;',s:'Government bonds',          w:+3, r: 0,x:-8, c:'#63b3ed',m:1.03,i:'4.5% yield on UK gilts. Capital protection in bear markets.'},
+    {id:'drip',      t:'Dividend DRIP',  f:'&#9851;',  s:'Reinvest all dividends',    w:+9, r:-1,x:-3, c:'#68d391',m:1.09,i:'Compounding dividends add 2.1% to total annual return.'},
+    {id:'inv300',    t:'+£300/mo',       f:'&#10133;', s:'Increase by £300/month',    w:+16,r:-2,x:-4, c:'#38b2ac',m:1.16,i:'£300/mo extra at 8% = £520k additional wealth over 25yrs.'},
+    {id:'inv500',    t:'+£500/mo',       f:'&#10133;', s:'Increase by £500/month',    w:+22,r:-3,x:-5, c:'#38b2ac',m:1.22,i:'£500/mo extra = £880k additional wealth. Retire 3 yrs early.'},
+    {id:'inv1000',   t:'+£1,000/mo',     f:'&#10133;', s:'Increase by £1k/month',     w:+31,r:-4,x:-6, c:'#68d391',m:1.31,i:'£1k/mo extra = £1.76M additional. Life-changing compounding.'},
+    {id:'robo',      t:'Robo-Advisor',   f:'&#129302;',s:'Switch to algorithmic',     w:+10,r:-1,x:-2, c:'#9f7aea',m:1.10,i:'Automated rebalancing improves returns by 1.4%/yr avg.'},
+  ]},
+  {id:'retire',label:'Retirement',e:'&#127958;',c:'#63b3ed',sc:[
+    {id:'ret40', t:'Retire at 40',   f:'&#127796;',s:'8 years away',           w:-35,r:-12,x:-40,c:'#fc8181',m:0.65,i:'Requires 8x current savings rate. Portfolio funds 50+ years.'},
+    {id:'ret42', t:'Retire at 42',   f:'&#127796;',s:'10 years away',          w:-28,r:-10,x:-35,c:'#fc8181',m:0.72,i:'Requires 6x current savings rate. Career optimisation key.'},
+    {id:'ret45', t:'Retire at 45',   f:'&#127965;',s:'13 years away',          w:-20,r:-7, x:-28,c:'#f6ad55',m:0.80,i:'Requires 4x savings rate. £1.8M portfolio needed.'},
+    {id:'ret48', t:'Retire at 48',   f:'&#127965;',s:'16 years away',          w:-12,r:-4, x:-18,c:'#f6ad55',m:0.88,i:'Requires 2.5x savings rate. Freelance + investments help.'},
+    {id:'ret50', t:'Retire at 50',   f:'&#9961;',  s:'18 years away',          w:-8, r:-2, x:-15,c:'#63b3ed',m:0.92,i:'1.8x savings rate. ISA + SIPP combo achieves this.'},
+    {id:'ret52', t:'Retire at 52',   f:'&#127919;',s:'Baseline projection',    w: 0, r: 0, x:  0,c:'#68d391',m:1.00,i:'Current trajectory. 71% confidence. Achievable with discipline.'},
+    {id:'ret55', t:'Retire at 55',   f:'&#128197;',s:'Comfortable buffer',     w:+8, r:+3, x:+5, c:'#38b2ac',m:1.08,i:'3 extra years adds £220k buffer. 88% confidence.'},
+    {id:'ret58', t:'Retire at 58',   f:'&#128197;',s:'Strong position',        w:+15,r:+6, x:+8, c:'#38b2ac',m:1.15,i:'State pension overlap begins. Portfolio stress-tests at 94%.'},
+    {id:'ret60', t:'Retire at 60',   f:'&#128197;',s:'Full state pension',     w:+20,r:+8, x:+10,c:'#68d391',m:1.20,i:'Full state pension available. £3.4M portfolio achievable.'},
+    {id:'ret65', t:'Retire at 65',   f:'&#128197;',s:'Traditional retirement', w:+35,r:+13,x:+12,c:'#68d391',m:1.35,i:'Maximum accumulation. £5.1M projected. 99% confidence.'},
+    {id:'semi',  t:'Semi-Retire 45', f:'&#129495;',s:'Part-time passion work', w:-8, r:-3, x:-20,c:'#9f7aea',m:0.92,i:'2 days/week funds lifestyle. Freedom without full stop.'},
+    {id:'coast', t:'Coast FIRE',     f:'&#127940;',s:'Stop saving, coast',     w:-5, r:-2, x:-15,c:'#63b3ed',m:0.95,i:'Current savings compound without new contributions.'},
+    {id:'barista',t:'Barista FIRE',  f:'&#9749;',  s:'Low-stress work + invest',w:+2,r:-1, x:-18,c:'#38b2ac',m:1.02,i:'Part-time covers expenses. Portfolio compounds untouched.'},
+    {id:'fire_ab',t:'FIRE Abroad',   f:'&#127759;',s:'Low-cost country FIRE',  w:-10,r:-5, x:-25,c:'#f6ad55',m:0.90,i:'Retire 5 years early in SE Asia on 40% of UK living costs.'},
+    {id:'phased', t:'Phased Retire', f:'&#128201;',s:'Part-time to 60',        w:+10,r:+3, x:-10,c:'#68d391',m:1.10,i:'Gradual wind-down. Health + finances both improve.'},
+  ]},
+];
+
+function buildInsights(){
+  if(!obData||!obData.name) return INSIGHTS_DATA_FALLBACK;
+  const u=obData;
+  const income=parseNum(u.income)||60000;
+  const expenses=parseNum(u.expenses)||2000;
+  const savings=parseNum(u.savings)||10000;
+  const debt=parseNum(u.debt)||0;
+  const age=parseInt(u.age)||30;
+  const city=u.city||'Paris';
+  const risk=u.risk||'balanced';
+  const mNet=income/12*0.72;
+  const monthSave=Math.max(0,mNet-expenses);
+  const em=expenses>0?savings/expenses:0;
+  const dti=income>0?debt/income*100:0;
+  const ins=[];
+  // Quick wins
+  if(em<6) ins.push({h:`Fonds d'urgence insuffisant`,c:'#fc8181',bg:'rgba(252,129,129,0.1)',i:'⚠️',t:`Ton fonds d'urgence couvre seulement ${em.toFixed(1)} mois de dépenses. L'objectif est 6 mois — soit ${fk(Math.round(expenses*6))}.`,a:'Simuler'});
+  if(dti>30) ins.push({h:'Réduire ta dette priorité',c:'#f6ad55',bg:'rgba(246,173,85,0.1)',i:'⚡',t:`Ton ratio dette/revenu est à ${Math.round(dti)}%. Réduire ta dette libère ${fk(Math.round(debt*0.05))}/an en charge d'intérêts.`,a:'Optimiser'});
+  if(monthSave>200) ins.push({h:`Investis ${fk(Math.round(monthSave*0.5))}/mo en S&P 500`,c:'#68d391',bg:'rgba(104,211,145,0.1)',i:'↗',t:`Investir 50% de ton épargne en S&P 500 génère ${fk(Math.round(monthSave*0.5*12*10*1.087))} supplémentaires en 10 ans.`,a:'Appliquer'});
+  // Relocation
+  const bestReloc=city==='Paris'||city==='London'?'Dubai':city==='Dubai'?'Singapour':'Lisbonne';
+  const relocBoost=city==='Paris'||city==='London'?23:city==='Dubai'?19:15;
+  ins.push({h:`Déménager à ${bestReloc} · +${relocBoost}% wealth`,c:'#f6ad55',bg:'rgba(246,173,85,0.1)',i:'🌍',t:`Économies fiscales estimées à ${fk(Math.round(income*0.12))}/an. Impact sur ton patrimoine projeté : +${relocBoost}%.`,a:'Simuler'});
+  // Investment
+  if(risk==='conservative') ins.push({h:'Passe à un profil équilibré',c:'#63b3ed',bg:'rgba(99,179,237,0.1)',i:'◎',t:`Ton profil prudent limite ton potentiel. Passer à équilibré augmente le rendement attendu de +2.2%/an, soit +${fk(Math.round(NETWORTH*0.22))} en 10 ans.`,a:'Explorer'});
+  if(risk==='aggressive') ins.push({h:'Diversifie avec 10% obligations',c:'#9f7aea',bg:'rgba(159,122,234,0.1)',i:'✦',t:`Ton profil agressif est aligné avec ton âge (${age} ans). Ajouter 10% en obligations réduit la volatilité sans sacrifier le rendement long terme.`,a:'Rééquilibrer'});
+  // ISA / Pension
+  ins.push({h:`Maxe ton ISA · ${fk(Math.round(20000*25*0.087))} défiscalisé`,c:'#9f7aea',bg:'rgba(159,122,234,0.1)',i:'✦',t:`Maxer ton ISA (${fk(20000)}/an) génère ${fk(Math.round(20000*25*0.087))} de croissance défiscalisée sur 25 ans — sans impôt sur les gains.`,a:'Simuler'});
+  ins.push({h:'Double ta cotisation retraite',c:'#38b2ac',bg:'rgba(56,178,172,0.1)',i:'◆',t:`Augmenter de 8% à 15% du salaire ajoute ${fk(Math.round(income*0.07*10))} à ton pot sur 10 ans grâce à la déduction fiscale.`,a:'Calculer'});
+  // Career
+  const salBoost=Math.round(income*0.20);
+  ins.push({h:`Négocie +20% · ${fk(salBoost*20)} en 20 ans`,c:'#68d391',bg:'rgba(104,211,145,0.1)',i:'↗',t:`Une négociation salariale de +20% ajoute ${fk(salBoost)}/an net, soit ${fk(salBoost*20)} de wealth accumulé sur 20 ans.`,a:'Simuler'});
+  // Retirement
+  const ytr=Math.max(1,RETIRE_AGE-age);
+  ins.push({h:`Retraite à ${RETIRE_AGE} ans · ${BASE_CONF}% confiance`,c:'#63b3ed',bg:'rgba(99,179,237,0.1)',i:'◎',t:`À ${age} ans tu es à ${ytr} ans de ta cible. ${BASE_CONF<70?'Augmente ton épargne mensuelle de 20% pour atteindre 80% de confiance.':'Tu es sur la bonne trajectoire — continue à optimiser.'}`,a:'Détails'});
+  // Stress
+  if(BASE_STRESS>50) ins.push({h:'Réduire ton stress financier',c:'#fc8181',bg:'rgba(252,129,129,0.1)',i:'⚠️',t:`Ton score de stress est élevé (${BASE_STRESS}/100). Les scénarios Career + Investments combinés réduisent le stress de 18 points en 2 ans.`,a:'Voir plan'});
+  // Side income
+  ins.push({h:'Revenu complémentaire · +£240k/10 ans',c:'#f6ad55',bg:'rgba(246,173,85,0.1)',i:'💡',t:`Un revenu de ${fk(2000)}/mo (freelance, immobilier, création) ajoute ${fk(2000*12*10)} brut en 10 ans et accélère la retraite de 2-3 ans.`,a:'Explorer'});
+  return ins;
+}
+const INSIGHTS_DATA_FALLBACK=[
+  {c:'#f6ad55',bg:'rgba(246,173,85,0.1)',i:'⚡',t:'Ton épargne mensuelle actuelle est sous-optimisée. Augmenter de 20% accélère la retraite de 2 ans.',a:'Simuler'},
+  {c:'#68d391',bg:'rgba(104,211,145,0.1)',i:'↗',t:'Maxer ton ISA génère +£4,200/an en croissance défiscalisée.',a:'Appliquer'},
+  {c:'#63b3ed',bg:'rgba(99,179,237,0.1)',i:'◎',t:'Une relocalisation fiscalement avantageuse peut réduire ta charge fiscale de 20-30%.',a:'Explorer'},
+];
+
+const TIMELINE = [
+  {y:2026,l:'Emergency Fund Complete',   s:'6 months expenses secured',           c:'#68d391',done:true},
+  {y:2026,l:'Debt Paydown Begins',        s:'£12k cleared in structured plan',     c:'#f6ad55',done:true},
+  {y:2027,l:'House Deposit Ready',        s:'£45,000 target reached',              c:'#63b3ed',done:false},
+  {y:2027,l:'ISA Fully Maxed',            s:'£20k contributed, tax-free',          c:'#38b2ac',done:false},
+  {y:2028,l:'All Consumer Debt Cleared',  s:'Financial slate wiped clean',          c:'#68d391',done:false},
+  {y:2028,l:'Salary £120k Target',        s:'Via promotion or career switch',       c:'#9f7aea',done:false},
+  {y:2029,l:'Portfolio £200k',            s:'Compound interest inflection point',   c:'#9f7aea',done:false},
+  {y:2030,l:'First Property Owned',       s:'Keys in hand — equity building',       c:'#63b3ed',done:false},
+  {y:2031,l:'Side Income £2k/mo',         s:'Passive revenue stream active',        c:'#f6ad55',done:false},
+  {y:2032,l:'Pension Pot £150k',          s:'On track for comfortable retirement',  c:'#38b2ac',done:false},
+  {y:2034,l:'Net Worth £500k',            s:'Half-million milestone achieved',      c:'#68d391',done:false},
+  {y:2035,l:'Financial Independence',     s:'Passive income covers 60% of life',   c:'#f6ad55',done:false},
+  {y:2038,l:'2nd Property Acquired',      s:'Investment portfolio growing',         c:'#63b3ed',done:false},
+  {y:2040,l:'Net Worth £1 Million',       s:'Millionaire milestone unlocked',       c:'#9f7aea',done:false},
+  {y:2044,l:'Retirement Projection',      s:'71% confidence — age 52 target',      c:'#fc8181',done:false},
+];
+
+const HEALTH = [
+  {k:'savings',    l:'Savings Rate',    v:78,c:'#68d391'},
+  {k:'stability',  l:'Stability',        v:65,c:'#63b3ed'},
+  {k:'retirement', l:'Retirement',       v:71,c:'#9f7aea'},
+  {k:'spending',   l:'Spending',         v:60,c:'#f6ad55'},
+  {k:'debt',       l:'Debt Health',      v:82,c:'#38b2ac'},
+  {k:'invest',     l:'Investment',       v:74,c:'#fc8181'},
+  {k:'emergency',  l:'Emergency Fund',   v:55,c:'#63b3ed'},
+  {k:'pension',    l:'Pension',          v:68,c:'#9f7aea'},
+  {k:'protection', l:'Protection',       v:80,c:'#68d391'},
+  {k:'diversity',  l:'Diversification',  v:58,c:'#f6ad55'},
+  {k:'liquidity',  l:'Liquidity',        v:72,c:'#38b2ac'},
+  {k:'taxeff',     l:'Tax Efficiency',   v:63,c:'#fc8181'},
+  {k:'income',     l:'Income Growth',    v:77,c:'#63b3ed'},
+  {k:'networth',   l:'Net Worth Growth', v:85,c:'#68d391'},
+  {k:'risk',       l:'Risk Score',       v:45,c:'#f6ad55'},
+];
+
+/* ===== STATE ===== */
+let activeScs = new Map(); // id → sc, multi-select
+let activeSc = null;       // combined scenario (backward compat)
+let activeCat = 'relocate';
+let wealthChart, investChart, radarChart;
+let typingTimer = null;
+
+function getCombinedSc(){
+  const scs=[...activeScs.values()];
+  if(!scs.length) return null;
+  if(scs.length===1) return scs[0];
+  const totalW=scs.reduce((a,s)=>a+s.w,0);
+  const totalR=scs.reduce((a,s)=>a+(s.r||0),0);
+  const totalX=scs.reduce((a,s)=>a+(s.x||0),0);
+  const combinedM=Math.min(2.5,scs.reduce((a,s)=>a*Math.pow(s.m,0.75),1.0));
+  return{
+    t:scs.map(s=>s.t).join(' + '),
+    f:'🔀',c:'#63b3ed',
+    w:totalW,r:totalR,x:totalX,m:combinedM,
+    i:'Combinaison : '+scs.map(s=>s.t+' ('+( s.w>0?'+':'')+s.w+'%)').join(' · ')
+  };
+}
+
+/* ===== UTILS ===== */
+function fk(n){
+  const a=Math.abs(n);
+  if(a>=1e6) return CURRENCY+(n/1e6).toFixed(1).replace(/\.0$/,'')+'M';
+  if(a>=10000) return CURRENCY+(n/1000).toFixed(0)+'k';
+  if(a>=1000) return CURRENCY+(n/1000).toFixed(1).replace(/\.0$/,'')+'k';
+  return CURRENCY+Math.round(n);
+}
+function clr(n){return n<35?'#68d391':n<60?'#f6ad55':'#fc8181';}
+function getLbl(n){return n<35?'Low':n<60?'Moderate':'High';}
+
+function genWealth(mult){
+  const lbl=[],base=[],opt=[],con=[];
+  let v=NETWORTH;
+  const rate=0.087*mult;
+  const ac=MONTHLY_CON*12;
+  for(let y=0;y<=25;y++){
+    lbl.push(String(2026+y));
+    if(y>0) v=v*(1+rate)*(1+Math.sin(y*1.8)*0.04)+ac;
+    base.push(Math.round(v));
+    opt.push(Math.round(v*(1+0.04*Math.sqrt(y+1))));
+    con.push(Math.round(v*(1-0.03*Math.sqrt(y+1))));
+  }
+  return{lbl,base,opt,con};
+}
+
+function genInvest(mult){
+  const lbl=[],contrib=[],gains=[];
+  const base=Math.max(1000,USER_INV);
+  const mc=Math.max(100,MONTHLY_CON);
+  for(let m=0;m<=120;m+=6){
+    const b=base*Math.pow(1+(0.087*mult)/12,m);
+    lbl.push(m===0?'Now':m+'m');
+    contrib.push(Math.round(base+mc*m*mult));
+    gains.push(Math.max(0,Math.round((b-base)*mult)));
+  }
+  return{lbl,contrib,gains};
+}
+
+function ringOffset(pct,r){
+  const c=2*Math.PI*r;
+  return c-(pct/100)*c;
+}
+
+function setRing(id,pct,r=26,colorEl){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.setAttribute('stroke-dashoffset',ringOffset(pct,r));
+  if(colorEl) el.setAttribute('stroke',colorEl);
+}
+
+function animNum(el,to,prefix='£'){
+  if(!el) return;
+  const from=0,dur=1000,step=16;
+  const inc=to/(dur/step);
+  let cur=from;
+  const t=setInterval(()=>{
+    cur=Math.min(cur+inc,to);
+    const v=Math.round(cur);
+    el.textContent=v>=1e6?prefix+(v/1e6).toFixed(2)+'M':v>=1000?prefix+(v/1000).toFixed(0)+'k':prefix+v;
+    if(cur>=to) clearInterval(t);
+  },step);
+}
+
+/* ===== CHARTS ===== */
+const chartDefaults={
+  color:'#8899b0',
+  plugins:{legend:{display:false},tooltip:{
+    backgroundColor:'rgba(13,20,32,0.95)',
+    borderColor:'rgba(255,255,255,0.1)',
+    borderWidth:1,
+    titleColor:'#8899b0',
+    bodyColor:'#f0f4ff',
+    padding:12,
+    cornerRadius:10,
+    callbacks:{label:function(ctx){return ' '+fk(ctx.parsed.y);}}
+  }},
+  scales:{
+    x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#4a5568',font:{size:9,family:'Inter'}}},
+    y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#4a5568',font:{size:9,family:'Inter'},callback:v=>fk(v)}}
+  }
+};
+
+function initCharts(){
+  // Wealth chart
+  const wCtx=document.getElementById('wealth-chart').getContext('2d');
+  const wd=genWealth(1);
+  wealthChart=new Chart(wCtx,{
+    type:'line',
+    data:{labels:wd.lbl,datasets:[
+      {label:'Optimistic',data:wd.opt,borderColor:'#9f7aea',borderWidth:1.5,borderDash:[4,2],fill:false,tension:0.4,pointRadius:0},
+      {label:'Base',data:wd.base,borderColor:'#63b3ed',borderWidth:2,fill:{target:'origin',above:'rgba(99,179,237,0.08)'},tension:0.4,pointRadius:0},
+      {label:'Conservative',data:wd.con,borderColor:'#38b2ac',borderWidth:1.5,borderDash:[4,2],fill:false,tension:0.4,pointRadius:0},
+    ]},
+    options:{responsive:true,animation:{duration:800},...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>fk(v)}}}}
+  });
+
+  // Investment chart
+  const iCtx=document.getElementById('invest-chart').getContext('2d');
+  const id_=genInvest(1);
+  investChart=new Chart(iCtx,{
+    type:'bar',
+    data:{labels:id_.lbl,datasets:[
+      {label:'Contributions',data:id_.contrib,backgroundColor:'#2d4a6b',borderRadius:2},
+      {label:'Gains',data:id_.gains,backgroundColor:'#63b3ed',borderRadius:2},
+    ]},
+    options:{responsive:true,animation:{duration:800},...chartDefaults,scales:{...chartDefaults.scales}}
+  });
+
+  // Radar chart (optional — hidden on mobile)
+  const rCtxEl=document.getElementById('radar-chart');
+  if(!rCtxEl) return;
+  const rCtx=rCtxEl.getContext('2d');
+  radarChart=new Chart(rCtx,{
+    type:'radar',
+    data:{
+      labels:HEALTH.slice(0,6).map(h=>h.l),
+      datasets:[{label:'Health',data:HEALTH.slice(0,6).map(h=>h.v),borderColor:'#f6ad55',backgroundColor:'rgba(246,173,85,0.08)',borderWidth:1.5,pointBackgroundColor:'#f6ad55',pointRadius:2}]
+    },
+    options:{responsive:true,scales:{r:{grid:{color:'rgba(255,255,255,0.06)'},pointLabels:{color:'#8899b0',font:{size:9,family:'Inter'}},ticks:{display:false},min:0,max:100}},plugins:{legend:{display:false}}}
+  });
+}
+
+function updateCharts(mult){
+  const wd=genWealth(mult);
+  wealthChart.data.datasets[0].data=wd.opt;
+  wealthChart.data.datasets[1].data=wd.base;
+  wealthChart.data.datasets[2].data=wd.con;
+  wealthChart.update('active');
+
+  const id_=genInvest(mult);
+  investChart.data.datasets[0].data=id_.contrib;
+  investChart.data.datasets[1].data=id_.gains;
+  investChart.update('active');
+
+  const last=id_.contrib[id_.contrib.length-1]+id_.gains[id_.gains.length-1];
+  document.getElementById('inv-total').textContent=fk(last);
+  document.getElementById('inv-bear').textContent=fk(Math.round(last*0.55));
+  document.getElementById('inv-base').textContent=fk(last);
+  document.getElementById('inv-bull').textContent=fk(Math.round(last*1.65));
+}
+
+/* ===== RENDER STATIC CONTENT ===== */
+function renderTimeline(sc){
+  const el=document.getElementById('timeline-list');
+  const line=el.querySelector('div[style*="position:absolute"]');
+  el.innerHTML='';
+  if(line) el.appendChild(line);
+  TIMELINE.forEach((ev,i)=>{
+    const upd=sc&&!ev.done;
+    const d=document.createElement('div');
+    d.style.cssText='display:flex;gap:16px;margin-bottom:'+(i<TIMELINE.length-1?'14px':'0')+';position:relative;';
+    d.innerHTML=`
+      <div style="position:absolute;left:-15px;top:2px;width:10px;height:10px;border-radius:50%;
+        background:${ev.done?ev.c:'rgba(255,255,255,0.1)'};border:2px solid ${ev.c};
+        box-shadow:${ev.done?'0 0 8px '+ev.c+'60':'none'};transition:all 0.5s"></div>
+      <div style="flex:1;padding-left:4px">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+          <span style="font-size:10px;font-weight:700;color:${ev.c};letter-spacing:0.3px">${ev.y}</span>
+          ${ev.done?'<span class="tag" style="background:rgba(104,211,145,0.1);color:#68d391;border:1px solid rgba(104,211,145,0.2);font-size:9px">Done</span>':''}
+          ${upd?'<span class="tag" style="background:'+sc.c+'10;color:'+sc.c+';border:1px solid '+sc.c+'20;font-size:9px">Updated</span>':''}
+        </div>
+        <div style="font-size:12px;font-weight:600;color:#f0f4ff;margin-bottom:1px">${ev.l}</div>
+        <div style="font-size:10px;color:#8899b0">${ev.s}</div>
+      </div>`;
+    el.appendChild(d);
+  });
+}
+
+function renderInsights(){
+  const el=document.getElementById('insights-list');
+  if(!el) return;
+  el.innerHTML='';
+  const data=buildInsights();
+  // Update summary text
+  const sumEl=document.getElementById('ins-summary');
+  if(sumEl && obData && obData.name){
+    const score=Math.round((HEALTH[0].v+HEALTH[2].v+HEALTH[4].v)/3);
+    sumEl.textContent=`${data.length} recommandations personnalisées pour ${obData.name} · Score ${score}/100`;
+  }
+  // Update health score ring
+  const hsn=document.getElementById('health-score-num');
+  if(hsn){const s=Math.round((HEALTH[0].v+HEALTH[2].v+HEALTH[4].v)/3);hsn.textContent=s;hsn.parentElement.nextElementSibling&&(hsn.parentElement.nextElementSibling.style.background=`conic-gradient(#f6ad55 0% ${s}%,rgba(255,255,255,0.06) ${s}%)`);}
+  data.forEach((ins,idx)=>{
+    const d=document.createElement('div');
+    d.className='ins-chip';
+    d.style.cssText=`display:flex;align-items:flex-start;gap:12px;padding:14px;border-radius:14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);cursor:pointer;transition:background 0.15s`;
+    d.onmouseenter=()=>{d.style.background='rgba(255,255,255,0.055)';};
+    d.onmouseleave=()=>{d.style.background='rgba(255,255,255,0.03)';};
+    d.innerHTML=`
+      <div style="width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:${ins.bg}">${ins.i}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:700;color:#f0f4ff;margin-bottom:4px;letter-spacing:-0.2px">${ins.h||ins.t.substring(0,40)}</div>
+        <div style="font-size:11px;color:#8899b0;line-height:1.5;margin-bottom:8px">${ins.t}</div>
+        <button onclick="event.stopPropagation();void(0)" style="font-size:10px;font-weight:700;color:${ins.c};letter-spacing:0.3px;background:${ins.c}12;border:1px solid ${ins.c}30;border-radius:8px;padding:5px 10px;cursor:pointer;font-family:'Inter',sans-serif">${ins.a} →</button>
+      </div>`;
+    el.appendChild(d);
+  });
+}
+
+function renderHealthMini(){
+  const el=document.getElementById('health-mini');
+  if(!el) return;
+  el.innerHTML='';
+  const frLabels={savings:'Épargne',stability:'Stabilité',retirement:'Retraite',debt:'Dettes',invest:'Invest.',emergency:'Urgence'};
+  HEALTH.slice(0,4).forEach(m=>{
+    const lbl=frLabels[m.k]||m.l;
+    el.innerHTML+=`<div style="display:flex;align-items:center;gap:8px">
+      <div style="font-size:10px;color:#8899b0;width:55px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${lbl}</div>
+      <div class="pb" style="flex:1"><div class="pf" style="width:${m.v}%;background:${m.c}"></div></div>
+      <div style="font-size:10px;font-weight:700;color:${m.c};width:22px;text-align:right">${m.v}</div>
+    </div>`;
+  });
+}
+
+function renderHealthGrid(){
+  const el=document.getElementById('health-grid');
+  el.innerHTML='';
+  HEALTH.forEach(m=>{
+    el.innerHTML+=`<div style="padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:10px;color:#8899b0">${m.l}</span>
+        <span style="font-size:12px;font-weight:800;color:${m.c}">${m.v}</span>
+      </div>
+      <div class="pb"><div class="pf" style="width:${m.v}%;background:linear-gradient(90deg,${m.c}80,${m.c})"></div></div>
+    </div>`;
+  });
+}
+
+/* ===== SCENARIO CARDS ===== */
+function renderCatTabs(){
+  const el=document.getElementById('cat-tabs');
+  el.innerHTML='';
+  CATS.forEach(cat=>{
+    const btn=document.createElement('button');
+    btn.className='cat-tab'+(activeCat===cat.id?' on':'');
+    if(activeCat===cat.id) btn.style.cssText=`background:${cat.c}15;border-color:${cat.c}40;color:${cat.c}`;
+    btn.innerHTML=cat.e+' '+cat.label;
+    btn.onclick=()=>selectCat(cat.id);
+    el.appendChild(btn);
+  });
+}
+
+function renderScenarioGrid(){
+  const el=document.getElementById('sc-grid');
+  el.innerHTML='';
+  el.style.animation='none';
+  setTimeout(()=>{el.style.animation='slideIn 0.3s ease forwards';},10);
+  const cat=CATS.find(c=>c.id===activeCat);
+  cat.sc.forEach(sc=>{
+    const isOn=activeScs.has(sc.id);
+    const rAge=52+(sc.r||0);
+    const wPos=sc.w>0,wZero=sc.w===0;
+    const wC=wZero?'#63b3ed':wPos?'#68d391':'#fc8181';
+    const wBg=wZero?'rgba(99,179,237,0.1)':wPos?'rgba(104,211,145,0.1)':'rgba(252,129,129,0.1)';
+    const wBr=wZero?'rgba(99,179,237,0.2)':wPos?'rgba(104,211,145,0.2)':'rgba(252,129,129,0.2)';
+    const card=document.createElement('div');
+    card.className='sc-card'+(isOn?' on':'');
+    card.style.cssText=`border-color:${isOn?sc.c+'45':'var(--br)'};background:${isOn?sc.c+'09':'var(--bg2)'}`;
+    card.innerHTML=`
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:9px">
+        <span style="font-size:18px">${sc.f}</span>
+        <span class="tag" style="background:${wBg};color:${wC};border:1px solid ${wBr};font-size:10px">${sc.w>0?'+':''}${sc.w}%</span>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:#f0f4ff;margin-bottom:2px;line-height:1.2">${sc.t}</div>
+      <div style="font-size:10px;color:#8899b0;margin-bottom:9px;line-height:1.3">${sc.s}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
+        <div style="padding:5px 6px;border-radius:6px;background:rgba(255,255,255,0.04)">
+          <div style="font-size:7px;color:#4a5568;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:2px">Retire</div>
+          <div style="font-size:11px;font-weight:700;color:${(sc.r||0)<=0?'#68d391':'#fc8181'}">${rAge}</div>
+        </div>
+        <div style="padding:5px 6px;border-radius:6px;background:rgba(255,255,255,0.04)">
+          <div style="font-size:7px;color:#4a5568;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:2px">Stress</div>
+          <div style="font-size:11px;font-weight:700;color:${(sc.x||0)<0?'#68d391':(sc.x||0)===0?'#f0f4ff':'#fc8181'}">${(sc.x||0)>0?'+':''}${sc.x||0}</div>
+        </div>
+      </div>
+      ${isOn?`<div style="margin-top:8px;font-size:10px;color:${sc.c};border-top:1px solid ${sc.c}20;padding-top:8px;line-height:1.5">${sc.i}</div>`:''}`;
+    card.onclick=()=>selectScenario(sc);
+    el.appendChild(card);
+  });
+}
+
+function selectCat(id){
+  activeCat=id;
+  renderCatTabs();
+  renderScenarioGrid();
+  document.getElementById('sc-count').textContent=CATS.find(c=>c.id===id).sc.length+' in this category';
+}
+
+/* ===== HERO UPDATE ===== */
+function updateHero(sc){
+  const mult=sc?sc.m:RISK_MULT;
+  const stress=sc?Math.max(15,Math.min(90,BASE_STRESS+(sc.x||0))):BASE_STRESS;
+  const retAge=sc?(RETIRE_AGE+(sc.r||0)):RETIRE_AGE;
+  const conf=sc?Math.max(40,Math.min(95,BASE_CONF+sc.w/3)):BASE_CONF;
+  const nw=sc?Math.round(NETWORTH*(1+(sc.w/100)*0.1)):NETWORTH;
+  const p5=sc?Math.round(P5_BASE*(1+(sc.w/100)*0.5)):P5_BASE;
+  const p10=sc?Math.round(P10_BASE*(1+(sc.w/100)*0.7)):P10_BASE;
+  const p25=sc?Math.round(P25_BASE*(1+(sc.w/100))):P25_BASE;
+  const sc_=clr(stress);
+  const stressLabel=getLbl(stress);
+
+  // Net worth
+  const nwEl=document.getElementById('nw-display');
+  nwEl.textContent=fk(nw);
+
+  document.getElementById('p5').textContent=fk(p5);
+  document.getElementById('p10').textContent=fk(p10);
+  document.getElementById('p25').textContent=fk(p25);
+
+  // AI forecast
+  document.getElementById('ai-age').textContent=retAge;
+  document.getElementById('ai-conf').textContent=Math.round(conf)+'%';
+  document.getElementById('ai-txt').textContent=sc?' '+sc.i:'';
+
+  // Conf ring
+  setRing('conf-ring',conf,26,'#9f7aea');
+  document.getElementById('conf-ring-lbl').textContent=Math.round(conf)+'%';
+
+  // Stress
+  document.getElementById('stress-val').textContent=stress;
+  document.getElementById('stress-lbl').textContent=stressLabel;
+  document.getElementById('stress-lbl').style.color=sc_;
+  setRing('stress-ring',100-stress,26,sc_);
+  for(let i=0;i<4;i++){
+    const s=document.getElementById('ss'+i);
+    if(s) s.style.background=i<Math.floor(stress/25)?sc_:'rgba(255,255,255,0.08)';
+  }
+
+  // Topbar
+  document.getElementById('tb-sub').textContent=sc?'Simulating: '+sc.t:'Baseline — current trajectory';
+  const tag=document.getElementById('sim-tag');
+  if(sc){
+    tag.classList.add('on');
+    tag.textContent=sc.t+' active';
+    tag.style.cssText=`display:inline-flex;background:${sc.c}18;color:${sc.c};border:1px solid ${sc.c}30`;
+  } else {
+    tag.classList.remove('on');
+  }
+  document.getElementById('clear-btn').classList[sc?'add':'remove']('on');
+
+  // Banner
+  const bn=document.getElementById('sc-banner');
+  if(sc){
+    bn.classList.add('on');
+    bn.style.cssText=`display:flex;padding:12px 20px;border-radius:12px;margin-bottom:16px;align-items:center;gap:16px;background:linear-gradient(135deg,${sc.c}10,${sc.c}05);border:1px solid ${sc.c}25;`;
+    document.getElementById('bn-flag').innerHTML=sc.f;
+    document.getElementById('bn-title').textContent=sc.t+' simulation active — ';
+    document.getElementById('bn-title').style.color=sc.c;
+    document.getElementById('bn-insight').textContent=sc.i;
+    document.getElementById('bn-wealth').textContent=(sc.w>0?'+':'')+sc.w+'%';
+    document.getElementById('bn-wealth').style.color=sc.w>0?'#68d391':'#fc8181';
+    document.getElementById('bn-retire').textContent=retAge;
+  } else {
+    bn.classList.remove('on');
+    bn.style.display='none';
+  }
+
+  // Active scenario tag
+  const ast=document.getElementById('active-sc-tag');
+  if(sc){
+    ast.style.display='inline-flex';
+    ast.style.cssText=`display:inline-flex;background:${sc.c}18;color:${sc.c};border:1px solid ${sc.c}30`;
+    ast.innerHTML=sc.f+' '+sc.t+' active';
+  } else {
+    ast.style.display='none';
+  }
+
+  // Charts
+  updateCharts(mult);
+}
+
+function set3({nwEl,nwLbl,val,pos}){
+  const el=document.getElementById(nwEl);
+  const lbl=document.getElementById(nwLbl);
+  if(el){el.textContent=val;el.style.color=pos?'#68d391':'#fc8181';}
+  if(lbl){lbl.style.color=pos?'#68d391':'#fc8181';}
+}
+
+/* ===== SCENARIO IMPACT PANEL ===== */
+let scImpactChart=null;
+
+function updateScImpact(sc){
+  const panel=document.getElementById('sc-impact');
+  if(!panel)return;
+  if(!sc){
+    panel.style.display='none';
+    if(scImpactChart){scImpactChart.destroy();scImpactChart=null;}
+    return;
+  }
+  panel.style.display='block';
+  const nScs=activeScs.size;
+  // Style glass border with scenario color
+  const glass=document.getElementById('sc-impact-glass');
+  if(glass) glass.style.borderColor=sc.c+'40';
+
+  // Header — adapté au nombre de scénarios
+  const g=id=>document.getElementById(id);
+  g('si-flag').innerHTML=nScs>1?'🔀':(sc.f||'');
+  if(nScs>1){
+    g('si-title').textContent=nScs+' changements simulés ensemble';
+    g('si-sub').textContent=[...activeScs.values()].map(s=>s.t).join('  ·  ');
+  } else {
+    g('si-title').textContent=sc.t+' — Impact sur ton wealth';
+    g('si-sub').textContent=sc.i||'';
+  }
+  g('si-title').style.color=sc.c;
+
+  // Computed values
+  const simNW=Math.round(NETWORTH*(1+sc.w/100*0.8));
+  const simRet=RETIRE_AGE+(sc.r||0);
+  const simConf=Math.max(40,Math.min(98,BASE_CONF+sc.w/3));
+  const simStr=Math.max(15,Math.min(90,BASE_STRESS+(sc.x||0)));
+  const nwDelta=simNW-NETWORTH;
+  const retDelta=simRet-RETIRE_AGE;
+  const confDelta=Math.round(simConf-BASE_CONF);
+  const strDelta=Math.round(simStr-BASE_STRESS);
+  const city=(obData&&obData.city)||'Paris';
+
+  // ===== HERO: patrimoine projeté 25 ans (initial vs avec tes choix) =====
+  const baseP25=P25_BASE;
+  const scMultHero=Math.max(0.3,Math.min(3,(sc.m||RISK_MULT)*(1+sc.w/100*0.15)));
+  const newP25=Math.round(projectWealthMult(25,scMultHero));
+  const p25Delta=newP25-baseP25;
+  const heroBase=g('si-hero-base'); if(heroBase) heroBase.textContent=fk(baseP25);
+  const heroNew=g('si-hero-new'); if(heroNew) heroNew.textContent=fk(newP25);
+  const heroDelta=g('si-hero-delta');
+  if(heroDelta){
+    const pos=p25Delta>=0;
+    heroDelta.textContent=(pos?'+':'−')+fk(Math.abs(p25Delta)).replace(CURRENCY,CURRENCY);
+    heroDelta.style.background=pos?'rgba(104,211,145,0.15)':'rgba(252,129,129,0.15)';
+    heroDelta.style.borderColor=pos?'rgba(104,211,145,0.3)':'rgba(252,129,129,0.3)';
+    heroDelta.style.color=pos?'#68d391':'#fc8181';
+  }
+  const heroWrap=g('si-hero');
+  if(heroWrap){
+    const pos=p25Delta>=0;
+    heroWrap.style.background=pos?'linear-gradient(135deg,rgba(104,211,145,0.08),rgba(99,179,237,0.05))':'linear-gradient(135deg,rgba(252,129,129,0.08),rgba(246,173,85,0.05))';
+    heroWrap.style.borderColor=pos?'rgba(104,211,145,0.18)':'rgba(252,129,129,0.18)';
+  }
+
+  // Patrimoine
+  g('si-nw-base').textContent=fk(NETWORTH);
+  g('si-nw-label').textContent=sc.t;
+  g('si-nw-label').style.color=sc.c;
+  g('si-nw').textContent=fk(simNW);
+  g('si-nw').style.color=nwDelta>=0?'#68d391':'#fc8181';
+  const nwD=g('si-nw-d');
+  nwD.textContent=(nwDelta>=0?'▲ +':'▼ ')+fk(Math.abs(nwDelta));
+  nwD.style.cssText=`font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px;background:${nwDelta>=0?'rgba(104,211,145,0.12)':'rgba(252,129,129,0.12)'};color:${nwDelta>=0?'#68d391':'#fc8181'}`;
+
+  // Retraite
+  g('si-ret-base').textContent=RETIRE_AGE+' ans';
+  g('si-ret-label').textContent=sc.t;
+  g('si-ret-label').style.color=sc.c;
+  g('si-ret').textContent=simRet+' ans';
+  g('si-ret').style.color=retDelta<=0?'#68d391':'#f6ad55';
+  const retD=g('si-ret-d');
+  retD.textContent=retDelta===0?'— Inchangé':(retDelta<0?'▲ ':'▼ +')+Math.abs(retDelta)+' ans';
+  retD.style.cssText=`font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px;background:${retDelta<=0?'rgba(104,211,145,0.12)':'rgba(246,173,85,0.12)'};color:${retDelta<=0?'#68d391':'#f6ad55'}`;
+
+  // Confiance
+  g('si-conf-base').textContent=Math.round(BASE_CONF)+'%';
+  g('si-conf-label').textContent=sc.t;
+  g('si-conf-label').style.color=sc.c;
+  g('si-conf').textContent=Math.round(simConf)+'%';
+  g('si-conf').style.color=confDelta>=0?'#68d391':'#fc8181';
+  const confD=g('si-conf-d');
+  confD.textContent=(confDelta>=0?'▲ +':'▼ ')+Math.abs(confDelta)+'%';
+  confD.style.cssText=`font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px;background:${confDelta>=0?'rgba(104,211,145,0.12)':'rgba(252,129,129,0.12)'};color:${confDelta>=0?'#68d391':'#fc8181'}`;
+
+  // Stress
+  g('si-str-base').textContent=getLbl(BASE_STRESS);
+  g('si-str-label').textContent=sc.t;
+  g('si-str-label').style.color=sc.c;
+  g('si-str').textContent=getLbl(simStr);
+  g('si-str').style.color=strDelta<=0?'#68d391':'#fc8181';
+  const strD=g('si-str-d');
+  strD.textContent=strDelta===0?'— Inchangé':(strDelta<0?'▲ ':'▼ +')+Math.abs(strDelta)+' pts';
+  strD.style.cssText=`font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px;background:${strDelta<=0?'rgba(104,211,145,0.12)':'rgba(252,129,129,0.12)'};color:${strDelta<=0?'#68d391':'#fc8181'}`;
+
+  // Wealth chart
+  updateScImpactChart(sc,city);
+}
+
+function updateScImpactChart(sc,city){
+  const ctx=document.getElementById('sc-impact-chart');
+  if(!ctx)return;
+  const baseData=genWealth(RISK_MULT);
+  // Scenario uses its multiplier with wealth boost
+  const scMult=Math.max(0.3,Math.min(3,(sc.m||RISK_MULT)*(1+sc.w/100*0.15)));
+  const scData=genWealth(scMult);
+  const newColor=sc.w>=0?'#68d391':'#fc8181';
+  if(scImpactChart){scImpactChart.destroy();}
+  scImpactChart=new Chart(ctx.getContext('2d'),{
+    type:'line',
+    data:{
+      labels:baseData.lbl,
+      datasets:[
+        {label:'Ton évolution actuelle',data:baseData.base,borderColor:'rgba(255,255,255,0.35)',
+         borderWidth:1.5,borderDash:[5,3],fill:false,tension:0.4,pointRadius:0,order:2},
+        {label:'Avec tes choix',data:scData.base,borderColor:newColor,borderWidth:2.5,
+         fill:'-1',backgroundColor:newColor+'18',tension:0.4,pointRadius:0,order:1}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:true,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{position:'top',labels:{color:'#c8d8e8',font:{size:10,family:'Inter'},boxWidth:16,padding:12,usePointStyle:true}},
+        tooltip:{callbacks:{
+          label:c=>c.dataset.label+': '+fk(c.raw),
+          afterBody:items=>{
+            if(items.length>=2){
+              const d=Math.abs(items[0].raw-items[1].raw);
+              return '\nÉcart: '+(items[0].raw>=items[1].raw?'+':'−')+fk(d);
+            }
+            return '';
+          }
+        }}
+      },
+      scales:{
+        x:{ticks:{color:'#4a5568',font:{size:9},maxTicksLimit:7},grid:{display:false},border:{display:false}},
+        y:{ticks:{color:'#4a5568',font:{size:9},callback:v=>fk(v),maxTicksLimit:5},
+           grid:{color:'rgba(255,255,255,0.04)'},border:{display:false}}
+      }
+    }
+  });
+}
+
+/* ===== TYPING ANIMATION ===== */
+function typeText(text){
+  const el=document.getElementById('ai-type');
+  const cur=document.getElementById('ai-cur');
+  if(typingTimer) clearInterval(typingTimer);
+  el.textContent='';
+  cur.style.display='inline-block';
+  let i=0;
+  typingTimer=setInterval(()=>{
+    el.textContent=text.slice(0,i);
+    i++;
+    if(i>text.length){clearInterval(typingTimer);cur.style.display='none';}
+  },20);
+}
+
+/* ===== SELECT SCENARIO ===== */
+function selectScenario(sc){
+  if(activeScs.has(sc.id)){
+    activeScs.delete(sc.id);
+  } else {
+    activeScs.set(sc.id,sc);
+  }
+  const combo=getCombinedSc();
+  activeSc=combo;
+  updateHero(combo);
+  updateScImpact(combo);
+  renderScenarioGrid();
+  renderTimeline(combo);
+  renderActiveScChips();
+  if(!combo){
+    typeText('Ton jumeau financier est sur la bonne voie. Sélectionne un ou plusieurs scénarios pour voir leur impact combiné.');
+  } else {
+    const n=activeScs.size;
+    typeText((n>1?n+' scénarios actifs — ':'Simulation: ')+combo.t+' — impact wealth '+(combo.w>0?'+':'')+combo.w+'%. Retraite projetée à '+(RETIRE_AGE+(combo.r||0))+' ans.');
+  }
+}
+
+function renderActiveScChips(){
+  const el=document.getElementById('sc-active-chips');
+  if(!el) return;
+  el.innerHTML='';
+  if(!activeScs.size){
+    el.style.display='none';
+    return;
+  }
+  el.style.display='flex';
+  [...activeScs.values()].forEach(sc=>{
+    const chip=document.createElement('div');
+    chip.style.cssText=`display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;background:${sc.c}15;border:1px solid ${sc.c}40;font-size:11px;font-weight:600;color:${sc.c};cursor:pointer`;
+    chip.innerHTML=`<span>${sc.f} ${sc.t}</span><span style="font-size:10px;opacity:0.7">${sc.w>0?'+':''}${sc.w}%</span><span onclick="selectScenario(window._scById('${sc.id}'))" style="margin-left:2px;opacity:0.6;font-size:11px;font-weight:700" title="Retirer">✕</span>`;
+    el.appendChild(chip);
+  });
+  // Summary badge
+  if(activeScs.size>1){
+    const combo=getCombinedSc();
+    const sumDiv=document.createElement('div');
+    sumDiv.style.cssText=`display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;background:rgba(99,179,237,0.12);border:1px solid rgba(99,179,237,0.3);font-size:11px;font-weight:700;color:#63b3ed;margin-left:4px`;
+    sumDiv.innerHTML=`= ${combo.w>0?'+':''}${combo.w}% impact net`;
+    el.appendChild(sumDiv);
+  }
+}
+
+// Helper to find sc by id across all categories
+window._scById=function(id){
+  for(const cat of CATS) for(const sc of cat.sc) if(sc.id===id) return sc;
+  return null;
+};
+
+function clearSim(){
+  activeScs.clear();
+  activeSc=null;
+  updateHero(null);
+  updateScImpact(null);
+  renderScenarioGrid();
+  renderTimeline(null);
+  renderActiveScChips();
+  typeText('Ton jumeau financier est sur la bonne voie. Sélectionne un ou plusieurs scénarios pour voir leur impact combiné.');
+}
+
+/* ===== NAV ===== */
+const ALL_SECS=['sec-overview','sec-twin','sec-scenarios','sec-timeline','sec-health','sec-live','sec-compare'];
+const PAGE_MAP={
+  overview:    ['sec-overview'],
+  twin:        ['sec-twin'],
+  scenarios:   ['sec-scenarios'],
+  live:        ['sec-live'],
+  compare:     ['sec-compare'],
+  timeline:    ['sec-timeline'],
+  investments: ['sec-timeline'],
+  insights:    ['sec-health']
+};
+const TB_MAP={
+  overview:    ['Financial Overview','Baseline — trajectoire actuelle'],
+  twin:        ['Mon Financial Twin','Visualisation live de tes actifs'],
+  scenarios:   ['Simulateur de Scénarios','Clique une carte pour voir l\'impact immédiat sur ton wealth'],
+  live:        ['⚡ Live Simulator','Combine plusieurs choix et ajuste tes paramètres — impact en temps réel'],
+  compare:     ['⚖ Mon Plan','Compare ta situation actuelle vs ton futur selon tes choix — modifie tout en live'],
+  timeline:    ['Timeline & Projections','Jalons futurs · AI Insights · Investissements'],
+  investments: ['Projections Investissements','Croissance de ton portfolio sur 10 ans'],
+  insights:    ['AI Insights & Santé','Signaux temps réel · 15 métriques de santé financière']
+};
+
+function setNav(id,el){
+  document.querySelectorAll('.nav-i').forEach(n=>n.classList.remove('on'));
+  // Sync mobile tabs
+  document.querySelectorAll('.mob-tab').forEach(n=>n.classList.remove('on'));
+  const MOB_TAB_MAP={overview:0,twin:0,scenarios:1,live:2,compare:3,timeline:4,investments:4,insights:4};
+  const mobIdx=MOB_TAB_MAP[id];
+  const mobTabs=document.querySelectorAll('.mob-tab');
+  if(mobIdx!==undefined&&mobTabs[mobIdx]) mobTabs[mobIdx].classList.add('on');
+  if(el){
+    el.classList.add('on');
+    // If clicked from mob-tab, don't double-add (already handled above)
+  }
+  const show=PAGE_MAP[id]||PAGE_MAP.overview;
+  ALL_SECS.forEach(s=>{
+    const d=document.getElementById(s);
+    if(!d)return;
+    d.style.display=show.includes(s)?'':'none';
+  });
+  document.getElementById('main').scrollTop=0;
+  const[t,sub]=TB_MAP[id]||TB_MAP.overview;
+  document.getElementById('tb-title').textContent=t;
+  if(!activeScs.size||id!=='scenarios') document.getElementById('tb-sub').textContent=sub;
+  if(id==='live') initLiveSim();
+  if(id==='compare') initCompare();
+  // Re-apply mobile layout after section switch (some sections init lazily)
+  applyMobileLayout();
+}
+
+/* ===== MOBILE LAYOUT: fix inline-style grids ===== */
+function applyMobileLayout(){
+  const q=(sel,root)=>(root||document).querySelector(sel);
+  const qa=(sel,root)=>[...(root||document).querySelectorAll(sel)];
+  // Twin: 240px 1fr → 1fr
+  const twin=document.getElementById('sec-twin');
+  if(twin) twin.style.gridTemplateColumns='1fr';
+  // Timeline: 1fr 1fr 1fr → 1fr
+  const tl=document.getElementById('sec-timeline');
+  if(tl) tl.style.gridTemplateColumns='1fr';
+  // Health radar+grid: 240px 1fr → 1fr
+  const radarRow=q('#sec-health [style*="240px 1fr"]');
+  if(radarRow) radarRow.style.gridTemplateColumns='1fr';
+  // Live: 4-col KPI → 2-col
+  qa('#sec-live [style*="repeat(4,1fr)"]').forEach(el=>el.style.gridTemplateColumns='repeat(2,1fr)');
+  // Live: 3-col sliders → 1-col
+  qa('#sec-live [style*="repeat(3,1fr)"]').forEach(el=>el.style.gridTemplateColumns='1fr');
+  // Live scenario grid: 5-col → 3-col
+  const lsg=document.getElementById('live-sc-grid');
+  if(lsg) lsg.style.gridTemplateColumns='repeat(3,1fr)';
+  // Compare top bar: 1fr 110px 1fr → 1fr (stacked)
+  qa('#sec-compare [style*="1fr 110px 1fr"]').forEach(el=>{
+    el.style.gridTemplateColumns='1fr';
+    el.style.borderRadius='14px';
+  });
+  // Hide the arrow column (becomes awkward when stacked) — show vertical flow
+  qa('#sec-compare [style*="border-left:1px solid"]').forEach(el=>{
+    el.style.borderLeft='none';
+    el.style.borderRight='none';
+    el.style.borderTop='1px solid rgba(255,255,255,0.06)';
+    el.style.borderBottom='1px solid rgba(255,255,255,0.06)';
+    el.style.padding='8px 0';
+    const arrow=el.querySelector('[style*="font-size:22px"]');
+    if(arrow) arrow.textContent='↓';
+  });
+  // Compare: 4-col KPI sub-grids → 2-col
+  qa('#sec-compare [style*="repeat(4,1fr)"]').forEach(el=>el.style.gridTemplateColumns='repeat(2,1fr)');
+  // Compare builder+chart: 380px 1fr → 1fr
+  qa('#sec-compare [style*="380px 1fr"]').forEach(el=>el.style.gridTemplateColumns='1fr');
+  // Overview hero sub-mini (3-col projections) → keep 3-col (small enough)
+  // Scenario impact tiles: 4-col → 2-col (handled by CSS id)
+  qa('#sc-impact [style*="repeat(4,1fr)"]').forEach(el=>el.style.gridTemplateColumns='repeat(2,1fr)');
+  // Live baseline row: add id for CSS flex-wrap
+  const blRow=q('#sec-live [style*="gap:20px"]');
+  if(blRow&&!blRow.id) blRow.id='live-baseline-row';
+}
+
+window.addEventListener('resize',()=>{
+  applyMobileLayout();
+});
+
+// Init nav state after dashboard loads
+function initNavState(){
+  setNav('overview', document.querySelector('.nav-i.on'));
+}
+
+/* ===== INIT DASHBOARD (called after onboarding) ===== */
+function initDashboard(){
+  renderCatTabs();
+  renderScenarioGrid();
+  renderTimeline(null);
+  renderInsights();
+  renderHealthMini();
+  renderHealthGrid();
+  initCharts();
+  updateHero(null);
+  initNavState();
+  // Apply mobile-specific layout fixes (overrides inline styles)
+  setTimeout(()=>applyMobileLayout(), 50);
+  typeText(window.INIT_TYPING||'Ton jumeau financier est actif. Clique sur un scénario pour simuler son impact sur ton avenir.');
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  // Onboarding gère l'initialisation — rien ici
+});
+
+/* ===== COMPARATEUR — MON PLAN ===== */
+let cmpCity=null;
+let cmpChart=null;
+const CITY_OPTIONS=[
+  {id:'paris',    label:'Paris',     boost:0,  c:'#8899b0',f:'🇫🇷',rent:1800},
+  {id:'dubai',    label:'Dubai',     boost:23, c:'#f6ad55',f:'🇦🇪',rent:1400},
+  {id:'lisbon',   label:'Lisbonne',  boost:15, c:'#68d391',f:'🇵🇹',rent:1200},
+  {id:'singapore',label:'Singapore', boost:19, c:'#63b3ed',f:'🇸🇬',rent:2500},
+  {id:'zurich',   label:'Zurich',    boost:22, c:'#9f7aea',f:'🇨🇭',rent:2800},
+  {id:'hk',       label:'Hong Kong', boost:20, c:'#fc8181',f:'🇭🇰',rent:2200}
+];
+const ASSET_RET={eq:0.087,re:0.055,cr:0.20,cash:0.02};
+
+function initCompare(){
+  // Baseline column
+  const g=id=>document.getElementById(id);
+  // Calculer P10 baseline avec le même modèle que scénario pour cohérence
+  const bEq0=RISK_MULT>=1.3?70:RISK_MULT>=1.0?45:20;
+  const bRe0=RISK_MULT>=1.3?15:25;
+  const bCash0=100-bEq0-bRe0;
+  const br0=Math.max(0.01,(bEq0/100*0.087*RISK_MULT)+(bRe0/100*0.055)+(bCash0/100*0.02));
+  const cmpP10=Math.round(NETWORTH*Math.pow(1+br0,10)+MONTHLY_CON*12*(Math.pow(1+br0,10)-1)/br0);
+  if(g('cnow-nw')) g('cnow-nw').textContent=fk(NETWORTH);
+  if(g('cnow-ret')) g('cnow-ret').textContent=RETIRE_AGE+' ans';
+  if(g('cnow-p10')) g('cnow-p10').textContent=fk(cmpP10);
+  if(g('cnow-conf')) g('cnow-conf').textContent=Math.round(BASE_CONF)+'%';
+  window._cmpP10Base=cmpP10; // store for delta calc
+  // Init sliders
+  const baseRent=Math.min(4950,Math.round((parseNum(obData.expenses)||1500)/50)*50);
+  if(g('cmp-rent')) g('cmp-rent').value=baseRent;
+  // Pré-populer selon le profil de risque
+  const defEq=RISK_MULT>=1.3?70:RISK_MULT>=1.0?45:20;
+  const defRe=RISK_MULT>=1.3?15:RISK_MULT>=1.0?25:30;
+  const defCr=RISK_MULT>=1.3?5:0;
+  if(g('cmp-eq')) g('cmp-eq').value=defEq;
+  if(g('cmp-re')) g('cmp-re').value=defRe;
+  if(g('cmp-cr')) g('cmp-cr').value=defCr;
+  if(g('cmp-sal')) g('cmp-sal').value=0;
+  if(g('cmp-side')) g('cmp-side').value=0;
+  if(g('cmp-save')) g('cmp-save').value=0;
+  // City default = user's city
+  cmpCity=detectUserCity();
+  renderCmpCityChips();
+  updateCompare();
+  if(!cmpChart) initCmpChart();
+}
+
+function detectUserCity(){
+  const c=(obData.city||'').toLowerCase();
+  const found=CITY_OPTIONS.find(x=>c.includes(x.id)||c.includes(x.label.toLowerCase()));
+  return found?found.id:'paris';
+}
+
+function renderCmpCityChips(){
+  const el=document.getElementById('cmp-city-chips');
+  if(!el)return;
+  el.innerHTML='';
+  CITY_OPTIONS.forEach(c=>{
+    const on=cmpCity===c.id;
+    const btn=document.createElement('button');
+    btn.style.cssText=`padding:5px 11px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;border:1px solid ${on?c.c+'55':'rgba(255,255,255,0.08)'};background:${on?c.c+'18':'rgba(255,255,255,0.03)'};color:${on?c.c:'#8899b0'};transition:all 0.18s`;
+    btn.innerHTML=c.f+' '+c.label+(c.boost>0?` <span style="font-size:9px;opacity:0.6">+${c.boost}%</span>`:'');
+    btn.onclick=()=>{
+      cmpCity=c.id;
+      const city=CITY_OPTIONS.find(x=>x.id===c.id);
+      if(city) document.getElementById('cmp-rent').value=city.rent;
+      renderCmpCityChips();
+      updateCompare();
+    };
+    el.appendChild(btn);
+  });
+}
+
+function computeCmpValues(){
+  const g=id=>parseInt(document.getElementById(id)?.value)||0;
+  const rent=g('cmp-rent');
+  const eqPct=Math.min(100,g('cmp-eq'));
+  const rePct=Math.min(100-eqPct,g('cmp-re'));
+  const crPct=Math.min(50,Math.min(100-eqPct-rePct,g('cmp-cr')));
+  const cashPct=Math.max(0,100-eqPct-rePct-crPct);
+  const salBoost=g('cmp-sal');
+  const sideInc=g('cmp-side');
+  const addSave=g('cmp-save');
+  const city=CITY_OPTIONS.find(c=>c.id===cmpCity)||CITY_OPTIONS[0];
+  const cityBoost=city.boost;
+  // Rendements pondérés — équities scalées avec le profil de risque
+  const wr=(eqPct/100*0.087*RISK_MULT)+(rePct/100*0.055)+(crPct/100*0.20)+(cashPct/100*0.02);
+  const rate=Math.max(0.01,Math.min(0.28,wr*(1+cityBoost/100*0.2)));
+  // Annual contribution
+  const baseIncome=parseNum(obData.income)||60000;
+  const newMonthly=(baseIncome*(1+salBoost/100)/12*0.72)+sideInc;
+  const baseRent=parseNum(obData.expenses)||1500;
+  const rentSaving=Math.max(0,baseRent-rent);
+  const ac=(MONTHLY_CON+rentSaving+addSave+sideInc*0.5)*12;
+  // 10Y & 25Y projections
+  let v10=NETWORTH,v25=NETWORTH;
+  for(let y=1;y<=10;y++) v10=v10*(1+rate)+ac/10;
+  for(let y=1;y<=25;y++) v25=v25*(1+rate)+ac/25;
+  // Simpler annual compound
+  v10=NETWORTH*Math.pow(1+rate,10)+ac*(Math.pow(1+rate,10)-1)/rate;
+  v25=NETWORTH*Math.pow(1+rate,25)+ac*(Math.pow(1+rate,25)-1)/rate;
+  // Retire age: earlier if more savings
+  const savingsPower=(ac-MONTHLY_CON*12)/Math.max(1,MONTHLY_CON*12);
+  const retAccel=Math.round(savingsPower*3)+(cityBoost>15?3:cityBoost>8?1:0);
+  const newRet=Math.max(30,RETIRE_AGE-retAccel);
+  // Confidence
+  const newConf=Math.min(98,Math.max(30,BASE_CONF+cityBoost/3+salBoost/8+eqPct/8+addSave/200));
+  // NW immediate
+  const newNW=Math.round(NETWORTH*(1+cityBoost/100*0.08));
+  return{nw:newNW,p10:Math.round(v10),p25:Math.round(v25),ret:newRet,conf:Math.round(newConf),
+    rate,ac,eqPct,rePct,crPct,cashPct,rent,salBoost,sideInc,addSave,cityBoost,city};
+}
+
+function updateCompare(){
+  const v=computeCmpValues();
+  const g=id=>document.getElementById(id);
+  // Labels
+  if(g('cmp-rent-val')) g('cmp-rent-val').textContent=fk(parseInt(g('cmp-rent')?.value||0))+'/mo';
+  if(g('cmp-eq-val')) g('cmp-eq-val').textContent=v.eqPct+'%';
+  if(g('cmp-re-val')) g('cmp-re-val').textContent=v.rePct+'%';
+  if(g('cmp-cr-val')) g('cmp-cr-val').textContent=v.crPct+'%';
+  if(g('cmp-cash-val')) g('cmp-cash-val').textContent=v.cashPct+'%';
+  if(g('cmp-sal-val')) g('cmp-sal-val').textContent='+'+(parseInt(g('cmp-sal')?.value)||0)+'%';
+  if(g('cmp-side-val')) g('cmp-side-val').textContent=fk(v.sideInc)+'/mo';
+  if(g('cmp-save-val')) g('cmp-save-val').textContent=fk(v.addSave)+'/mo';
+  if(g('cmp-total-alloc')){
+    const tot=v.eqPct+v.rePct+v.crPct;
+    g('cmp-total-alloc').textContent=tot+'% alloué';
+    g('cmp-total-alloc').style.color=tot>0?'#63b3ed':'#8899b0';
+    g('cmp-total-alloc').style.background=tot>0?'rgba(99,179,237,0.1)':'rgba(255,255,255,0.05)';
+  }
+  // Deltas (comparaison vs baseline cohérent du Comparateur)
+  const cmpB0=window._cmpP10Base||P10_BASE;
+  const nwD=v.nw-NETWORTH;
+  const p10D=v.p10-cmpB0;
+  const retD=v.ret-RETIRE_AGE;
+  const confD=v.conf-Math.round(BASE_CONF);
+  const pos=x=>x>=0;
+  const col=x=>pos(x)?'#68d391':'#fc8181';
+  const retCol=x=>x<=0?'#68d391':'#f6ad55';
+  const fmt=(x,pfx='')=>x>=0?'▲ +'+(pfx||'')+fk(Math.abs(x)):'▼ '+(pfx||'')+fk(Math.abs(x));
+  if(g('csc-nw')){g('csc-nw').textContent=fk(v.nw);g('csc-nw').style.color=col(nwD);}
+  if(g('csc-nw-d')){g('csc-nw-d').textContent=fmt(nwD);g('csc-nw-d').style.color=col(nwD);}
+  if(g('csc-p10')){g('csc-p10').textContent=fk(v.p10);g('csc-p10').style.color=col(p10D);}
+  if(g('csc-p10-d')){g('csc-p10-d').textContent=fmt(p10D);g('csc-p10-d').style.color=col(p10D);}
+  if(g('csc-ret')){g('csc-ret').textContent=v.ret+' ans';g('csc-ret').style.color=retCol(retD);}
+  if(g('csc-ret-d')){g('csc-ret-d').textContent=retD===0?'Inchangé':(retD<0?'▲ ':'▼ +')+Math.abs(retD)+' ans';g('csc-ret-d').style.color=retCol(retD);}
+  if(g('csc-conf')){g('csc-conf').textContent=v.conf+'%';g('csc-conf').style.color=col(confD);}
+  if(g('csc-conf-d')){g('csc-conf-d').textContent=(confD>=0?'▲ +':'▼ ')+Math.abs(confD)+'%';g('csc-conf-d').style.color=col(confD);}
+  // Delta badge (vs baseline cohérent)
+  const cmpBase=window._cmpP10Base||P10_BASE;
+  const p10pct=Math.round((v.p10-cmpBase)/Math.max(1,cmpBase)*100);
+  if(g('cmp-delta-badge')){
+    g('cmp-delta-badge').textContent=(p10pct>=0?'+':'')+p10pct+'% en 10 ans';
+    g('cmp-delta-badge').style.background=pos(p10pct)?'rgba(104,211,145,0.15)':'rgba(252,129,129,0.15)';
+    g('cmp-delta-badge').style.color=pos(p10pct)?'#68d391':'#fc8181';
+  }
+  renderCmpMilestones(v);
+  if(cmpChart) updateCmpChart(v);
+}
+
+function renderCmpMilestones(v){
+  const el=document.getElementById('cmp-milestones');
+  if(!el)return;
+  const items=[];
+  const cmpB=window._cmpP10Base||P10_BASE;
+  const p10pct=Math.round((v.p10-cmpB)/Math.max(1,cmpB)*100);
+  if(p10pct!==0) items.push({c:p10pct>0?'#68d391':'#fc8181',text:`Patrimoine × ${(v.p10/Math.max(1,cmpB)).toFixed(1)} vs baseline en 10 ans (${p10pct>0?'+':''}${p10pct}%)`});
+  if(v.ret<RETIRE_AGE) items.push({c:'#63b3ed',text:`Retraite à ${v.ret} ans — ${RETIRE_AGE-v.ret} an${RETIRE_AGE-v.ret>1?'s':''} plus tôt qu'actuellement`});
+  if(v.cityBoost>0) items.push({c:v.city.c,text:`${v.city.f} ${v.city.label} — avantage fiscal +${v.cityBoost}% sur ton wealth long terme`});
+  if(v.eqPct>=20) items.push({c:'#63b3ed',text:`${v.eqPct}% en Bourse → rendement moyen estimé ${(v.rate*100).toFixed(1)}%/an`});
+  if(v.crPct>=10) items.push({c:'#f6ad55',text:`₿ ${v.crPct}% Crypto — rendement élevé mais volatilité importante`});
+  if(v.sideInc>0) items.push({c:'#9f7aea',text:`Revenu complémentaire ${fk(v.sideInc)}/mo → ${fk(v.sideInc*12)}/an sur tes projections`});
+  if(v.addSave>0) items.push({c:'#68d391',text:`+${fk(v.addSave)}/mo d'épargne → ${fk(v.addSave*12)}/an réinvestis`});
+  if(items.length===0){
+    el.innerHTML='<div style="font-size:11px;color:#4a5568;font-style:italic">Modifie les paramètres à gauche pour voir l\'impact sur ton futur.</div>';
+    return;
+  }
+  el.innerHTML=items.map(m=>`<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><div style="width:6px;height:6px;border-radius:50%;background:${m.c};flex-shrink:0;margin-top:4px"></div><div style="font-size:11px;color:#c4d0e0;line-height:1.4">${m.text}</div></div>`).join('');
+}
+
+function genCmpWealth(rate,ac){
+  // Baseline = même modèle que scénario mais avec l'allocation actuelle de l'utilisateur
+  const bEq=RISK_MULT>=1.3?70:RISK_MULT>=1.0?45:20;
+  const bRe=RISK_MULT>=1.3?15:25;
+  const bCash=100-bEq-bRe;
+  const br=Math.max(0.01,(bEq/100*0.087*RISK_MULT)+(bRe/100*0.055)+(bCash/100*0.02));
+  const bac=MONTHLY_CON*12;
+  const labels=[];const sc=[];const base=[];
+  let vb=NETWORTH,vs=NETWORTH;
+  for(let y=0;y<=25;y++){
+    labels.push(String(2026+y));
+    if(y>0){vb=vb*(1+br)+bac;vs=vs*(1+rate)+ac;}
+    base.push(Math.round(vb));sc.push(Math.round(vs));
+  }
+  return{labels,sc,base};
+}
+
+function initCmpChart(){
+  const ctx=document.getElementById('compare-chart');
+  if(!ctx)return;
+  const v=computeCmpValues();
+  const{labels,sc,base}=genCmpWealth(v.rate,v.ac,25);
+  cmpChart=new Chart(ctx.getContext('2d'),{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Avec tes choix',data:sc,borderColor:'#68d391',borderWidth:2.5,fill:{target:'origin',above:'rgba(104,211,145,0.08)'},tension:0.4,pointRadius:0},
+      {label:'Maintenant (baseline)',data:base,borderColor:'rgba(255,255,255,0.3)',borderWidth:1.5,borderDash:[5,3],fill:false,tension:0.4,pointRadius:0}
+    ]},
+    options:{responsive:true,plugins:{
+      legend:{position:'top',labels:{color:'#8899b0',font:{size:10,family:'Inter'},boxWidth:16,padding:12}},
+      tooltip:{callbacks:{label:c=>c.dataset.label+': '+fk(c.raw)}}
+    },scales:{
+      x:{ticks:{color:'#4a5568',font:{size:9},maxTicksLimit:7},grid:{display:false},border:{display:false}},
+      y:{ticks:{color:'#4a5568',font:{size:9},callback:v=>fk(v),maxTicksLimit:5},grid:{color:'rgba(255,255,255,0.04)'},border:{display:false}}
+    }}
+  });
+}
+
+function updateCmpChart(v){
+  if(!cmpChart)return;
+  const{labels,sc,base}=genCmpWealth(v.rate,v.ac,25);
+  cmpChart.data.datasets[0].data=sc;
+  cmpChart.data.datasets[1].data=base;
+  cmpChart.update('none');
+}
+
+/* ===== LIVE SIMULATOR ===== */
+let liveSelections=new Set();
+let liveCat='relocate';
+let liveChart=null;
+let lSliders={savings:500,invest:300,retire:55};
+
+function initLiveSim(){
+  const sv=Math.min(4950,Math.round(MONTHLY_CON/50)*50)||500;
+  const iv=Math.min(4950,Math.round(USER_INV/10/50)*50)||300;
+  document.getElementById('sl-savings').value=sv;
+  document.getElementById('sl-invest').value=iv;
+  document.getElementById('sl-retire').value=RETIRE_AGE;
+  lSliders={savings:sv,invest:iv,retire:RETIRE_AGE};
+  // Populate baseline reference row
+  const bl=id=>document.getElementById(id);
+  if(bl('live-bl-nw')) bl('live-bl-nw').textContent=fk(NETWORTH);
+  if(bl('live-bl-ret')) bl('live-bl-ret').textContent=RETIRE_AGE+' ans';
+  if(bl('live-bl-conf')) bl('live-bl-conf').textContent=Math.round(BASE_CONF)+'%';
+  if(bl('live-bl-str')) bl('live-bl-str').textContent=getLbl(BASE_STRESS);
+  renderLiveCatTabs();
+  renderLiveGrid();
+  renderLiveChips();
+  updateLiveResults();
+  if(!liveChart) initLiveChart();
+}
+
+function renderLiveCatTabs(){
+  const el=document.getElementById('live-cat-tabs');
+  if(!el)return;
+  el.innerHTML='';
+  CATS.forEach(cat=>{
+    const btn=document.createElement('button');
+    btn.style.cssText='padding:8px 14px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid;font-family:Inter,sans-serif;transition:all 0.2s;';
+    btn.style.cssText+=liveCat===cat.id?`background:${cat.c}18;border-color:${cat.c}40;color:${cat.c}`:'background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08);color:#8899b0';
+    btn.innerHTML=cat.e+' '+cat.label;
+    btn.onclick=()=>{liveCat=cat.id;renderLiveCatTabs();renderLiveGrid();};
+    el.appendChild(btn);
+  });
+}
+
+function renderLiveGrid(){
+  const el=document.getElementById('live-sc-grid');
+  if(!el)return;
+  el.innerHTML='';
+  const cat=CATS.find(c=>c.id===liveCat);
+  cat.sc.forEach(sc=>{
+    const on=liveSelections.has(sc.id);
+    const wC=sc.w===0?'#63b3ed':sc.w>0?'#68d391':'#fc8181';
+    const card=document.createElement('div');
+    card.style.cssText=`padding:11px;border-radius:12px;cursor:pointer;transition:all 0.25s;border:1px solid ${on?sc.c+'50':'rgba(255,255,255,0.07)'};background:${on?sc.c+'12':'rgba(255,255,255,0.03)'};position:relative;`;
+    if(on) card.style.boxShadow=`0 0 18px ${sc.c}25`;
+    card.innerHTML=`${on?`<div style="position:absolute;top:7px;right:7px;width:16px;height:16px;border-radius:50%;background:${sc.c};display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;font-weight:800">✓</div>`:''}
+      <div style="font-size:16px;margin-bottom:6px">${sc.f}</div>
+      <div style="font-size:11px;font-weight:700;color:#f0f4ff;margin-bottom:2px;line-height:1.2">${sc.t}</div>
+      <div style="font-size:9px;color:#8899b0;margin-bottom:7px">${sc.s}</div>
+      <div style="font-size:11px;font-weight:700;color:${wC}">${sc.w>0?'+':''}${sc.w}%</div>`;
+    card.onclick=()=>{
+      liveSelections.has(sc.id)?liveSelections.delete(sc.id):liveSelections.add(sc.id);
+      renderLiveGrid();renderLiveChips();updateLiveResults();
+    };
+    el.appendChild(card);
+  });
+}
+
+function renderLiveChips(){
+  const el=document.getElementById('live-chips');
+  if(!el)return;
+  el.innerHTML='';
+  if(liveSelections.size===0){
+    el.innerHTML='<span style="font-size:11px;color:#4a5568">Aucun scénario sélectionné — clique sur les cartes ci-dessus pour en ajouter</span>';
+    return;
+  }
+  liveSelections.forEach(id=>{
+    let sc=null;
+    CATS.forEach(cat=>cat.sc.forEach(s=>{if(s.id===id)sc=s;}));
+    if(!sc)return;
+    const chip=document.createElement('span');
+    chip.style.cssText=`display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;background:${sc.c}18;border:1px solid ${sc.c}35;font-size:11px;font-weight:600;color:${sc.c};cursor:pointer`;
+    chip.innerHTML=sc.f+' '+sc.t+' <span style="opacity:0.6;font-size:10px">✕</span>';
+    chip.onclick=()=>{liveSelections.delete(id);renderLiveGrid();renderLiveChips();updateLiveResults();};
+    el.appendChild(chip);
+  });
+}
+
+function updateLiveSliders(){
+  lSliders.savings=parseInt(document.getElementById('sl-savings').value)||0;
+  lSliders.invest=parseInt(document.getElementById('sl-invest').value)||0;
+  lSliders.retire=parseInt(document.getElementById('sl-retire').value)||RETIRE_AGE;
+  updateLiveResults();
+}
+
+function computeLiveImpact(){
+  let tw=0,tr=0,tx=0,tm=1;
+  liveSelections.forEach(id=>{
+    CATS.forEach(cat=>cat.sc.forEach(s=>{if(s.id===id){tw+=s.w;tr+=(s.r||0);tx+=(s.x||0);tm*=s.m;}}));
+  });
+  const savingsImpact=(lSliders.savings-MONTHLY_CON)/Math.max(1,MONTHLY_CON)*15;
+  const investImpact=(lSliders.invest/Math.max(1,USER_INV/10))*3;
+  const retireDelta=lSliders.retire-RETIRE_AGE;
+  tw=Math.max(-80,Math.min(150,tw+savingsImpact+investImpact));
+  tr=Math.max(-25,Math.min(25,tr+retireDelta));
+  tx=Math.max(-60,Math.min(70,tx));
+  tm=Math.max(0.3,Math.min(3.0,tm));
+  return{tw,tr,tx,tm};
+}
+
+function updateLiveResults(){
+  const{tw,tr,tx,tm}=computeLiveImpact();
+  const newNW=Math.round(NETWORTH*(1+tw/100*0.8)+(lSliders.savings+lSliders.invest)*12*2);
+  const newRet=RETIRE_AGE+Math.round(tr);
+  const newStr=Math.max(5,Math.min(95,BASE_STRESS+tx));
+  const newConf=Math.max(10,Math.min(98,BASE_CONF+tw/3));
+  const nwDelta=newNW-NETWORTH;
+  const retDelta=newRet-RETIRE_AGE;
+  const strC=newStr<35?'#68d391':newStr<60?'#f6ad55':'#fc8181';
+  const confC=newConf>70?'#68d391':newConf>50?'#f6ad55':'#fc8181';
+  const g=id=>document.getElementById(id);
+  if(!g('live-nw'))return;
+  g('live-nw').textContent=fk(newNW);g('live-nw').style.color=nwDelta>=0?'#68d391':'#fc8181';
+  g('live-nw-d').textContent=(nwDelta>=0?'+':'')+fk(nwDelta)+' vs baseline';g('live-nw-d').style.color=nwDelta>=0?'#68d391':'#fc8181';
+  g('live-ret').textContent=newRet+' ans';g('live-ret').style.color=retDelta<=0?'#68d391':'#f6ad55';
+  g('live-ret-d').textContent=(retDelta===0?'Inchangé':(retDelta>0?'+':'')+retDelta+' ans vs baseline');g('live-ret-d').style.color=retDelta<=0?'#68d391':'#f6ad55';
+  g('live-stress').textContent=getLbl(newStr);g('live-stress').style.color=strC;
+  g('live-stress-d').textContent='score : '+Math.round(newStr);
+  g('live-conf').textContent=Math.round(newConf)+'%';g('live-conf').style.color=confC;
+  const cd=Math.round(newConf-BASE_CONF);
+  g('live-conf-d').textContent=(cd>=0?'+':'')+cd+'% vs baseline';g('live-conf-d').style.color=confC;
+  g('live-count').textContent=liveSelections.size+' choix actif'+(liveSelections.size>1?'s':'');
+  g('live-sv').textContent=fk(lSliders.savings)+'/mo';
+  g('live-iv').textContent=fk(lSliders.invest)+'/mo';
+  g('live-rv').textContent=lSliders.retire+' ans';
+  if(liveChart) updateLiveChart(tm);
+}
+
+function genLiveWealth(mult){
+  const{tw,tm}=computeLiveImpact();
+  const rate=0.087*Math.max(0.3,Math.min(3,mult*tm));
+  const ac=(MONTHLY_CON+lSliders.savings+lSliders.invest)*12;
+  const data=[];let v=NETWORTH;
+  for(let y=0;y<=25;y++){
+    if(y>0) v=v*(1+rate)*(1+Math.sin(y*1.8)*0.04)+ac;
+    data.push(Math.round(v));
+  }
+  return data;
+}
+
+function initLiveChart(){
+  const ctx=document.getElementById('live-chart');
+  if(!ctx)return;
+  const wd=genWealth(RISK_MULT);
+  const combo=genLiveWealth(RISK_MULT);
+  liveChart=new Chart(ctx.getContext('2d'),{
+    type:'line',
+    data:{labels:wd.lbl,datasets:[
+      {label:'Combiné',data:combo,borderColor:'#68d391',borderWidth:2.5,fill:{target:'origin',above:'rgba(104,211,145,0.06)'},tension:0.4,pointRadius:0},
+      {label:'Baseline',data:wd.base,borderColor:'rgba(99,179,237,0.5)',borderWidth:1.5,borderDash:[5,3],fill:false,tension:0.4,pointRadius:0}
+    ]},
+    options:{responsive:true,animation:{duration:300},...chartDefaults}
+  });
+}
+
+function updateLiveChart(tm){
+  if(!liveChart)return;
+  const wd=genWealth(RISK_MULT);
+  liveChart.data.datasets[0].data=genLiveWealth(tm);
+  liveChart.data.datasets[1].data=wd.base;
+  liveChart.update('active');
+}
+
+function resetLiveSim(){
+  liveSelections.clear();
+  const sv=Math.min(4950,Math.round(MONTHLY_CON/50)*50)||500;
+  const iv=Math.min(4950,Math.round(USER_INV/10/50)*50)||300;
+  document.getElementById('sl-savings').value=sv;
+  document.getElementById('sl-invest').value=iv;
+  document.getElementById('sl-retire').value=RETIRE_AGE;
+  lSliders={savings:sv,invest:iv,retire:RETIRE_AGE};
+  renderLiveGrid();renderLiveChips();updateLiveResults();
+}
+
+/* ===== ONBOARDING ===== */
+const STEPS=[
+  {id:'name',    lbl:'Bienvenue',         q:"Quel est ton prénom ?",                                  sub:"On va personnaliser ton expérience FinTwin.",                               type:'text',     ph:'ex : Alex',        key:'name',       opt:true},
+  {id:'age',     lbl:'Ton profil',         q:"Quel est ton âge ?",                                     sub:"Ton âge détermine ta trajectoire et ta date de retraite.",                   type:'number',   ph:'30',               key:'age',        unit:'ans',min:18,max:75},
+  {id:'city',    lbl:'Localisation',       q:"Où vis-tu actuellement ?",                               sub:"Ta localisation influence ta fiscalité et ton coût de vie.",                 type:'text',     ph:'ex : Paris, France',key:'city',       opt:true},
+  {id:'income',  lbl:'Revenus',            q:"Quel est ton revenu annuel brut ?",                      sub:"Salaire avant impôts + tout revenu secondaire régulier.",                    type:'currency', ph:'60 000',           key:'income'},
+  {id:'expenses',lbl:'Dépenses',           q:"Quel est ton budget mensuel total ?",                    sub:"Loyer, nourriture, abonnements, transport — tout inclus.",                   type:'currency', ph:'2 500',            key:'expenses'},
+  {id:'savings', lbl:'Épargne',            q:"Combien as-tu en épargne / liquidités ?",                sub:"Comptes bancaires, livret A, fonds d'urgence.",                              type:'currency', ph:'15 000',           key:'savings'},
+  {id:'invest',  lbl:'Investissements',    q:"Quelle est la valeur de tes investissements ?",          sub:"Actions, ETF, retraite, crypto — valeur totale actuelle. 0 si aucun.",      type:'currency', ph:'20 000',           key:'investments', opt:true},
+  {id:'debt',    lbl:'Dettes',             q:"Quel est ton niveau d'endettement total ?",              sub:"Crédit immo, prêts étudiants, cartes de crédit — 0 si aucune dette.",        type:'currency', ph:'0',                key:'debt',       opt:true},
+  {id:'retire',  lbl:'Objectif retraite',  q:"À quel âge veux-tu prendre ta retraite ?",               sub:"Ton objectif — on simulera comment y arriver.",                              type:'number',   ph:'55',               key:'retireAge',  unit:'ans',min:30,max:80},
+  {id:'risk',    lbl:'Profil de risque',   q:"Quel est ton appétit pour le risque ?",                  sub:"Cela détermine ton taux de croissance projeté sur les 90 simulations.",      type:'choice',   key:'risk',
+    choices:[
+      {v:'conservative',l:'Prudent',    s:'Préservation du capital, faible volatilité', c:'#63b3ed',bg:'rgba(99,179,237,0.1)', e:'&#128737;'},
+      {v:'balanced',    l:'Équilibré',  s:'Mix croissance et stabilité',                c:'#9f7aea',bg:'rgba(159,122,234,0.1)',e:'&#9878;'},
+      {v:'aggressive',  l:'Dynamique',  s:'Croissance maximale, risque élevé',          c:'#f6ad55',bg:'rgba(246,173,85,0.1)', e:'&#128640;'}
+    ]}
+];
+
+let obStep=-1;
+let obData={};
+
+function startOnboarding(){
+  document.getElementById('ob-welcome').style.display='none';
+  document.getElementById('ob-steps').style.display='block';
+  showObStep(0);
+}
+
+function showObStep(i){
+  obStep=i;
+  document.getElementById('ob-prog').style.width=((i+1)/STEPS.length*100)+'%';
+  document.getElementById('ob-counter').textContent=(i+1)+' / '+STEPS.length;
+  document.getElementById('ob-back-btn').style.display=i>0?'':'none';
+  const container=document.getElementById('ob-steps');
+  const prev=container.querySelector('.ob-step');
+  if(prev){prev.classList.add('out');setTimeout(()=>prev.remove(),300);}
+  const step=STEPS[i];
+  const div=document.createElement('div');
+  div.className='ob-step';
+  let inp='';
+  if(step.type==='text'||step.type==='number'){
+    inp=`<div class="ob-iw">
+      <input class="ob-inp" id="ob-inp" type="${step.type==='number'?'number':'text'}"
+        placeholder="${step.ph}" ${step.min!=null?'min="'+step.min+'"':''} ${step.max!=null?'max="'+step.max+'"':''}
+        autocomplete="off" value="${obData[step.key]||''}">
+      ${step.unit?'<span class="ob-unit">'+step.unit+'</span>':''}
+    </div>`;
+  } else if(step.type==='currency'){
+    inp=`<div class="ob-ctabs">
+      ${['€','£','$'].map(c=>`<button class="ob-cb${CURRENCY===c?' on':''}" onclick="obSetCurr('${c}',this)">${c}</button>`).join('')}
+    </div>
+    <div class="ob-iw">
+      <span class="ob-cs" id="ob-cs">${CURRENCY}</span>
+      <input class="ob-inp" id="ob-inp" type="text" inputmode="numeric"
+        placeholder="${step.ph}" autocomplete="off" value="${obData[step.key]||''}">
+    </div>`;
+  } else if(step.type==='choice'){
+    inp=`<div class="ob-choices">${step.choices.map(c=>`
+      <button class="ob-ch" style="${obData[step.key]===c.v?'border-color:'+c.c+'40;background:'+c.bg:''}"
+        onclick="obChoose('${c.v}','${step.key}','${c.c}','${c.bg}',this.closest('.ob-choices'))">
+        <div class="ob-ch-ic" style="background:${c.bg};color:${c.c}">${c.e}</div>
+        <div><div class="ob-ch-t">${c.l}</div><div class="ob-ch-s">${c.s}</div></div>
+        ${obData[step.key]===c.v?'<span style="margin-left:auto;font-size:16px;color:'+c.c+'">&#10003;</span>':''}
+      </button>`).join('')}</div>`;
+  }
+  div.innerHTML=`
+    <div class="ob-lbl">${step.lbl}</div>
+    <h2 class="ob-q">${step.q}</h2>
+    <p class="ob-sub">${step.sub}</p>
+    ${inp}
+    <p class="ob-hint">Appuie sur <kbd>Entrée ↵</kbd> pour continuer${step.opt?' &nbsp;·&nbsp; <span style="color:#4a5568">Optionnel</span>':''}</p>
+    <div class="ob-footer">
+      <button class="ob-cont" onclick="obNext()">
+        ${i===STEPS.length-1?'Créer mon Twin ✨':'Continuer'} &#8594;
+      </button>
+    </div>`;
+  setTimeout(()=>{container.appendChild(div);},prev?30:0);
+  setTimeout(()=>{const el=div.querySelector('#ob-inp');if(el)el.focus();},300);
+}
+
+function obSetCurr(c,btn){
+  CURRENCY=c;
+  document.querySelectorAll('.ob-cb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('#ob-cs').forEach(el=>el.textContent=c);
+}
+
+function obChoose(val,key,color,bg,container){
+  obData[key]=val;
+  container.querySelectorAll('.ob-ch').forEach(btn=>{
+    btn.style.borderColor='';btn.style.background='';
+    btn.querySelector('.ob-chk')?.remove();
+  });
+  const step=STEPS.find(s=>s.key===key);
+  const idx=step.choices.findIndex(c=>c.v===val);
+  const btn=container.children[idx];
+  if(btn){
+    btn.style.borderColor=color+'40';btn.style.background=bg;
+    const chk=document.createElement('span');
+    chk.className='ob-chk';chk.style.cssText='margin-left:auto;font-size:16px;color:'+color;
+    chk.textContent='✓';btn.appendChild(chk);
+  }
+}
+
+function obNext(){
+  const step=STEPS[obStep];
+  if(step.type==='choice'){
+    if(!obData[step.key])return;
+  } else {
+    const el=document.getElementById('ob-inp');
+    const val=el?el.value.trim():'';
+    if(!val&&!step.opt){
+      if(el){el.closest('.ob-iw').style.borderBottomColor='#fc8181';setTimeout(()=>{el.closest('.ob-iw').style.borderBottomColor='';},1000);}
+      return;
+    }
+    if(val) obData[step.key]=val;
+  }
+  if(obStep<STEPS.length-1) showObStep(obStep+1);
+  else finishOnboarding();
+}
+
+function obBack(){if(obStep>0)showObStep(obStep-1);}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&obStep>=0&&document.getElementById('onboarding').style.display!=='none'){
+    e.preventDefault();obNext();
+  }
+});
+
+function finishOnboarding(){
+  // Hide the steps form — keep #onboarding container visible for the loading screen
+  const steps=document.getElementById('ob-steps');
+  if(steps){steps.style.transition='opacity 0.3s';steps.style.opacity='0';setTimeout(()=>{steps.style.display='none';steps.style.opacity='1';showLoading();},300);}
+  else showLoading();
+}
+
+function parseNum(s){return parseInt(String(s||'').replace(/[^0-9]/g,''))||0;}
+
+function projectWealth(yrs){
+  const rate=0.087*RISK_MULT;
+  let v=NETWORTH;
+  for(let y=1;y<=yrs;y++) v=v*(1+rate)+MONTHLY_CON*12;
+  return Math.round(Math.max(0,v));
+}
+// Projection avec un multiplicateur custom (utilisé par le simulateur de scénarios)
+function projectWealthMult(yrs,mult){
+  const rate=0.087*Math.max(0.3,Math.min(3,mult));
+  let v=NETWORTH;
+  for(let y=1;y<=yrs;y++) v=v*(1+rate)+MONTHLY_CON*12;
+  return Math.round(Math.max(0,v));
+}
+
+function buildTwinData(){
+  const u=obData;
+  const income=parseNum(u.income)||60000;
+  const expenses=parseNum(u.expenses)||2000;
+  const savings=parseNum(u.savings)||10000;
+  const investments=parseNum(u.investments)||0;
+  const debt=parseNum(u.debt)||0;
+  const age=parseInt(u.age)||30;
+  NETWORTH=savings+investments-debt;
+  USER_INV=Math.max(investments,savings*0.3);
+  const mNet=income/12*0.72;
+  MONTHLY_CON=Math.max(100,mNet-expenses);
+  RISK_MULT={conservative:0.78,balanced:1.0,aggressive:1.32}[u.risk]||1.0;
+  RETIRE_AGE=parseInt(u.retireAge)||55;
+  const sr=Math.round(Math.min(95,MONTHLY_CON/mNet*100));
+  const em=expenses>0?savings/expenses:0;
+  const dti=income>0?debt/income*100:0;
+  BASE_CONF=Math.round(Math.max(20,Math.min(92,45+sr*0.7-dti*0.3+(RISK_MULT-1)*20)));
+  BASE_STRESS=Math.round(Math.max(15,Math.min(85,35+dti*0.4-sr*0.3-(em>6?10:0))));
+  P5_BASE=projectWealth(5);
+  P10_BASE=projectWealth(10);
+  P25_BASE=projectWealth(25);
+  // Mise à jour des scores de santé
+  HEALTH[0].v=sr;
+  HEALTH[1].v=Math.round(Math.min(90,40+sr*0.5+(em>=3?20:0)));
+  HEALTH[2].v=BASE_CONF;
+  HEALTH[3].v=Math.round(Math.max(10,90-sr));
+  HEALTH[4].v=Math.round(Math.max(10,Math.min(95,100-dti)));
+  HEALTH[5].v=Math.round(Math.min(90,investments>0?investments/Math.max(1,NETWORTH)*100:25));
+  HEALTH[6].v=Math.round(Math.min(95,em/6*100));
+  HEALTH[14].v=Math.round(Math.max(10,Math.min(80,BASE_STRESS)));
+  // Sidebar
+  const name=u.name||'Toi';
+  const initials=name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?';
+  document.getElementById('sb-avatar').textContent=initials;
+  document.getElementById('sb-name').textContent=name;
+  document.getElementById('sb-role').textContent=u.city||'Ton Financial Twin';
+  document.getElementById('sb-age').textContent=age;
+  document.getElementById('sb-score').textContent=Math.round((HEALTH[0].v+HEALTH[2].v+HEALTH[4].v)/3);
+  document.getElementById('tb-sub').textContent=(u.city?u.city+' · ':'')+'Trajectoire de base';
+  // Loading step
+  document.getElementById('ob-nw-step').textContent='Patrimoine net calculé : '+fk(NETWORTH);
+  // SVG twin
+  const t=e=>document.getElementById(e);
+  if(t('twin-salary-val')) t('twin-salary-val').textContent=fk(Math.round(income/1000)*1000);
+  if(t('twin-invest-val')) t('twin-invest-val').textContent=fk(USER_INV);
+  if(t('twin-savings-val')) t('twin-savings-val').textContent=fk(savings);
+  if(t('twin-debt-val')) t('twin-debt-val').textContent=debt>0?'-'+fk(debt):CURRENCY+'0';
+  if(t('twin-spend-val')) t('twin-spend-val').textContent=fk(expenses)+'/mo';
+  if(t('twin-net-val')) t('twin-net-val').textContent=fk(NETWORTH);
+  // Typing text
+  const ytr=RETIRE_AGE-age;
+  window.INIT_TYPING='Jumeau financier activé, '+name+' ! Il te reste '+ytr+' ans pour atteindre la retraite à '+RETIRE_AGE+' ans. '+(BASE_CONF>70?'Tu es sur la bonne voie — continue à optimiser.':'Ajuste ta stratégie pour améliorer ton score de confiance.');
+  // Personalized overview banner
+  updateOverviewProfile();
+}
+
+function updateOverviewProfile(){
+  if(!obData||!obData.name) return;
+  const u=obData;
+  const name=u.name||'';
+  const age=parseInt(u.age)||0;
+  const income=parseNum(u.income)||0;
+  const expenses=parseNum(u.expenses)||0;
+  const investments=parseNum(u.investments)||0;
+  const mNet=income/12*0.72;
+  const saveRate=Math.round(Math.min(99,MONTHLY_CON/Math.max(1,mNet)*100));
+  const riskLbl={conservative:'Prudent',balanced:'Équilibré',aggressive:'Agressif'}[u.risk||'balanced']||'Équilibré';
+  const riskClr={conservative:'#63b3ed',balanced:'#f6ad55',aggressive:'#fc8181'}[u.risk||'balanced']||'#f6ad55';
+  const riskBg={conservative:'rgba(99,179,237,0.08)',balanced:'rgba(246,173,85,0.08)',aggressive:'rgba(252,129,129,0.08)'}[u.risk||'balanced']||'rgba(246,173,85,0.08)';
+  const riskBr={conservative:'rgba(99,179,237,0.12)',balanced:'rgba(246,173,85,0.12)',aggressive:'rgba(252,129,129,0.12)'}[u.risk||'balanced']||'rgba(246,173,85,0.12)';
+  const initials=name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?';
+  const cityFlag={'Paris':'🇫🇷','London':'🇬🇧','Dubai':'🇦🇪','Singapore':'🇸🇬','New York':'🇺🇸','Amsterdam':'🇳🇱','Zurich':'🇨🇭','Lisbon':'🇵🇹','Berlin':'🇩🇪'}[u.city]||'🌍';
+  const score=Math.round((HEALTH[0].v+(HEALTH[2]?HEALTH[2].v:BASE_CONF)+HEALTH[4].v)/3);
+  const g=id=>document.getElementById(id);
+  const gx=(id,fn)=>{const e=g(id);if(e)fn(e);};
+  gx('pf-avatar',e=>e.textContent=initials);
+  gx('pf-hello',e=>e.textContent='Bonjour '+(name||'')+(age?' · '+age+' ans':''));
+  gx('pf-location',e=>e.textContent=cityFlag+' '+(u.city||'—')+' · épargne '+saveRate+'%');
+  gx('pf-income',e=>e.textContent=fk(Math.round(income/1000)*1000));
+  gx('pf-exp',e=>e.textContent=fk(expenses)+'/mo');
+  gx('pf-save',e=>e.textContent=fk(Math.round(MONTHLY_CON))+'/mo');
+  gx('pf-inv',e=>e.textContent=fk(Math.max(investments,USER_INV)));
+  gx('pf-risk',e=>{e.textContent=riskLbl;e.style.color=riskClr;e.style.background=riskBg;e.style.borderColor=riskBr;});
+  gx('pf-score-badge',e=>e.textContent=score+' pts');
+  gx('home-score',e=>e.textContent=score);
+  // Topbar sync
+  gx('tb-avatar',e=>e.textContent=initials);
+  const months=['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Aoû','Sep','Oct','Nov','Déc'];
+  const now=new Date();
+  gx('tb-date',e=>e.textContent=months[now.getMonth()]+' '+now.getFullYear());
+  // Sidebar sync
+  gx('sb-avatar',e=>e.textContent=initials);
+  gx('sb-name',e=>e.textContent=name||'Toi');
+  gx('sb-role',e=>e.textContent=u.city||'Ton Financial Twin');
+  gx('sb-age',e=>e.textContent=age||'—');
+  gx('sb-score',e=>e.textContent=score);
+}
+
+function showLoading(){
+  buildTwinData();
+  const lEl=document.getElementById('ob-loading');
+  lEl.style.display='flex';
+  const items=document.querySelectorAll('.ob-ls');
+  let i=0;
+  (function tick(){
+    if(i<items.length){
+      items[i].classList.add('done');
+      items[i].querySelector('.ob-ls-ic').textContent='✓';
+      i++;setTimeout(tick,i<items.length?550:800);
+    } else {
+      setTimeout(launchDashboard,500);
+    }
+  })();
+}
+
+function launchDashboard(){
+  const lEl=document.getElementById('ob-loading');
+  lEl.style.transition='opacity 0.5s';lEl.style.opacity='0';
+  setTimeout(()=>{
+    lEl.style.display='none';
+    // Hide the whole onboarding container
+    const obEl=document.getElementById('onboarding');
+    if(obEl){ obEl.style.transition='opacity 0.3s'; obEl.style.opacity='0'; setTimeout(()=>{obEl.style.display='none';},300); }
+    const app=document.getElementById('app');
+    app.style.display='flex';
+    initDashboard();
+    app.style.opacity='1';
+  },500);
+}
+</script>
+
+<!-- ===== MOBILE BOTTOM NAV ===== -->
+<nav id="mob-nav" role="navigation" aria-label="Navigation principale">
+  <div class="mob-tab on" onclick="setNav('overview',this)">
+    <span class="mt-ic">◆</span><span>Accueil</span>
+  </div>
+  <div class="mob-tab" onclick="setNav('scenarios',this)">
+    <span class="mt-ic">⬡</span><span>Scénarios</span>
+  </div>
+  <div class="mob-tab" onclick="setNav('live',this)">
+    <span class="mt-ic">⚡</span><span>Live</span>
+  </div>
+  <div class="mob-tab" onclick="setNav('compare',this)">
+    <span class="mt-ic">⚖</span><span>Mon Plan</span>
+  </div>
+  <div class="mob-tab" onclick="setNav('insights',this)">
+    <span class="mt-ic">✦</span><span>Insights</span>
+  </div>
+</nav>
+</body>
+</html>
