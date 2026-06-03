@@ -229,13 +229,13 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
   <div id="ob-welcome">
     <div class="ob-logo-big">FT</div>
     <h1 class="ob-h1">Build your<br><span class="grad-bl">Financial Twin</span></h1>
-    <p class="ob-wsub">Réponds à 10 questions. Obtiens un jumeau financier IA personnalisé. Teste chaque grande décision de vie avant de la prendre.</p>
-    <button class="ob-start" onclick="startOnboarding()">Commencer &#8594;</button>
+    <p class="ob-wsub">Answer 10 questions. Get a personalized AI financial twin. Test every major life decision before you make it.</p>
+    <button class="ob-start" onclick="startOnboarding()">Get started &#8594;</button>
     <div class="ob-feats">
-      <span class="ob-feat">100% personnalisé</span>
-      <span class="ob-feat">90 scénarios de vie</span>
+      <span class="ob-feat">100% personalized</span>
+      <span class="ob-feat">90 life scenarios</span>
       <span class="ob-feat">2 minutes</span>
-      <span class="ob-feat">Données privées</span>
+      <span class="ob-feat">Private data</span>
     </div>
   </div>
   <div id="ob-steps" class="ob-body" style="display:none"></div>
@@ -254,16 +254,16 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
     </div>
   </div>
   <div style="text-align:center;margin-bottom:32px">
-    <div style="font-size:20px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">Construction de ton jumeau financier</div>
-    <div style="font-size:13px;color:#4a5568;margin-top:6px">Analyse de tes données en cours...</div>
+    <div style="font-size:20px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">Building your financial twin</div>
+    <div style="font-size:13px;color:#4a5568;margin-top:6px">Analyzing your data...</div>
   </div>
   <ul class="ob-ls-list">
-    <li class="ob-ls"><div class="ob-ls-ic">1</div><span>Profil personnel créé</span></li>
-    <li class="ob-ls"><div class="ob-ls-ic">2</div><span>Revenus &amp; cashflow mappés</span></li>
-    <li class="ob-ls"><div class="ob-ls-ic">3</div><span id="ob-nw-step">Patrimoine net calculé</span></li>
-    <li class="ob-ls"><div class="ob-ls-ic">4</div><span>2 847 simulations lancées...</span></li>
-    <li class="ob-ls"><div class="ob-ls-ic">5</div><span>Insights IA générés</span></li>
-    <li class="ob-ls"><div class="ob-ls-ic">&#8594;</div><span>Lancement de ton Financial Twin</span></li>
+    <li class="ob-ls"><div class="ob-ls-ic">1</div><span>Personal profile created</span></li>
+    <li class="ob-ls"><div class="ob-ls-ic">2</div><span>Income &amp; cashflow mapped</span></li>
+    <li class="ob-ls"><div class="ob-ls-ic">3</div><span id="ob-nw-step">Net worth calculated</span></li>
+    <li class="ob-ls"><div class="ob-ls-ic">4</div><span>2,847 simulations running...</span></li>
+    <li class="ob-ls"><div class="ob-ls-ic">5</div><span>AI insights generated</span></li>
+    <li class="ob-ls"><div class="ob-ls-ic">&#8594;</div><span>Launching your Financial Twin</span></li>
   </ul>
 </div>
 
@@ -285,8 +285,8 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
     <div style="display:flex;align-items:center;gap:10px">
       <div id="sb-avatar" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#9f7aea,#63b3ed);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0">?</div>
       <div>
-        <div id="sb-name" style="font-size:13px;font-weight:600;color:#f0f4ff">Toi</div>
-        <div id="sb-role" style="font-size:11px;color:#8899b0">Ton Financial Twin</div>
+        <div id="sb-name" style="font-size:13px;font-weight:600;color:#f0f4ff">You</div>
+        <div id="sb-role" style="font-size:11px;color:#8899b0">Your Financial Twin</div>
       </div>
     </div>
     <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
@@ -295,7 +295,7 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
         <div id="sb-score" style="font-size:16px;font-weight:800;color:#68d391">—</div>
       </div>
       <div style="padding:8px;border-radius:8px;background:rgba(99,179,237,0.08)">
-        <div style="font-size:9px;color:#63b3ed;letter-spacing:0.5px;font-weight:600;text-transform:uppercase">Âge</div>
+        <div style="font-size:9px;color:#63b3ed;letter-spacing:0.5px;font-weight:600;text-transform:uppercase">Age</div>
         <div id="sb-age" style="font-size:16px;font-weight:800;color:#63b3ed">—</div>
       </div>
     </div>
@@ -307,7 +307,7 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
     <div class="nav-i" onclick="setNav('scenarios',this)"><span style="font-size:14px">&#11041;</span><span>Simulations</span></div>
     <div class="nav-i" onclick="setNav('live',this)" style="position:relative"><span style="font-size:14px">&#9889;</span><span>Live Sim</span><span style="margin-left:auto;font-size:9px;font-weight:700;background:linear-gradient(135deg,#63b3ed,#9f7aea);color:#fff;padding:2px 6px;border-radius:4px;letter-spacing:0.3px">NEW</span></div>
     <div class="nav-i" onclick="setNav('timeline',this)"><span style="font-size:14px">&#9711;</span><span>Timeline</span></div>
-    <div class="nav-i" onclick="setNav('compare',this)"><span style="font-size:14px">&#9878;</span><span>Mon Plan</span></div>
+    <div class="nav-i" onclick="setNav('compare',this)"><span style="font-size:14px">&#9878;</span><span>My Plan</span></div>
     <div class="nav-i" onclick="setNav('insights',this)"><span style="font-size:14px">&#10022;</span><span>AI Insights</span></div>
   </div>
   <div style="margin-top:auto;padding-top:16px">
@@ -332,7 +332,7 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
     </div>
     <div style="display:flex;align-items:center;gap:12px">
       <button id="clear-btn" onclick="clearSim()" style="font-size:11px;font-weight:600;color:#8899b0;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px 12px;cursor:pointer">Clear simulation</button>
-      <div id="tb-date" style="font-size:11px;color:#4a5568">Juin 2026</div>
+      <div id="tb-date" style="font-size:11px;color:#4a5568">Jun 2026</div>
       <div id="tb-avatar" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#9f7aea,#63b3ed);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;cursor:pointer">?</div>
     </div>
   </header>
@@ -352,7 +352,7 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
           <div style="display:flex;align-items:center;gap:12px">
             <div id="pf-avatar" style="width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,#9f7aea,#63b3ed);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 4px 16px rgba(99,179,237,0.2)">?</div>
             <div>
-              <div id="pf-hello" style="font-size:16px;font-weight:800;color:#f0f4ff;letter-spacing:-0.4px">Bonjour —</div>
+              <div id="pf-hello" style="font-size:16px;font-weight:800;color:#f0f4ff;letter-spacing:-0.4px">Hi —</div>
               <div id="pf-location" style="font-size:11px;color:#8899b0;margin-top:2px">📍 —</div>
             </div>
           </div>
@@ -361,25 +361,25 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
 
         <!-- Net worth BIG -->
         <div style="margin-bottom:18px;position:relative">
-          <div style="font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#3a4a5e;margin-bottom:8px">Patrimoine net</div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#3a4a5e;margin-bottom:8px">Net worth</div>
           <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
             <div id="nw-display" class="grad-bl" style="font-size:48px;font-weight:900;letter-spacing:-2.5px;line-height:1">£108k</div>
-            <span class="tag" style="background:rgba(104,211,145,0.12);color:#68d391;border:1px solid rgba(104,211,145,0.2);font-size:11px">+12.4% cette année</span>
+            <span class="tag" style="background:rgba(104,211,145,0.12);color:#68d391;border:1px solid rgba(104,211,145,0.2);font-size:11px">+12.4% this year</span>
           </div>
         </div>
 
         <!-- Projection pill bar -->
         <div style="display:flex;margin-bottom:22px;border-radius:14px;border:1px solid rgba(255,255,255,0.07);overflow:hidden;background:rgba(255,255,255,0.025)">
           <div style="flex:1;padding:13px 12px;text-align:center;border-right:1px solid rgba(255,255,255,0.06)">
-            <div style="font-size:9px;color:#3a4a5e;text-transform:uppercase;letter-spacing:0.8px;font-weight:700;margin-bottom:5px">5 ans</div>
+            <div style="font-size:9px;color:#3a4a5e;text-transform:uppercase;letter-spacing:0.8px;font-weight:700;margin-bottom:5px">5 yrs</div>
             <div id="p5" style="font-size:16px;font-weight:800;color:#63b3ed;letter-spacing:-0.5px">£340k</div>
           </div>
           <div style="flex:1;padding:13px 12px;text-align:center;border-right:1px solid rgba(255,255,255,0.06)">
-            <div style="font-size:9px;color:#3a4a5e;text-transform:uppercase;letter-spacing:0.8px;font-weight:700;margin-bottom:5px">10 ans</div>
+            <div style="font-size:9px;color:#3a4a5e;text-transform:uppercase;letter-spacing:0.8px;font-weight:700;margin-bottom:5px">10 yrs</div>
             <div id="p10" style="font-size:16px;font-weight:800;color:#9f7aea;letter-spacing:-0.5px">£720k</div>
           </div>
           <div style="flex:1;padding:13px 12px;text-align:center">
-            <div style="font-size:9px;color:#3a4a5e;text-transform:uppercase;letter-spacing:0.8px;font-weight:700;margin-bottom:5px">25 ans</div>
+            <div style="font-size:9px;color:#3a4a5e;text-transform:uppercase;letter-spacing:0.8px;font-weight:700;margin-bottom:5px">25 yrs</div>
             <div id="p25" style="font-size:16px;font-weight:800;color:#38b2ac;letter-spacing:-0.5px">£2.4M</div>
           </div>
         </div>
@@ -388,29 +388,29 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
       <!-- ═══════════ WEALTH CHART ═══════════ -->
       <div style="padding:0 20px;margin-bottom:22px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#3a4a5e;text-transform:uppercase">Ta trajectoire · 25 ans</div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#3a4a5e;text-transform:uppercase">Your trajectory · 25 yrs</div>
           <div style="display:flex;gap:10px">
-            <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:2px;background:#9f7aea;border-radius:1px"></div><span style="font-size:9px;color:#4a5568">Optimiste</span></div>
+            <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:2px;background:#9f7aea;border-radius:1px"></div><span style="font-size:9px;color:#4a5568">Optimistic</span></div>
             <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:2px;background:#63b3ed;border-radius:1px"></div><span style="font-size:9px;color:#4a5568">Base</span></div>
-            <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:2px;background:#38b2ac;border-radius:1px"></div><span style="font-size:9px;color:#4a5568">Prudent</span></div>
+            <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:2px;background:#38b2ac;border-radius:1px"></div><span style="font-size:9px;color:#4a5568">Conservative</span></div>
           </div>
         </div>
         <canvas id="wealth-chart" height="185"></canvas>
       </div>
 
-      <!-- ═══════════ 3 MÉTRIQUES CLÉS ═══════════ -->
+      <!-- ═══════════ 3 KEY METRICS ═══════════ -->
       <div style="padding:0 20px;margin-bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
         <div class="glass" style="padding:16px 8px;text-align:center;position:relative;overflow:hidden">
           <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f6ad55 50%,transparent)"></div>
-          <div style="font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#f6ad55;margin-bottom:8px">Retraite</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#f6ad55;margin-bottom:8px">Retirement</div>
           <div id="ai-age" style="font-size:28px;font-weight:900;color:#f0f4ff;letter-spacing:-1px;line-height:1">52</div>
-          <div style="font-size:10px;color:#4a5568;margin-top:4px">ans</div>
+          <div style="font-size:10px;color:#4a5568;margin-top:4px">yrs</div>
         </div>
         <div class="glass" style="padding:16px 8px;text-align:center;position:relative;overflow:hidden">
           <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#68d391 50%,transparent)"></div>
-          <div style="font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#68d391;margin-bottom:8px">Confiance</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#68d391;margin-bottom:8px">Confidence</div>
           <div id="ai-conf" style="font-size:28px;font-weight:900;color:#f0f4ff;letter-spacing:-1px;line-height:1">79%</div>
-          <div style="font-size:10px;color:#4a5568;margin-top:4px">proba.</div>
+          <div style="font-size:10px;color:#4a5568;margin-top:4px">prob.</div>
         </div>
         <div class="glass" style="padding:16px 8px;text-align:center;position:relative;overflow:hidden">
           <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#9f7aea 50%,transparent)"></div>
@@ -423,29 +423,29 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
       <!-- ═══════════ SITUATION ACTUELLE 2×2 ═══════════ -->
       <div style="padding:0 20px;margin-bottom:18px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-          <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3a4a5e">Situation actuelle</div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3a4a5e">Current situation</div>
           <div id="pf-risk" style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px;background:rgba(252,129,129,0.08);color:#fc8181;border:1px solid rgba(252,129,129,0.12)">—</div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div style="padding:16px;border-radius:16px;background:rgba(104,211,145,0.04);border:1px solid rgba(104,211,145,0.09)">
-            <div style="font-size:9px;color:#68d391;letter-spacing:0.8px;font-weight:700;text-transform:uppercase;margin-bottom:6px">Revenus</div>
+            <div style="font-size:9px;color:#68d391;letter-spacing:0.8px;font-weight:700;text-transform:uppercase;margin-bottom:6px">Income</div>
             <div id="pf-income" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
-            <div style="font-size:10px;color:#4a5568;margin-top:3px">par an</div>
+            <div style="font-size:10px;color:#4a5568;margin-top:3px">per year</div>
           </div>
           <div style="padding:16px;border-radius:16px;background:rgba(246,173,85,0.04);border:1px solid rgba(246,173,85,0.09)">
-            <div style="font-size:9px;color:#f6ad55;letter-spacing:0.8px;font-weight:700;text-transform:uppercase;margin-bottom:6px">Dépenses</div>
+            <div style="font-size:9px;color:#f6ad55;letter-spacing:0.8px;font-weight:700;text-transform:uppercase;margin-bottom:6px">Expenses</div>
             <div id="pf-exp" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
-            <div style="font-size:10px;color:#4a5568;margin-top:3px">par mois</div>
+            <div style="font-size:10px;color:#4a5568;margin-top:3px">per month</div>
           </div>
           <div style="padding:16px;border-radius:16px;background:rgba(99,179,237,0.04);border:1px solid rgba(99,179,237,0.09)">
-            <div style="font-size:9px;color:#63b3ed;letter-spacing:0.8px;font-weight:700;text-transform:uppercase;margin-bottom:6px">Épargne nette</div>
+            <div style="font-size:9px;color:#63b3ed;letter-spacing:0.8px;font-weight:700;text-transform:uppercase;margin-bottom:6px">Net savings</div>
             <div id="pf-save" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
-            <div style="font-size:10px;color:#4a5568;margin-top:3px">par mois</div>
+            <div style="font-size:10px;color:#4a5568;margin-top:3px">per month</div>
           </div>
           <div style="padding:16px;border-radius:16px;background:rgba(159,122,234,0.04);border:1px solid rgba(159,122,234,0.09)">
-            <div style="font-size:9px;color:#9f7aea;letter-spacing:0.8px;font-weight:700;text-transform:uppercase;margin-bottom:6px">Investissements</div>
+            <div style="font-size:9px;color:#9f7aea;letter-spacing:0.8px;font-weight:700;text-transform:uppercase;margin-bottom:6px">Investments</div>
             <div id="pf-inv" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
-            <div style="font-size:10px;color:#4a5568;margin-top:3px">portefeuille</div>
+            <div style="font-size:10px;color:#4a5568;margin-top:3px">portfolio</div>
           </div>
         </div>
       </div>
@@ -466,7 +466,7 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
           </div>
         </div>
         <div class="glass" style="padding:16px">
-          <div style="font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#3a4a5e;margin-bottom:12px">Santé</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#3a4a5e;margin-bottom:12px">Health</div>
           <div id="health-mini" style="display:flex;flex-direction:column;gap:7px"></div>
         </div>
       </div>
@@ -474,7 +474,7 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
       <!-- ═══════════ CTA ═══════════ -->
       <div style="padding:0 20px 28px">
         <button onclick="setNav('scenarios',null)" style="width:100%;padding:18px;border-radius:16px;background:linear-gradient(135deg,#63b3ed,#9f7aea);color:#fff;font-size:15px;font-weight:800;border:none;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:-0.3px;box-shadow:0 8px 32px rgba(99,179,237,0.22);display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent">
-          <span>⚡</span><span>Simule un changement</span><span style="opacity:0.7;margin-left:2px">→</span>
+          <span>⚡</span><span>Simulate a change</span><span style="opacity:0.7;margin-left:2px">→</span>
         </button>
       </div>
 
@@ -573,8 +573,8 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
       <!-- Header compact -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
         <div>
-          <div style="font-size:15px;font-weight:800;color:#f0f4ff;letter-spacing:-0.3px">Simulateur</div>
-          <div style="font-size:11px;color:#4a5568;margin-top:1px">Combine des scénarios · impact en temps réel</div>
+          <div style="font-size:15px;font-weight:800;color:#f0f4ff;letter-spacing:-0.3px">Simulator</div>
+          <div style="font-size:11px;color:#4a5568;margin-top:1px">Combine scenarios · real-time impact</div>
         </div>
         <span id="sc-count" style="font-size:10px;color:#3a4a5e;padding:4px 10px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)">15</span>
       </div>
@@ -585,7 +585,7 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
       <!-- Active chips bar -->
       <div id="sc-active-chips" style="display:none;flex-wrap:wrap;gap:6px;margin-bottom:14px;padding:10px 14px;background:rgba(99,179,237,0.04);border-radius:12px;border:1px solid rgba(99,179,237,0.12)"></div>
 
-      <!-- IMPACT PANEL — apparaît au-dessus de la grille dès qu'un scénario est sélectionné -->
+      <!-- IMPACT PANEL — appears above the grid as soon as a scenario is selected -->
       <div id="sc-impact" style="display:none;margin-bottom:16px">
         <div id="sc-impact-glass" class="glass" style="padding:24px;border:1px solid rgba(99,179,237,0.2)">
           <!-- Header row -->
@@ -597,20 +597,20 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
                 <div id="si-sub" style="font-size:11px;color:#8899b0;line-height:1.4;max-width:480px"></div>
               </div>
             </div>
-            <button onclick="clearSim()" style="font-size:11px;font-weight:600;color:#8899b0;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:7px 14px;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap">✕ Effacer</button>
+            <button onclick="clearSim()" style="font-size:11px;font-weight:600;color:#8899b0;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:7px 14px;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap">✕ Clear</button>
           </div>
 
-          <!-- HERO: évolution initiale vs avec tes choix (25 ans) -->
+          <!-- HERO: baseline vs with your choices (25 yrs) -->
           <div id="si-hero" style="position:relative;overflow:hidden;border-radius:16px;padding:18px;margin-bottom:20px;background:linear-gradient(135deg,rgba(104,211,145,0.08),rgba(99,179,237,0.05));border:1px solid rgba(104,211,145,0.18)">
-            <div style="font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#68d391;margin-bottom:14px">Ton patrimoine dans 25 ans</div>
+            <div style="font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#68d391;margin-bottom:14px">Your net worth in 25 years</div>
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
               <div style="flex:1;min-width:90px">
-                <div style="font-size:9px;color:#8899b0;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px">Sans changement</div>
+                <div style="font-size:9px;color:#8899b0;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px">No change</div>
                 <div id="si-hero-base" style="font-size:24px;font-weight:800;color:#8899b0;letter-spacing:-1px;line-height:1">—</div>
               </div>
               <div style="font-size:22px;color:#4a5568;font-weight:300">→</div>
               <div style="flex:1;min-width:90px">
-                <div style="font-size:9px;color:#68d391;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px;font-weight:700">Avec tes choix</div>
+                <div style="font-size:9px;color:#68d391;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px;font-weight:700">With your choices</div>
                 <div id="si-hero-new" class="grad-bl" style="font-size:28px;font-weight:900;letter-spacing:-1.2px;line-height:1">—</div>
               </div>
               <div id="si-hero-delta" style="padding:8px 14px;border-radius:12px;background:rgba(104,211,145,0.15);border:1px solid rgba(104,211,145,0.3);font-size:15px;font-weight:800;color:#68d391;white-space:nowrap">—</div>
@@ -619,11 +619,11 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
 
           <!-- 4 KPI comparison tiles -->
           <div id="sc-impact-tiles" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px">
-            <!-- Patrimoine -->
+            <!-- Net worth -->
             <div style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
-              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Patrimoine net</div>
+              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Net worth</div>
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-                <span style="font-size:10px;color:#8899b0">Actuel</span>
+                <span style="font-size:10px;color:#8899b0">Current</span>
                 <span id="si-nw-base" style="font-size:13px;font-weight:700;color:#f0f4ff"></span>
               </div>
               <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:5px"></div>
@@ -633,11 +633,11 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
               </div>
               <div id="si-nw-d" style="font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px"></div>
             </div>
-            <!-- Retraite -->
+            <!-- Retirement -->
             <div style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
-              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Retraite</div>
+              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Retirement</div>
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-                <span style="font-size:10px;color:#8899b0">Actuel</span>
+                <span style="font-size:10px;color:#8899b0">Current</span>
                 <span id="si-ret-base" style="font-size:13px;font-weight:700;color:#f0f4ff"></span>
               </div>
               <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:5px"></div>
@@ -647,11 +647,11 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
               </div>
               <div id="si-ret-d" style="font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px"></div>
             </div>
-            <!-- Confiance -->
+            <!-- Confidence -->
             <div style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
-              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Confiance</div>
+              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Confidence</div>
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-                <span style="font-size:10px;color:#8899b0">Actuel</span>
+                <span style="font-size:10px;color:#8899b0">Current</span>
                 <span id="si-conf-base" style="font-size:13px;font-weight:700;color:#f0f4ff"></span>
               </div>
               <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:5px"></div>
@@ -663,9 +663,9 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
             </div>
             <!-- Stress -->
             <div style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
-              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Stress financier</div>
+              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Financial stress</div>
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-                <span style="font-size:10px;color:#8899b0">Actuel</span>
+                <span style="font-size:10px;color:#8899b0">Current</span>
                 <span id="si-str-base" style="font-size:13px;font-weight:700;color:#f0f4ff"></span>
               </div>
               <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:5px"></div>
@@ -679,7 +679,7 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
 
           <!-- Wealth projection chart -->
           <div>
-            <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4a5568;margin-bottom:10px">Projection patrimoine — 25 ans</div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4a5568;margin-bottom:10px">Net worth projection — 25 yrs</div>
             <canvas id="sc-impact-chart" height="120"></canvas>
           </div>
         </div>
@@ -756,14 +756,14 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
       <div style="margin-bottom:18px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
           <div>
-            <div style="font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#3a4a5e;margin-bottom:4px">Recommandations IA</div>
-            <div style="font-size:11px;color:#8899b0">Basées sur ton profil · mis à jour maintenant</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#3a4a5e;margin-bottom:4px">AI recommendations</div>
+            <div style="font-size:11px;color:#8899b0">Based on your profile · updated just now</div>
           </div>
           <span class="tag" style="background:rgba(159,122,234,0.1);color:#9f7aea;border:1px solid rgba(159,122,234,0.2);font-size:9px">✦ FinTwin AI</span>
         </div>
         <!-- AI header description -->
         <div style="padding:12px 14px;border-radius:12px;margin-bottom:12px;background:rgba(159,122,234,0.06);border:1px solid rgba(159,122,234,0.12);font-size:12px;line-height:1.7;color:#c8d8e8">
-          <span style="color:#9f7aea;font-weight:600">◉ FinTwin AI</span><span style="color:#4a5568;font-size:11px"> · </span><span id="ins-summary">Analyse de ton profil financier en cours…</span>
+          <span style="color:#9f7aea;font-weight:600">◉ FinTwin AI</span><span style="color:#4a5568;font-size:11px"> · </span><span id="ins-summary">Analyzing your financial profile…</span>
         </div>
         <!-- Insights cards list -->
         <div id="insights-list" style="display:flex;flex-direction:column;gap:8px"></div>
@@ -773,8 +773,8 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
       <div class="glass" style="padding:20px;margin-bottom:18px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
           <div>
-            <div style="font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#3a4a5e;margin-bottom:4px">Score de santé</div>
-            <div style="font-size:11px;color:#8899b0">15 métriques de performance</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#3a4a5e;margin-bottom:4px">Health score</div>
+            <div style="font-size:11px;color:#8899b0">15 performance metrics</div>
           </div>
           <div style="display:flex;align-items:center;gap:10px">
             <div style="text-align:right">
@@ -802,44 +802,44 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
           <div>
             <div class="lbl" style="margin-bottom:4px">&#9889; Live Simulator</div>
-            <div style="font-size:12px;color:#8899b0">Modifie ta situation actuelle — chaque curseur représente un changement par rapport à aujourd'hui</div>
+            <div style="font-size:12px;color:#8899b0">Change your current situation — each slider represents a change from today</div>
           </div>
           <div style="display:flex;align-items:center;gap:10px">
-            <span id="live-count" class="tag" style="background:rgba(99,179,237,0.1);color:#63b3ed;border:1px solid rgba(99,179,237,0.2)">0 choix actifs</span>
-            <button onclick="resetLiveSim()" style="font-size:11px;font-weight:600;color:#8899b0;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:7px 14px;cursor:pointer;font-family:'Inter',sans-serif">Réinitialiser</button>
+            <span id="live-count" class="tag" style="background:rgba(99,179,237,0.1);color:#63b3ed;border:1px solid rgba(99,179,237,0.2)">0 active choices</span>
+            <button onclick="resetLiveSim()" style="font-size:11px;font-weight:600;color:#8899b0;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:7px 14px;cursor:pointer;font-family:'Inter',sans-serif">Reset</button>
           </div>
         </div>
 
         <!-- Baseline reference row -->
         <div id="live-baseline-row" style="display:flex;align-items:center;gap:20px;padding:10px 16px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid rgba(255,255,255,0.06);margin-bottom:14px;font-size:11px">
-          <span style="font-size:9px;font-weight:800;letter-spacing:1.2px;color:#4a5568;text-transform:uppercase;white-space:nowrap">Situation actuelle</span>
-          <span style="color:#8899b0">Patrimoine: <strong id="live-bl-nw" style="color:#f0f4ff">—</strong></span>
-          <span style="color:#8899b0">Retraite: <strong id="live-bl-ret" style="color:#f0f4ff">—</strong></span>
-          <span style="color:#8899b0">Confiance: <strong id="live-bl-conf" style="color:#f0f4ff">—</strong></span>
+          <span style="font-size:9px;font-weight:800;letter-spacing:1.2px;color:#4a5568;text-transform:uppercase;white-space:nowrap">Current situation</span>
+          <span style="color:#8899b0">Net worth: <strong id="live-bl-nw" style="color:#f0f4ff">—</strong></span>
+          <span style="color:#8899b0">Retirement: <strong id="live-bl-ret" style="color:#f0f4ff">—</strong></span>
+          <span style="color:#8899b0">Confidence: <strong id="live-bl-conf" style="color:#f0f4ff">—</strong></span>
           <span style="color:#8899b0">Stress: <strong id="live-bl-str" style="color:#f0f4ff">—</strong></span>
         </div>
 
         <!-- Live Impact Cards -->
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px">
           <div style="padding:16px;border-radius:14px;background:rgba(99,179,237,0.06);border:1px solid rgba(99,179,237,0.15)">
-            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#63b3ed;text-transform:uppercase;margin-bottom:8px">Patrimoine net</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#63b3ed;text-transform:uppercase;margin-bottom:8px">Net worth</div>
             <div id="live-nw" style="font-size:22px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
             <div id="live-nw-d" style="font-size:12px;margin-top:4px;font-weight:600">vs baseline</div>
           </div>
           <div style="padding:16px;border-radius:14px;background:rgba(104,211,145,0.06);border:1px solid rgba(104,211,145,0.15)">
-            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#68d391;text-transform:uppercase;margin-bottom:8px">Retraite</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#68d391;text-transform:uppercase;margin-bottom:8px">Retirement</div>
             <div id="live-ret" style="font-size:22px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
             <div id="live-ret-d" style="font-size:12px;margin-top:4px;font-weight:600">vs baseline</div>
           </div>
           <div style="padding:16px;border-radius:14px;background:rgba(246,173,85,0.06);border:1px solid rgba(246,173,85,0.15)">
-            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#f6ad55;text-transform:uppercase;margin-bottom:8px">Stress financier</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#f6ad55;text-transform:uppercase;margin-bottom:8px">Financial stress</div>
             <div id="live-stress" style="font-size:22px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
-            <div id="live-stress-d" style="font-size:12px;margin-top:4px;font-weight:600">niveau</div>
+            <div id="live-stress-d" style="font-size:12px;margin-top:4px;font-weight:600">level</div>
           </div>
           <div style="padding:16px;border-radius:14px;background:rgba(159,122,234,0.06);border:1px solid rgba(159,122,234,0.15)">
-            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#9f7aea;text-transform:uppercase;margin-bottom:8px">Confiance</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#9f7aea;text-transform:uppercase;margin-bottom:8px">Confidence</div>
             <div id="live-conf" style="font-size:22px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
-            <div id="live-conf-d" style="font-size:12px;margin-top:4px;font-weight:600">probabilité</div>
+            <div id="live-conf-d" style="font-size:12px;margin-top:4px;font-weight:600">probability</div>
           </div>
         </div>
 
@@ -847,7 +847,7 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px;padding:16px;background:rgba(255,255,255,0.03);border-radius:12px;border:1px solid rgba(255,255,255,0.06)">
           <div>
             <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-              <span style="font-size:11px;color:#8899b0;font-weight:600">Épargne additionnelle</span>
+              <span style="font-size:11px;color:#8899b0;font-weight:600">Additional savings</span>
               <span id="live-sv" style="font-size:11px;font-weight:700;color:#68d391"></span>
             </div>
             <input type="range" id="sl-savings" min="0" max="5000" step="50" value="500"
@@ -856,7 +856,7 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
           </div>
           <div>
             <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-              <span style="font-size:11px;color:#8899b0;font-weight:600">Investissement additionnel</span>
+              <span style="font-size:11px;color:#8899b0;font-weight:600">Additional investment</span>
               <span id="live-iv" style="font-size:11px;font-weight:700;color:#63b3ed"></span>
             </div>
             <input type="range" id="sl-invest" min="0" max="5000" step="50" value="300"
@@ -865,12 +865,12 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
           </div>
           <div>
             <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-              <span style="font-size:11px;color:#8899b0;font-weight:600">Âge de retraite cible</span>
+              <span style="font-size:11px;color:#8899b0;font-weight:600">Target retirement age</span>
               <span id="live-rv" style="font-size:11px;font-weight:700;color:#9f7aea"></span>
             </div>
             <input type="range" id="sl-retire" min="35" max="75" step="1" value="55"
               style="width:100%;accent-color:#9f7aea;cursor:pointer" oninput="updateLiveSliders()">
-            <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>35</span><span>75 ans</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>35</span><span>75 yrs</span></div>
           </div>
         </div>
 
@@ -888,11 +888,11 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
       <div class="glass" style="padding:24px;margin-top:16px">
         <div style="display:flex;justify-content:space-between;margin-bottom:16px">
           <div>
-            <div class="lbl" style="margin-bottom:4px">Projection combinée</div>
-            <div style="font-size:12px;color:#8899b0">Trajectoire 25 ans avec tous tes choix actifs</div>
+            <div class="lbl" style="margin-bottom:4px">Combined projection</div>
+            <div style="font-size:12px;color:#8899b0">25-year trajectory with all your active choices</div>
           </div>
           <div style="display:flex;gap:12px;align-items:center">
-            <div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:2px;background:#68d391;border-radius:1px"></div><span style="font-size:10px;color:#8899b0">Combiné</span></div>
+            <div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:2px;background:#68d391;border-radius:1px"></div><span style="font-size:10px;color:#8899b0">Combined</span></div>
             <div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:2px;background:rgba(99,179,237,0.4);border-radius:1px;border-top:1px dashed #63b3ed"></div><span style="font-size:10px;color:#8899b0">Baseline</span></div>
           </div>
         </div>
@@ -907,27 +907,27 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
       <div style="display:grid;grid-template-columns:1fr 110px 1fr;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);margin-bottom:16px">
         <!-- MAINTENANT -->
         <div style="padding:20px 24px;background:rgba(255,255,255,0.02)">
-          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4a5568;margin-bottom:14px">📍 Maintenant</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4a5568;margin-bottom:14px">📍 Now</div>
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">PATRIMOINE</div><div id="cnow-nw" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">RETRAITE</div><div id="cnow-ret" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">PROJ. 10 ANS</div><div id="cnow-p10" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">CONFIANCE</div><div id="cnow-conf" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">NET WORTH</div><div id="cnow-nw" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">RETIREMENT</div><div id="cnow-ret" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">10-YR PROJ.</div><div id="cnow-p10" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">CONFIDENCE</div><div id="cnow-conf" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
           </div>
         </div>
-        <!-- FLÈCHE + DELTA -->
+        <!-- ARROW + DELTA -->
         <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:rgba(104,211,145,0.04);border-left:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);padding:12px 0">
           <div style="font-size:22px;color:#68d391">→</div>
           <div id="cmp-delta-badge" style="font-size:9px;font-weight:700;padding:3px 8px;border-radius:12px;background:rgba(104,211,145,0.15);color:#68d391;text-align:center"></div>
         </div>
-        <!-- AVEC TES CHOIX -->
+        <!-- WITH YOUR CHOICES -->
         <div style="padding:20px 24px;background:rgba(104,211,145,0.03)">
-          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#68d391;margin-bottom:14px">✨ Avec tes choix</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#68d391;margin-bottom:14px">✨ With your choices</div>
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">PATRIMOINE</div><div id="csc-nw" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-nw-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">RETRAITE</div><div id="csc-ret" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-ret-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">PROJ. 10 ANS</div><div id="csc-p10" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-p10-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">CONFIANCE</div><div id="csc-conf" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-conf-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">NET WORTH</div><div id="csc-nw" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-nw-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">RETIREMENT</div><div id="csc-ret" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-ret-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">10-YR PROJ.</div><div id="csc-p10" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-p10-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
+            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">CONFIDENCE</div><div id="csc-conf" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-conf-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
           </div>
         </div>
       </div>
@@ -935,23 +935,23 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
       <!-- BUILDER + CHART -->
       <div style="display:grid;grid-template-columns:380px 1fr;gap:16px;padding-bottom:24px">
 
-        <!-- LEFT: PARAMÈTRES -->
+        <!-- LEFT: PARAMETERS -->
         <div style="display:flex;flex-direction:column;gap:12px">
 
           <!-- 🏠 LOGEMENT -->
           <div class="glass" style="padding:18px">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
               <span style="font-size:15px">🏠</span>
-              <span style="font-size:12px;font-weight:700;color:#f0f4ff">Logement</span>
+              <span style="font-size:12px;font-weight:700;color:#f0f4ff">Housing</span>
             </div>
-            <div style="font-size:9px;font-weight:700;letter-spacing:1px;color:#4a5568;text-transform:uppercase;margin-bottom:8px">Résidence</div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:1px;color:#4a5568;text-transform:uppercase;margin-bottom:8px">Residence</div>
             <div id="cmp-city-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-              <span style="font-size:11px;color:#8899b0">Loyer / mensualité</span>
+              <span style="font-size:11px;color:#8899b0">Rent / monthly payment</span>
               <span id="cmp-rent-val" style="font-size:12px;font-weight:700;color:#63b3ed"></span>
             </div>
             <input type="range" id="cmp-rent" min="0" max="5000" step="50" style="width:100%;accent-color:#63b3ed;cursor:pointer" oninput="updateCompare()">
-            <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5 000/mo</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5,000/mo</span></div>
           </div>
 
           <!-- 📈 INVESTISSEMENTS -->
@@ -959,50 +959,50 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
               <div style="display:flex;align-items:center;gap:8px">
                 <span style="font-size:15px">📈</span>
-                <span style="font-size:12px;font-weight:700;color:#f0f4ff">Investissements</span>
+                <span style="font-size:12px;font-weight:700;color:#f0f4ff">Investments</span>
               </div>
-              <div id="cmp-total-alloc" style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;background:rgba(255,255,255,0.05);color:#8899b0">0% alloué</div>
+              <div id="cmp-total-alloc" style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;background:rgba(255,255,255,0.05);color:#8899b0">0% allocated</div>
             </div>
-            <div style="font-size:9px;font-weight:700;letter-spacing:1px;color:#4a5568;text-transform:uppercase;margin-bottom:10px">% de ton patrimoine</div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:1px;color:#4a5568;text-transform:uppercase;margin-bottom:10px">% of your net worth</div>
             <div style="display:flex;flex-direction:column;gap:10px">
               <div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;color:#8899b0">📊 Bourse / ETF <span style="font-size:9px;color:#4a5568">8.7%/an</span></span>
+                  <span style="font-size:11px;color:#8899b0">📊 Stocks / ETF <span style="font-size:9px;color:#4a5568">8.7%/yr</span></span>
                   <span id="cmp-eq-val" style="font-size:12px;font-weight:700;color:#63b3ed"></span>
                 </div>
                 <input type="range" id="cmp-eq" min="0" max="100" step="5" style="width:100%;accent-color:#63b3ed;cursor:pointer" oninput="updateCompare()">
               </div>
               <div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;color:#8899b0">🏢 Immobilier <span style="font-size:9px;color:#4a5568">5.5%/an</span></span>
+                  <span style="font-size:11px;color:#8899b0">🏢 Real estate <span style="font-size:9px;color:#4a5568">5.5%/yr</span></span>
                   <span id="cmp-re-val" style="font-size:12px;font-weight:700;color:#9f7aea"></span>
                 </div>
                 <input type="range" id="cmp-re" min="0" max="100" step="5" style="width:100%;accent-color:#9f7aea;cursor:pointer" oninput="updateCompare()">
               </div>
               <div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;color:#8899b0">₿ Crypto <span style="font-size:9px;color:#4a5568">20%/an</span></span>
+                  <span style="font-size:11px;color:#8899b0">₿ Crypto <span style="font-size:9px;color:#4a5568">20%/yr</span></span>
                   <span id="cmp-cr-val" style="font-size:12px;font-weight:700;color:#f6ad55"></span>
                 </div>
                 <input type="range" id="cmp-cr" min="0" max="50" step="5" style="width:100%;accent-color:#f6ad55;cursor:pointer" oninput="updateCompare()">
               </div>
               <div style="padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center">
-                <span style="font-size:11px;color:#8899b0">💵 Liquidités (reste) <span style="font-size:9px;color:#4a5568">2%/an</span></span>
+                <span style="font-size:11px;color:#8899b0">💵 Cash (remainder) <span style="font-size:9px;color:#4a5568">2%/yr</span></span>
                 <span id="cmp-cash-val" style="font-size:12px;font-weight:700;color:#68d391"></span>
               </div>
             </div>
           </div>
 
-          <!-- 💼 REVENUS & ÉPARGNE -->
+          <!-- 💼 INCOME & SAVINGS -->
           <div class="glass" style="padding:18px">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
               <span style="font-size:15px">💼</span>
-              <span style="font-size:12px;font-weight:700;color:#f0f4ff">Revenus & Épargne</span>
+              <span style="font-size:12px;font-weight:700;color:#f0f4ff">Income & Savings</span>
             </div>
             <div style="display:flex;flex-direction:column;gap:12px">
               <div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;color:#8899b0">Augmentation salaire</span>
+                  <span style="font-size:11px;color:#8899b0">Salary increase</span>
                   <span id="cmp-sal-val" style="font-size:12px;font-weight:700;color:#68d391"></span>
                 </div>
                 <input type="range" id="cmp-sal" min="0" max="100" step="5" style="width:100%;accent-color:#68d391;cursor:pointer" oninput="updateCompare()">
@@ -1010,19 +1010,19 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
               </div>
               <div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;color:#8899b0">Revenu complémentaire</span>
+                  <span style="font-size:11px;color:#8899b0">Side income</span>
                   <span id="cmp-side-val" style="font-size:12px;font-weight:700;color:#63b3ed"></span>
                 </div>
                 <input type="range" id="cmp-side" min="0" max="5000" step="100" style="width:100%;accent-color:#63b3ed;cursor:pointer" oninput="updateCompare()">
-                <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5 000/mo</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5,000/mo</span></div>
               </div>
               <div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;color:#8899b0">Épargne mensuelle additionnelle</span>
+                  <span style="font-size:11px;color:#8899b0">Additional monthly savings</span>
                   <span id="cmp-save-val" style="font-size:12px;font-weight:700;color:#9f7aea"></span>
                 </div>
                 <input type="range" id="cmp-save" min="0" max="5000" step="100" style="width:100%;accent-color:#9f7aea;cursor:pointer" oninput="updateCompare()">
-                <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5 000/mo</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5,000/mo</span></div>
               </div>
             </div>
           </div>
@@ -1034,13 +1034,13 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
 
           <!-- Projection chart -->
           <div class="glass" style="padding:20px">
-            <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4a5568;margin-bottom:12px">Projection patrimoine — 25 ans</div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4a5568;margin-bottom:12px">Net worth projection — 25 yrs</div>
             <canvas id="compare-chart" height="200"></canvas>
           </div>
 
-          <!-- Jalons clés -->
+          <!-- Key milestones -->
           <div class="glass" style="padding:20px">
-            <div style="font-size:11px;font-weight:700;color:#f0f4ff;margin-bottom:12px;letter-spacing:0.3px">Impact de tes choix</div>
+            <div style="font-size:11px;font-weight:700;color:#f0f4ff;margin-bottom:12px;letter-spacing:0.3px">Impact of your choices</div>
             <div id="cmp-milestones"></div>
           </div>
 
@@ -1192,35 +1192,35 @@ function buildInsights(){
   const dti=income>0?debt/income*100:0;
   const ins=[];
   // Quick wins
-  if(em<6) ins.push({h:`Fonds d'urgence insuffisant`,c:'#fc8181',bg:'rgba(252,129,129,0.1)',i:'⚠️',t:`Ton fonds d'urgence couvre seulement ${em.toFixed(1)} mois de dépenses. L'objectif est 6 mois — soit ${fk(Math.round(expenses*6))}.`,a:'Simuler'});
-  if(dti>30) ins.push({h:'Réduire ta dette priorité',c:'#f6ad55',bg:'rgba(246,173,85,0.1)',i:'⚡',t:`Ton ratio dette/revenu est à ${Math.round(dti)}%. Réduire ta dette libère ${fk(Math.round(debt*0.05))}/an en charge d'intérêts.`,a:'Optimiser'});
-  if(monthSave>200) ins.push({h:`Investis ${fk(Math.round(monthSave*0.5))}/mo en S&P 500`,c:'#68d391',bg:'rgba(104,211,145,0.1)',i:'↗',t:`Investir 50% de ton épargne en S&P 500 génère ${fk(Math.round(monthSave*0.5*12*10*1.087))} supplémentaires en 10 ans.`,a:'Appliquer'});
+  if(em<6) ins.push({h:`Emergency fund too low`,c:'#fc8181',bg:'rgba(252,129,129,0.1)',i:'⚠️',t:`Your emergency fund only covers ${em.toFixed(1)} months of expenses. The target is 6 months — that's ${fk(Math.round(expenses*6))}.`,a:'Simulate'});
+  if(dti>30) ins.push({h:'Pay down your debt first',c:'#f6ad55',bg:'rgba(246,173,85,0.1)',i:'⚡',t:`Your debt-to-income ratio is ${Math.round(dti)}%. Paying down your debt frees up ${fk(Math.round(debt*0.05))}/yr in interest.`,a:'Optimize'});
+  if(monthSave>200) ins.push({h:`Invest ${fk(Math.round(monthSave*0.5))}/mo in the S&P 500`,c:'#68d391',bg:'rgba(104,211,145,0.1)',i:'↗',t:`Investing 50% of your savings in the S&P 500 generates an extra ${fk(Math.round(monthSave*0.5*12*10*1.087))} over 10 years.`,a:'Apply'});
   // Relocation
-  const bestReloc=city==='Paris'||city==='London'?'Dubai':city==='Dubai'?'Singapour':'Lisbonne';
+  const bestReloc=city==='Paris'||city==='London'?'Dubai':city==='Dubai'?'Singapore':'Lisbon';
   const relocBoost=city==='Paris'||city==='London'?23:city==='Dubai'?19:15;
-  ins.push({h:`Déménager à ${bestReloc} · +${relocBoost}% wealth`,c:'#f6ad55',bg:'rgba(246,173,85,0.1)',i:'🌍',t:`Économies fiscales estimées à ${fk(Math.round(income*0.12))}/an. Impact sur ton patrimoine projeté : +${relocBoost}%.`,a:'Simuler'});
+  ins.push({h:`Move to ${bestReloc} · +${relocBoost}% wealth`,c:'#f6ad55',bg:'rgba(246,173,85,0.1)',i:'🌍',t:`Estimated tax savings of ${fk(Math.round(income*0.12))}/yr. Impact on your projected net worth: +${relocBoost}%.`,a:'Simulate'});
   // Investment
-  if(risk==='conservative') ins.push({h:'Passe à un profil équilibré',c:'#63b3ed',bg:'rgba(99,179,237,0.1)',i:'◎',t:`Ton profil prudent limite ton potentiel. Passer à équilibré augmente le rendement attendu de +2.2%/an, soit +${fk(Math.round(NETWORTH*0.22))} en 10 ans.`,a:'Explorer'});
-  if(risk==='aggressive') ins.push({h:'Diversifie avec 10% obligations',c:'#9f7aea',bg:'rgba(159,122,234,0.1)',i:'✦',t:`Ton profil agressif est aligné avec ton âge (${age} ans). Ajouter 10% en obligations réduit la volatilité sans sacrifier le rendement long terme.`,a:'Rééquilibrer'});
+  if(risk==='conservative') ins.push({h:'Switch to a balanced profile',c:'#63b3ed',bg:'rgba(99,179,237,0.1)',i:'◎',t:`Your conservative profile limits your potential. Switching to balanced raises expected returns by +2.2%/yr, or +${fk(Math.round(NETWORTH*0.22))} over 10 years.`,a:'Explore'});
+  if(risk==='aggressive') ins.push({h:'Diversify with 10% bonds',c:'#9f7aea',bg:'rgba(159,122,234,0.1)',i:'✦',t:`Your aggressive profile is aligned with your age (${age} yrs). Adding 10% bonds reduces volatility without sacrificing long-term returns.`,a:'Rebalance'});
   // ISA / Pension
-  ins.push({h:`Maxe ton ISA · ${fk(Math.round(20000*25*0.087))} défiscalisé`,c:'#9f7aea',bg:'rgba(159,122,234,0.1)',i:'✦',t:`Maxer ton ISA (${fk(20000)}/an) génère ${fk(Math.round(20000*25*0.087))} de croissance défiscalisée sur 25 ans — sans impôt sur les gains.`,a:'Simuler'});
-  ins.push({h:'Double ta cotisation retraite',c:'#38b2ac',bg:'rgba(56,178,172,0.1)',i:'◆',t:`Augmenter de 8% à 15% du salaire ajoute ${fk(Math.round(income*0.07*10))} à ton pot sur 10 ans grâce à la déduction fiscale.`,a:'Calculer'});
+  ins.push({h:`Max your ISA · ${fk(Math.round(20000*25*0.087))} tax-free`,c:'#9f7aea',bg:'rgba(159,122,234,0.1)',i:'✦',t:`Maxing your ISA (${fk(20000)}/yr) generates ${fk(Math.round(20000*25*0.087))} of tax-free growth over 25 years — no tax on gains.`,a:'Simulate'});
+  ins.push({h:'Double your pension contribution',c:'#38b2ac',bg:'rgba(56,178,172,0.1)',i:'◆',t:`Increasing from 8% to 15% of salary adds ${fk(Math.round(income*0.07*10))} to your pot over 10 years thanks to tax relief.`,a:'Calculate'});
   // Career
   const salBoost=Math.round(income*0.20);
-  ins.push({h:`Négocie +20% · ${fk(salBoost*20)} en 20 ans`,c:'#68d391',bg:'rgba(104,211,145,0.1)',i:'↗',t:`Une négociation salariale de +20% ajoute ${fk(salBoost)}/an net, soit ${fk(salBoost*20)} de wealth accumulé sur 20 ans.`,a:'Simuler'});
+  ins.push({h:`Negotiate +20% · ${fk(salBoost*20)} over 20 yrs`,c:'#68d391',bg:'rgba(104,211,145,0.1)',i:'↗',t:`A +20% salary negotiation adds ${fk(salBoost)}/yr net, or ${fk(salBoost*20)} of accumulated wealth over 20 years.`,a:'Simulate'});
   // Retirement
   const ytr=Math.max(1,RETIRE_AGE-age);
-  ins.push({h:`Retraite à ${RETIRE_AGE} ans · ${BASE_CONF}% confiance`,c:'#63b3ed',bg:'rgba(99,179,237,0.1)',i:'◎',t:`À ${age} ans tu es à ${ytr} ans de ta cible. ${BASE_CONF<70?'Augmente ton épargne mensuelle de 20% pour atteindre 80% de confiance.':'Tu es sur la bonne trajectoire — continue à optimiser.'}`,a:'Détails'});
+  ins.push({h:`Retire at ${RETIRE_AGE} · ${BASE_CONF}% confidence`,c:'#63b3ed',bg:'rgba(99,179,237,0.1)',i:'◎',t:`At ${age} you're ${ytr} years from your target. ${BASE_CONF<70?'Increase your monthly savings by 20% to reach 80% confidence.':"You're on the right track — keep optimizing."}`,a:'Details'});
   // Stress
-  if(BASE_STRESS>50) ins.push({h:'Réduire ton stress financier',c:'#fc8181',bg:'rgba(252,129,129,0.1)',i:'⚠️',t:`Ton score de stress est élevé (${BASE_STRESS}/100). Les scénarios Career + Investments combinés réduisent le stress de 18 points en 2 ans.`,a:'Voir plan'});
+  if(BASE_STRESS>50) ins.push({h:'Reduce your financial stress',c:'#fc8181',bg:'rgba(252,129,129,0.1)',i:'⚠️',t:`Your stress score is high (${BASE_STRESS}/100). Combining the Career + Investments scenarios cuts stress by 18 points in 2 years.`,a:'View plan'});
   // Side income
-  ins.push({h:'Revenu complémentaire · +£240k/10 ans',c:'#f6ad55',bg:'rgba(246,173,85,0.1)',i:'💡',t:`Un revenu de ${fk(2000)}/mo (freelance, immobilier, création) ajoute ${fk(2000*12*10)} brut en 10 ans et accélère la retraite de 2-3 ans.`,a:'Explorer'});
+  ins.push({h:'Side income · +£240k/10 yrs',c:'#f6ad55',bg:'rgba(246,173,85,0.1)',i:'💡',t:`A ${fk(2000)}/mo income (freelance, property, content) adds ${fk(2000*12*10)} gross over 10 years and brings retirement forward 2-3 years.`,a:'Explore'});
   return ins;
 }
 const INSIGHTS_DATA_FALLBACK=[
-  {c:'#f6ad55',bg:'rgba(246,173,85,0.1)',i:'⚡',t:'Ton épargne mensuelle actuelle est sous-optimisée. Augmenter de 20% accélère la retraite de 2 ans.',a:'Simuler'},
-  {c:'#68d391',bg:'rgba(104,211,145,0.1)',i:'↗',t:'Maxer ton ISA génère +£4,200/an en croissance défiscalisée.',a:'Appliquer'},
-  {c:'#63b3ed',bg:'rgba(99,179,237,0.1)',i:'◎',t:'Une relocalisation fiscalement avantageuse peut réduire ta charge fiscale de 20-30%.',a:'Explorer'},
+  {c:'#f6ad55',bg:'rgba(246,173,85,0.1)',i:'⚡',t:'Your current monthly savings are under-optimized. Increasing them by 20% brings retirement forward 2 years.',a:'Simulate'},
+  {c:'#68d391',bg:'rgba(104,211,145,0.1)',i:'↗',t:'Maxing your ISA generates +£4,200/yr in tax-free growth.',a:'Apply'},
+  {c:'#63b3ed',bg:'rgba(99,179,237,0.1)',i:'◎',t:'A tax-efficient relocation can reduce your tax burden by 20-30%.',a:'Explore'},
 ];
 
 const TIMELINE = [
@@ -1278,7 +1278,7 @@ function getCombinedSc(){
     t:scs.map(s=>s.t).join(' + '),
     f:'🔀',c:'#63b3ed',
     w:totalW,r:totalR,x:totalX,m:combinedM,
-    i:'Combinaison : '+scs.map(s=>s.t+' ('+( s.w>0?'+':'')+s.w+'%)').join(' · ')
+    i:'Combination: '+scs.map(s=>s.t+' ('+( s.w>0?'+':'')+s.w+'%)').join(' · ')
   };
 }
 
@@ -1460,7 +1460,7 @@ function renderInsights(){
   const sumEl=document.getElementById('ins-summary');
   if(sumEl && obData && obData.name){
     const score=Math.round((HEALTH[0].v+HEALTH[2].v+HEALTH[4].v)/3);
-    sumEl.textContent=`${data.length} recommandations personnalisées pour ${obData.name} · Score ${score}/100`;
+    sumEl.textContent=`${data.length} personalized recommendations for ${obData.name} · Score ${score}/100`;
   }
   // Update health score ring
   const hsn=document.getElementById('health-score-num');
@@ -1486,7 +1486,7 @@ function renderHealthMini(){
   const el=document.getElementById('health-mini');
   if(!el) return;
   el.innerHTML='';
-  const frLabels={savings:'Épargne',stability:'Stabilité',retirement:'Retraite',debt:'Dettes',invest:'Invest.',emergency:'Urgence'};
+  const frLabels={savings:'Savings',stability:'Stability',retirement:'Retirement',debt:'Debt',invest:'Invest.',emergency:'Emergency'};
   HEALTH.slice(0,4).forEach(m=>{
     const lbl=frLabels[m.k]||m.l;
     el.innerHTML+=`<div style="display:flex;align-items:center;gap:8px">
@@ -1678,14 +1678,14 @@ function updateScImpact(sc){
   const glass=document.getElementById('sc-impact-glass');
   if(glass) glass.style.borderColor=sc.c+'40';
 
-  // Header — adapté au nombre de scénarios
+  // Header — adapts to the number of scenarios
   const g=id=>document.getElementById(id);
   g('si-flag').innerHTML=nScs>1?'🔀':(sc.f||'');
   if(nScs>1){
-    g('si-title').textContent=nScs+' changements simulés ensemble';
+    g('si-title').textContent=nScs+' changes simulated together';
     g('si-sub').textContent=[...activeScs.values()].map(s=>s.t).join('  ·  ');
   } else {
-    g('si-title').textContent=sc.t+' — Impact sur ton wealth';
+    g('si-title').textContent=sc.t+' — Impact on your wealth';
     g('si-sub').textContent=sc.i||'';
   }
   g('si-title').style.color=sc.c;
@@ -1701,7 +1701,7 @@ function updateScImpact(sc){
   const strDelta=Math.round(simStr-BASE_STRESS);
   const city=(obData&&obData.city)||'Paris';
 
-  // ===== HERO: patrimoine projeté 25 ans (initial vs avec tes choix) =====
+  // ===== HERO: projected wealth 25 yrs (baseline vs with your choices) =====
   const baseP25=P25_BASE;
   const scMultHero=Math.max(0.3,Math.min(3,(sc.m||RISK_MULT)*(1+sc.w/100*0.15)));
   const newP25=Math.round(projectWealthMult(25,scMultHero));
@@ -1723,7 +1723,7 @@ function updateScImpact(sc){
     heroWrap.style.borderColor=pos?'rgba(104,211,145,0.18)':'rgba(252,129,129,0.18)';
   }
 
-  // Patrimoine
+  // Net worth
   g('si-nw-base').textContent=fk(NETWORTH);
   g('si-nw-label').textContent=sc.t;
   g('si-nw-label').style.color=sc.c;
@@ -1733,14 +1733,14 @@ function updateScImpact(sc){
   nwD.textContent=(nwDelta>=0?'▲ +':'▼ ')+fk(Math.abs(nwDelta));
   nwD.style.cssText=`font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px;background:${nwDelta>=0?'rgba(104,211,145,0.12)':'rgba(252,129,129,0.12)'};color:${nwDelta>=0?'#68d391':'#fc8181'}`;
 
-  // Retraite
-  g('si-ret-base').textContent=RETIRE_AGE+' ans';
+  // Retirement
+  g('si-ret-base').textContent=RETIRE_AGE+' yrs';
   g('si-ret-label').textContent=sc.t;
   g('si-ret-label').style.color=sc.c;
-  g('si-ret').textContent=simRet+' ans';
+  g('si-ret').textContent=simRet+' yrs';
   g('si-ret').style.color=retDelta<=0?'#68d391':'#f6ad55';
   const retD=g('si-ret-d');
-  retD.textContent=retDelta===0?'— Inchangé':(retDelta<0?'▲ ':'▼ +')+Math.abs(retDelta)+' ans';
+  retD.textContent=retDelta===0?'— Unchanged':(retDelta<0?'▲ ':'▼ +')+Math.abs(retDelta)+' yrs';
   retD.style.cssText=`font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px;background:${retDelta<=0?'rgba(104,211,145,0.12)':'rgba(246,173,85,0.12)'};color:${retDelta<=0?'#68d391':'#f6ad55'}`;
 
   // Confiance
@@ -1760,7 +1760,7 @@ function updateScImpact(sc){
   g('si-str').textContent=getLbl(simStr);
   g('si-str').style.color=strDelta<=0?'#68d391':'#fc8181';
   const strD=g('si-str-d');
-  strD.textContent=strDelta===0?'— Inchangé':(strDelta<0?'▲ ':'▼ +')+Math.abs(strDelta)+' pts';
+  strD.textContent=strDelta===0?'— Unchanged':(strDelta<0?'▲ ':'▼ +')+Math.abs(strDelta)+' pts';
   strD.style.cssText=`font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px;background:${strDelta<=0?'rgba(104,211,145,0.12)':'rgba(252,129,129,0.12)'};color:${strDelta<=0?'#68d391':'#fc8181'}`;
 
   // Wealth chart
@@ -1781,9 +1781,9 @@ function updateScImpactChart(sc,city){
     data:{
       labels:baseData.lbl,
       datasets:[
-        {label:'Ton évolution actuelle',data:baseData.base,borderColor:'rgba(255,255,255,0.35)',
+        {label:'Your current path',data:baseData.base,borderColor:'rgba(255,255,255,0.35)',
          borderWidth:1.5,borderDash:[5,3],fill:false,tension:0.4,pointRadius:0,order:2},
-        {label:'Avec tes choix',data:scData.base,borderColor:newColor,borderWidth:2.5,
+        {label:'With your choices',data:scData.base,borderColor:newColor,borderWidth:2.5,
          fill:'-1',backgroundColor:newColor+'18',tension:0.4,pointRadius:0,order:1}
       ]
     },
@@ -1797,7 +1797,7 @@ function updateScImpactChart(sc,city){
           afterBody:items=>{
             if(items.length>=2){
               const d=Math.abs(items[0].raw-items[1].raw);
-              return '\nÉcart: '+(items[0].raw>=items[1].raw?'+':'−')+fk(d);
+              return '\nGap: '+(items[0].raw>=items[1].raw?'+':'−')+fk(d);
             }
             return '';
           }
@@ -1842,10 +1842,10 @@ function selectScenario(sc){
   renderTimeline(combo);
   renderActiveScChips();
   if(!combo){
-    typeText('Ton jumeau financier est sur la bonne voie. Sélectionne un ou plusieurs scénarios pour voir leur impact combiné.');
+    typeText('Your financial twin is on the right track. Select one or more scenarios to see their combined impact.');
   } else {
     const n=activeScs.size;
-    typeText((n>1?n+' scénarios actifs — ':'Simulation: ')+combo.t+' — impact wealth '+(combo.w>0?'+':'')+combo.w+'%. Retraite projetée à '+(RETIRE_AGE+(combo.r||0))+' ans.');
+    typeText((n>1?n+' active scenarios — ':'Simulation: ')+combo.t+' — wealth impact '+(combo.w>0?'+':'')+combo.w+'%. Projected retirement at '+(RETIRE_AGE+(combo.r||0))+' yrs.');
   }
 }
 
@@ -1861,7 +1861,7 @@ function renderActiveScChips(){
   [...activeScs.values()].forEach(sc=>{
     const chip=document.createElement('div');
     chip.style.cssText=`display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;background:${sc.c}15;border:1px solid ${sc.c}40;font-size:11px;font-weight:600;color:${sc.c};cursor:pointer`;
-    chip.innerHTML=`<span>${sc.f} ${sc.t}</span><span style="font-size:10px;opacity:0.7">${sc.w>0?'+':''}${sc.w}%</span><span onclick="selectScenario(window._scById('${sc.id}'))" style="margin-left:2px;opacity:0.6;font-size:11px;font-weight:700" title="Retirer">✕</span>`;
+    chip.innerHTML=`<span>${sc.f} ${sc.t}</span><span style="font-size:10px;opacity:0.7">${sc.w>0?'+':''}${sc.w}%</span><span onclick="selectScenario(window._scById('${sc.id}'))" style="margin-left:2px;opacity:0.6;font-size:11px;font-weight:700" title="Remove">✕</span>`;
     el.appendChild(chip);
   });
   // Summary badge
@@ -1869,7 +1869,7 @@ function renderActiveScChips(){
     const combo=getCombinedSc();
     const sumDiv=document.createElement('div');
     sumDiv.style.cssText=`display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;background:rgba(99,179,237,0.12);border:1px solid rgba(99,179,237,0.3);font-size:11px;font-weight:700;color:#63b3ed;margin-left:4px`;
-    sumDiv.innerHTML=`= ${combo.w>0?'+':''}${combo.w}% impact net`;
+    sumDiv.innerHTML=`= ${combo.w>0?'+':''}${combo.w}% net impact`;
     el.appendChild(sumDiv);
   }
 }
@@ -1888,7 +1888,7 @@ function clearSim(){
   renderScenarioGrid();
   renderTimeline(null);
   renderActiveScChips();
-  typeText('Ton jumeau financier est sur la bonne voie. Sélectionne un ou plusieurs scénarios pour voir leur impact combiné.');
+  typeText('Your financial twin is on the right track. Select one or more scenarios to see their combined impact.');
 }
 
 /* ===== NAV ===== */
@@ -1904,14 +1904,14 @@ const PAGE_MAP={
   insights:    ['sec-health']
 };
 const TB_MAP={
-  overview:    ['Financial Overview','Baseline — trajectoire actuelle'],
-  twin:        ['Mon Financial Twin','Visualisation live de tes actifs'],
-  scenarios:   ['Simulateur de Scénarios','Clique une carte pour voir l\'impact immédiat sur ton wealth'],
-  live:        ['⚡ Live Simulator','Combine plusieurs choix et ajuste tes paramètres — impact en temps réel'],
-  compare:     ['⚖ Mon Plan','Compare ta situation actuelle vs ton futur selon tes choix — modifie tout en live'],
-  timeline:    ['Timeline & Projections','Jalons futurs · AI Insights · Investissements'],
-  investments: ['Projections Investissements','Croissance de ton portfolio sur 10 ans'],
-  insights:    ['AI Insights & Santé','Signaux temps réel · 15 métriques de santé financière']
+  overview:    ['Financial Overview','Baseline — current trajectory'],
+  twin:        ['My Financial Twin','Live visualization of your assets'],
+  scenarios:   ['Scenario Simulator','Tap a card to see the immediate impact on your wealth'],
+  live:        ['⚡ Live Simulator','Combine multiple choices and adjust your parameters — real-time impact'],
+  compare:     ['⚖ My Plan','Compare your current situation vs your future based on your choices — edit everything live'],
+  timeline:    ['Timeline & Projections','Future milestones · AI Insights · Investments'],
+  investments: ['Investment Projections','Your portfolio growth over 10 years'],
+  insights:    ['AI Insights & Health','Real-time signals · 15 financial health metrics']
 };
 
 function setNav(id,el){
@@ -2011,11 +2011,11 @@ function initDashboard(){
   initNavState();
   // Apply mobile-specific layout fixes (overrides inline styles)
   setTimeout(()=>applyMobileLayout(), 50);
-  typeText(window.INIT_TYPING||'Ton jumeau financier est actif. Clique sur un scénario pour simuler son impact sur ton avenir.');
+  typeText(window.INIT_TYPING||'Your financial twin is active. Tap a scenario to simulate its impact on your future.');
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
-  // Onboarding gère l'initialisation — rien ici
+  // Onboarding handles initialization — nothing here
 });
 
 /* ===== COMPARATEUR — MON PLAN ===== */
@@ -2024,7 +2024,7 @@ let cmpChart=null;
 const CITY_OPTIONS=[
   {id:'paris',    label:'Paris',     boost:0,  c:'#8899b0',f:'🇫🇷',rent:1800},
   {id:'dubai',    label:'Dubai',     boost:23, c:'#f6ad55',f:'🇦🇪',rent:1400},
-  {id:'lisbon',   label:'Lisbonne',  boost:15, c:'#68d391',f:'🇵🇹',rent:1200},
+  {id:'lisbon',   label:'Lisbon',    boost:15, c:'#68d391',f:'🇵🇹',rent:1200},
   {id:'singapore',label:'Singapore', boost:19, c:'#63b3ed',f:'🇸🇬',rent:2500},
   {id:'zurich',   label:'Zurich',    boost:22, c:'#9f7aea',f:'🇨🇭',rent:2800},
   {id:'hk',       label:'Hong Kong', boost:20, c:'#fc8181',f:'🇭🇰',rent:2200}
@@ -2034,21 +2034,21 @@ const ASSET_RET={eq:0.087,re:0.055,cr:0.20,cash:0.02};
 function initCompare(){
   // Baseline column
   const g=id=>document.getElementById(id);
-  // Calculer P10 baseline avec le même modèle que scénario pour cohérence
+  // Compute P10 baseline with the same model as the scenario for consistency
   const bEq0=RISK_MULT>=1.3?70:RISK_MULT>=1.0?45:20;
   const bRe0=RISK_MULT>=1.3?15:25;
   const bCash0=100-bEq0-bRe0;
   const br0=Math.max(0.01,(bEq0/100*0.087*RISK_MULT)+(bRe0/100*0.055)+(bCash0/100*0.02));
   const cmpP10=Math.round(NETWORTH*Math.pow(1+br0,10)+MONTHLY_CON*12*(Math.pow(1+br0,10)-1)/br0);
   if(g('cnow-nw')) g('cnow-nw').textContent=fk(NETWORTH);
-  if(g('cnow-ret')) g('cnow-ret').textContent=RETIRE_AGE+' ans';
+  if(g('cnow-ret')) g('cnow-ret').textContent=RETIRE_AGE+' yrs';
   if(g('cnow-p10')) g('cnow-p10').textContent=fk(cmpP10);
   if(g('cnow-conf')) g('cnow-conf').textContent=Math.round(BASE_CONF)+'%';
   window._cmpP10Base=cmpP10; // store for delta calc
   // Init sliders
   const baseRent=Math.min(4950,Math.round((parseNum(obData.expenses)||1500)/50)*50);
   if(g('cmp-rent')) g('cmp-rent').value=baseRent;
-  // Pré-populer selon le profil de risque
+  // Pre-populate based on risk profile
   const defEq=RISK_MULT>=1.3?70:RISK_MULT>=1.0?45:20;
   const defRe=RISK_MULT>=1.3?15:RISK_MULT>=1.0?25:30;
   const defCr=RISK_MULT>=1.3?5:0;
@@ -2103,7 +2103,7 @@ function computeCmpValues(){
   const addSave=g('cmp-save');
   const city=CITY_OPTIONS.find(c=>c.id===cmpCity)||CITY_OPTIONS[0];
   const cityBoost=city.boost;
-  // Rendements pondérés — équities scalées avec le profil de risque
+  // Weighted returns — equities scaled with the risk profile
   const wr=(eqPct/100*0.087*RISK_MULT)+(rePct/100*0.055)+(crPct/100*0.20)+(cashPct/100*0.02);
   const rate=Math.max(0.01,Math.min(0.28,wr*(1+cityBoost/100*0.2)));
   // Annual contribution
@@ -2145,11 +2145,11 @@ function updateCompare(){
   if(g('cmp-save-val')) g('cmp-save-val').textContent=fk(v.addSave)+'/mo';
   if(g('cmp-total-alloc')){
     const tot=v.eqPct+v.rePct+v.crPct;
-    g('cmp-total-alloc').textContent=tot+'% alloué';
+    g('cmp-total-alloc').textContent=tot+'% allocated';
     g('cmp-total-alloc').style.color=tot>0?'#63b3ed':'#8899b0';
     g('cmp-total-alloc').style.background=tot>0?'rgba(99,179,237,0.1)':'rgba(255,255,255,0.05)';
   }
-  // Deltas (comparaison vs baseline cohérent du Comparateur)
+  // Deltas (comparison vs consistent comparator baseline)
   const cmpB0=window._cmpP10Base||P10_BASE;
   const nwD=v.nw-NETWORTH;
   const p10D=v.p10-cmpB0;
@@ -2163,15 +2163,15 @@ function updateCompare(){
   if(g('csc-nw-d')){g('csc-nw-d').textContent=fmt(nwD);g('csc-nw-d').style.color=col(nwD);}
   if(g('csc-p10')){g('csc-p10').textContent=fk(v.p10);g('csc-p10').style.color=col(p10D);}
   if(g('csc-p10-d')){g('csc-p10-d').textContent=fmt(p10D);g('csc-p10-d').style.color=col(p10D);}
-  if(g('csc-ret')){g('csc-ret').textContent=v.ret+' ans';g('csc-ret').style.color=retCol(retD);}
-  if(g('csc-ret-d')){g('csc-ret-d').textContent=retD===0?'Inchangé':(retD<0?'▲ ':'▼ +')+Math.abs(retD)+' ans';g('csc-ret-d').style.color=retCol(retD);}
+  if(g('csc-ret')){g('csc-ret').textContent=v.ret+' yrs';g('csc-ret').style.color=retCol(retD);}
+  if(g('csc-ret-d')){g('csc-ret-d').textContent=retD===0?'Unchanged':(retD<0?'▲ ':'▼ +')+Math.abs(retD)+' yrs';g('csc-ret-d').style.color=retCol(retD);}
   if(g('csc-conf')){g('csc-conf').textContent=v.conf+'%';g('csc-conf').style.color=col(confD);}
   if(g('csc-conf-d')){g('csc-conf-d').textContent=(confD>=0?'▲ +':'▼ ')+Math.abs(confD)+'%';g('csc-conf-d').style.color=col(confD);}
-  // Delta badge (vs baseline cohérent)
+  // Delta badge (vs consistent baseline)
   const cmpBase=window._cmpP10Base||P10_BASE;
   const p10pct=Math.round((v.p10-cmpBase)/Math.max(1,cmpBase)*100);
   if(g('cmp-delta-badge')){
-    g('cmp-delta-badge').textContent=(p10pct>=0?'+':'')+p10pct+'% en 10 ans';
+    g('cmp-delta-badge').textContent=(p10pct>=0?'+':'')+p10pct+'% over 10 yrs';
     g('cmp-delta-badge').style.background=pos(p10pct)?'rgba(104,211,145,0.15)':'rgba(252,129,129,0.15)';
     g('cmp-delta-badge').style.color=pos(p10pct)?'#68d391':'#fc8181';
   }
@@ -2185,22 +2185,22 @@ function renderCmpMilestones(v){
   const items=[];
   const cmpB=window._cmpP10Base||P10_BASE;
   const p10pct=Math.round((v.p10-cmpB)/Math.max(1,cmpB)*100);
-  if(p10pct!==0) items.push({c:p10pct>0?'#68d391':'#fc8181',text:`Patrimoine × ${(v.p10/Math.max(1,cmpB)).toFixed(1)} vs baseline en 10 ans (${p10pct>0?'+':''}${p10pct}%)`});
-  if(v.ret<RETIRE_AGE) items.push({c:'#63b3ed',text:`Retraite à ${v.ret} ans — ${RETIRE_AGE-v.ret} an${RETIRE_AGE-v.ret>1?'s':''} plus tôt qu'actuellement`});
-  if(v.cityBoost>0) items.push({c:v.city.c,text:`${v.city.f} ${v.city.label} — avantage fiscal +${v.cityBoost}% sur ton wealth long terme`});
-  if(v.eqPct>=20) items.push({c:'#63b3ed',text:`${v.eqPct}% en Bourse → rendement moyen estimé ${(v.rate*100).toFixed(1)}%/an`});
-  if(v.crPct>=10) items.push({c:'#f6ad55',text:`₿ ${v.crPct}% Crypto — rendement élevé mais volatilité importante`});
-  if(v.sideInc>0) items.push({c:'#9f7aea',text:`Revenu complémentaire ${fk(v.sideInc)}/mo → ${fk(v.sideInc*12)}/an sur tes projections`});
-  if(v.addSave>0) items.push({c:'#68d391',text:`+${fk(v.addSave)}/mo d'épargne → ${fk(v.addSave*12)}/an réinvestis`});
+  if(p10pct!==0) items.push({c:p10pct>0?'#68d391':'#fc8181',text:`Net worth × ${(v.p10/Math.max(1,cmpB)).toFixed(1)} vs baseline over 10 yrs (${p10pct>0?'+':''}${p10pct}%)`});
+  if(v.ret<RETIRE_AGE) items.push({c:'#63b3ed',text:`Retire at ${v.ret} — ${RETIRE_AGE-v.ret} year${RETIRE_AGE-v.ret>1?'s':''} earlier than now`});
+  if(v.cityBoost>0) items.push({c:v.city.c,text:`${v.city.f} ${v.city.label} — tax advantage +${v.cityBoost}% on your long-term wealth`});
+  if(v.eqPct>=20) items.push({c:'#63b3ed',text:`${v.eqPct}% in stocks → estimated average return ${(v.rate*100).toFixed(1)}%/yr`});
+  if(v.crPct>=10) items.push({c:'#f6ad55',text:`₿ ${v.crPct}% Crypto — high return but significant volatility`});
+  if(v.sideInc>0) items.push({c:'#9f7aea',text:`Side income ${fk(v.sideInc)}/mo → ${fk(v.sideInc*12)}/yr on your projections`});
+  if(v.addSave>0) items.push({c:'#68d391',text:`+${fk(v.addSave)}/mo in savings → ${fk(v.addSave*12)}/yr reinvested`});
   if(items.length===0){
-    el.innerHTML='<div style="font-size:11px;color:#4a5568;font-style:italic">Modifie les paramètres à gauche pour voir l\'impact sur ton futur.</div>';
+    el.innerHTML='<div style="font-size:11px;color:#4a5568;font-style:italic">Adjust the parameters on the left to see the impact on your future.</div>';
     return;
   }
   el.innerHTML=items.map(m=>`<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><div style="width:6px;height:6px;border-radius:50%;background:${m.c};flex-shrink:0;margin-top:4px"></div><div style="font-size:11px;color:#c4d0e0;line-height:1.4">${m.text}</div></div>`).join('');
 }
 
 function genCmpWealth(rate,ac){
-  // Baseline = même modèle que scénario mais avec l'allocation actuelle de l'utilisateur
+  // Baseline = same model as scenario but with the user's current allocation
   const bEq=RISK_MULT>=1.3?70:RISK_MULT>=1.0?45:20;
   const bRe=RISK_MULT>=1.3?15:25;
   const bCash=100-bEq-bRe;
@@ -2224,8 +2224,8 @@ function initCmpChart(){
   cmpChart=new Chart(ctx.getContext('2d'),{
     type:'line',
     data:{labels,datasets:[
-      {label:'Avec tes choix',data:sc,borderColor:'#68d391',borderWidth:2.5,fill:{target:'origin',above:'rgba(104,211,145,0.08)'},tension:0.4,pointRadius:0},
-      {label:'Maintenant (baseline)',data:base,borderColor:'rgba(255,255,255,0.3)',borderWidth:1.5,borderDash:[5,3],fill:false,tension:0.4,pointRadius:0}
+      {label:'With your choices',data:sc,borderColor:'#68d391',borderWidth:2.5,fill:{target:'origin',above:'rgba(104,211,145,0.08)'},tension:0.4,pointRadius:0},
+      {label:'Now (baseline)',data:base,borderColor:'rgba(255,255,255,0.3)',borderWidth:1.5,borderDash:[5,3],fill:false,tension:0.4,pointRadius:0}
     ]},
     options:{responsive:true,plugins:{
       legend:{position:'top',labels:{color:'#8899b0',font:{size:10,family:'Inter'},boxWidth:16,padding:12}},
@@ -2261,7 +2261,7 @@ function initLiveSim(){
   // Populate baseline reference row
   const bl=id=>document.getElementById(id);
   if(bl('live-bl-nw')) bl('live-bl-nw').textContent=fk(NETWORTH);
-  if(bl('live-bl-ret')) bl('live-bl-ret').textContent=RETIRE_AGE+' ans';
+  if(bl('live-bl-ret')) bl('live-bl-ret').textContent=RETIRE_AGE+' yrs';
   if(bl('live-bl-conf')) bl('live-bl-conf').textContent=Math.round(BASE_CONF)+'%';
   if(bl('live-bl-str')) bl('live-bl-str').textContent=getLbl(BASE_STRESS);
   renderLiveCatTabs();
@@ -2314,7 +2314,7 @@ function renderLiveChips(){
   if(!el)return;
   el.innerHTML='';
   if(liveSelections.size===0){
-    el.innerHTML='<span style="font-size:11px;color:#4a5568">Aucun scénario sélectionné — clique sur les cartes ci-dessus pour en ajouter</span>';
+    el.innerHTML='<span style="font-size:11px;color:#4a5568">No scenario selected — tap the cards above to add some</span>';
     return;
   }
   liveSelections.forEach(id=>{
@@ -2365,17 +2365,17 @@ function updateLiveResults(){
   if(!g('live-nw'))return;
   g('live-nw').textContent=fk(newNW);g('live-nw').style.color=nwDelta>=0?'#68d391':'#fc8181';
   g('live-nw-d').textContent=(nwDelta>=0?'+':'')+fk(nwDelta)+' vs baseline';g('live-nw-d').style.color=nwDelta>=0?'#68d391':'#fc8181';
-  g('live-ret').textContent=newRet+' ans';g('live-ret').style.color=retDelta<=0?'#68d391':'#f6ad55';
-  g('live-ret-d').textContent=(retDelta===0?'Inchangé':(retDelta>0?'+':'')+retDelta+' ans vs baseline');g('live-ret-d').style.color=retDelta<=0?'#68d391':'#f6ad55';
+  g('live-ret').textContent=newRet+' yrs';g('live-ret').style.color=retDelta<=0?'#68d391':'#f6ad55';
+  g('live-ret-d').textContent=(retDelta===0?'Unchanged':(retDelta>0?'+':'')+retDelta+' yrs vs baseline');g('live-ret-d').style.color=retDelta<=0?'#68d391':'#f6ad55';
   g('live-stress').textContent=getLbl(newStr);g('live-stress').style.color=strC;
-  g('live-stress-d').textContent='score : '+Math.round(newStr);
+  g('live-stress-d').textContent='score: '+Math.round(newStr);
   g('live-conf').textContent=Math.round(newConf)+'%';g('live-conf').style.color=confC;
   const cd=Math.round(newConf-BASE_CONF);
   g('live-conf-d').textContent=(cd>=0?'+':'')+cd+'% vs baseline';g('live-conf-d').style.color=confC;
-  g('live-count').textContent=liveSelections.size+' choix actif'+(liveSelections.size>1?'s':'');
+  g('live-count').textContent=liveSelections.size+' active choice'+(liveSelections.size>1?'s':'');
   g('live-sv').textContent=fk(lSliders.savings)+'/mo';
   g('live-iv').textContent=fk(lSliders.invest)+'/mo';
-  g('live-rv').textContent=lSliders.retire+' ans';
+  g('live-rv').textContent=lSliders.retire+' yrs';
   if(liveChart) updateLiveChart(tm);
 }
 
@@ -2399,7 +2399,7 @@ function initLiveChart(){
   liveChart=new Chart(ctx.getContext('2d'),{
     type:'line',
     data:{labels:wd.lbl,datasets:[
-      {label:'Combiné',data:combo,borderColor:'#68d391',borderWidth:2.5,fill:{target:'origin',above:'rgba(104,211,145,0.06)'},tension:0.4,pointRadius:0},
+      {label:'Combined',data:combo,borderColor:'#68d391',borderWidth:2.5,fill:{target:'origin',above:'rgba(104,211,145,0.06)'},tension:0.4,pointRadius:0},
       {label:'Baseline',data:wd.base,borderColor:'rgba(99,179,237,0.5)',borderWidth:1.5,borderDash:[5,3],fill:false,tension:0.4,pointRadius:0}
     ]},
     options:{responsive:true,animation:{duration:300},...chartDefaults}
@@ -2427,20 +2427,20 @@ function resetLiveSim(){
 
 /* ===== ONBOARDING ===== */
 const STEPS=[
-  {id:'name',    lbl:'Bienvenue',         q:"Quel est ton prénom ?",                                  sub:"On va personnaliser ton expérience FinTwin.",                               type:'text',     ph:'ex : Alex',        key:'name',       opt:true},
-  {id:'age',     lbl:'Ton profil',         q:"Quel est ton âge ?",                                     sub:"Ton âge détermine ta trajectoire et ta date de retraite.",                   type:'number',   ph:'30',               key:'age',        unit:'ans',min:18,max:75},
-  {id:'city',    lbl:'Localisation',       q:"Où vis-tu actuellement ?",                               sub:"Ta localisation influence ta fiscalité et ton coût de vie.",                 type:'text',     ph:'ex : Paris, France',key:'city',       opt:true},
-  {id:'income',  lbl:'Revenus',            q:"Quel est ton revenu annuel brut ?",                      sub:"Salaire avant impôts + tout revenu secondaire régulier.",                    type:'currency', ph:'60 000',           key:'income'},
-  {id:'expenses',lbl:'Dépenses',           q:"Quel est ton budget mensuel total ?",                    sub:"Loyer, nourriture, abonnements, transport — tout inclus.",                   type:'currency', ph:'2 500',            key:'expenses'},
-  {id:'savings', lbl:'Épargne',            q:"Combien as-tu en épargne / liquidités ?",                sub:"Comptes bancaires, livret A, fonds d'urgence.",                              type:'currency', ph:'15 000',           key:'savings'},
-  {id:'invest',  lbl:'Investissements',    q:"Quelle est la valeur de tes investissements ?",          sub:"Actions, ETF, retraite, crypto — valeur totale actuelle. 0 si aucun.",      type:'currency', ph:'20 000',           key:'investments', opt:true},
-  {id:'debt',    lbl:'Dettes',             q:"Quel est ton niveau d'endettement total ?",              sub:"Crédit immo, prêts étudiants, cartes de crédit — 0 si aucune dette.",        type:'currency', ph:'0',                key:'debt',       opt:true},
-  {id:'retire',  lbl:'Objectif retraite',  q:"À quel âge veux-tu prendre ta retraite ?",               sub:"Ton objectif — on simulera comment y arriver.",                              type:'number',   ph:'55',               key:'retireAge',  unit:'ans',min:30,max:80},
-  {id:'risk',    lbl:'Profil de risque',   q:"Quel est ton appétit pour le risque ?",                  sub:"Cela détermine ton taux de croissance projeté sur les 90 simulations.",      type:'choice',   key:'risk',
+  {id:'name',    lbl:'Welcome',            q:"What's your first name?",                                sub:"We'll personalize your FinTwin experience.",                                type:'text',     ph:'e.g. Alex',        key:'name',       opt:true},
+  {id:'age',     lbl:'Your profile',       q:"How old are you?",                                       sub:"Your age shapes your trajectory and retirement date.",                       type:'number',   ph:'30',               key:'age',        unit:'yrs',min:18,max:75},
+  {id:'city',    lbl:'Location',           q:"Where do you currently live?",                           sub:"Your location affects your taxes and cost of living.",                       type:'text',     ph:'e.g. Paris, France',key:'city',       opt:true},
+  {id:'income',  lbl:'Income',             q:"What's your gross annual income?",                       sub:"Salary before taxes + any regular side income.",                             type:'currency', ph:'60,000',           key:'income'},
+  {id:'expenses',lbl:'Expenses',           q:"What's your total monthly budget?",                      sub:"Rent, food, subscriptions, transport — everything included.",                type:'currency', ph:'2,500',            key:'expenses'},
+  {id:'savings', lbl:'Savings',            q:"How much do you have in savings / cash?",                sub:"Bank accounts, savings accounts, emergency fund.",                           type:'currency', ph:'15,000',           key:'savings'},
+  {id:'invest',  lbl:'Investments',        q:"What's the value of your investments?",                  sub:"Stocks, ETFs, retirement, crypto — current total value. 0 if none.",        type:'currency', ph:'20,000',           key:'investments', opt:true},
+  {id:'debt',    lbl:'Debt',               q:"What's your total debt level?",                          sub:"Mortgage, student loans, credit cards — 0 if no debt.",                      type:'currency', ph:'0',                key:'debt',       opt:true},
+  {id:'retire',  lbl:'Retirement goal',    q:"At what age do you want to retire?",                     sub:"Your goal — we'll simulate how to get there.",                               type:'number',   ph:'55',               key:'retireAge',  unit:'yrs',min:30,max:80},
+  {id:'risk',    lbl:'Risk profile',       q:"What's your appetite for risk?",                         sub:"This sets your projected growth rate across all 90 simulations.",            type:'choice',   key:'risk',
     choices:[
-      {v:'conservative',l:'Prudent',    s:'Préservation du capital, faible volatilité', c:'#63b3ed',bg:'rgba(99,179,237,0.1)', e:'&#128737;'},
-      {v:'balanced',    l:'Équilibré',  s:'Mix croissance et stabilité',                c:'#9f7aea',bg:'rgba(159,122,234,0.1)',e:'&#9878;'},
-      {v:'aggressive',  l:'Dynamique',  s:'Croissance maximale, risque élevé',          c:'#f6ad55',bg:'rgba(246,173,85,0.1)', e:'&#128640;'}
+      {v:'conservative',l:'Conservative',s:'Capital preservation, low volatility',       c:'#63b3ed',bg:'rgba(99,179,237,0.1)', e:'&#128737;'},
+      {v:'balanced',    l:'Balanced',   s:'Mix of growth and stability',                c:'#9f7aea',bg:'rgba(159,122,234,0.1)',e:'&#9878;'},
+      {v:'aggressive',  l:'Dynamic',    s:'Maximum growth, high risk',                  c:'#f6ad55',bg:'rgba(246,173,85,0.1)', e:'&#128640;'}
     ]}
 ];
 
@@ -2495,10 +2495,10 @@ function showObStep(i){
     <h2 class="ob-q">${step.q}</h2>
     <p class="ob-sub">${step.sub}</p>
     ${inp}
-    <p class="ob-hint">Appuie sur <kbd>Entrée ↵</kbd> pour continuer${step.opt?' &nbsp;·&nbsp; <span style="color:#4a5568">Optionnel</span>':''}</p>
+    <p class="ob-hint">Press <kbd>Enter ↵</kbd> to continue${step.opt?' &nbsp;·&nbsp; <span style="color:#4a5568">Optional</span>':''}</p>
     <div class="ob-footer">
       <button class="ob-cont" onclick="obNext()">
-        ${i===STEPS.length-1?'Créer mon Twin ✨':'Continuer'} &#8594;
+        ${i===STEPS.length-1?'Create my Twin ✨':'Continue'} &#8594;
       </button>
     </div>`;
   setTimeout(()=>{container.appendChild(div);},prev?30:0);
@@ -2569,7 +2569,7 @@ function projectWealth(yrs){
   for(let y=1;y<=yrs;y++) v=v*(1+rate)+MONTHLY_CON*12;
   return Math.round(Math.max(0,v));
 }
-// Projection avec un multiplicateur custom (utilisé par le simulateur de scénarios)
+// Projection with a custom multiplier (used by the scenario simulator)
 function projectWealthMult(yrs,mult){
   const rate=0.087*Math.max(0.3,Math.min(3,mult));
   let v=NETWORTH;
@@ -2599,7 +2599,7 @@ function buildTwinData(){
   P5_BASE=projectWealth(5);
   P10_BASE=projectWealth(10);
   P25_BASE=projectWealth(25);
-  // Mise à jour des scores de santé
+  // Update health scores
   HEALTH[0].v=sr;
   HEALTH[1].v=Math.round(Math.min(90,40+sr*0.5+(em>=3?20:0)));
   HEALTH[2].v=BASE_CONF;
@@ -2609,16 +2609,16 @@ function buildTwinData(){
   HEALTH[6].v=Math.round(Math.min(95,em/6*100));
   HEALTH[14].v=Math.round(Math.max(10,Math.min(80,BASE_STRESS)));
   // Sidebar
-  const name=u.name||'Toi';
+  const name=u.name||'You';
   const initials=name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?';
   document.getElementById('sb-avatar').textContent=initials;
   document.getElementById('sb-name').textContent=name;
-  document.getElementById('sb-role').textContent=u.city||'Ton Financial Twin';
+  document.getElementById('sb-role').textContent=u.city||'Your Financial Twin';
   document.getElementById('sb-age').textContent=age;
   document.getElementById('sb-score').textContent=Math.round((HEALTH[0].v+HEALTH[2].v+HEALTH[4].v)/3);
-  document.getElementById('tb-sub').textContent=(u.city?u.city+' · ':'')+'Trajectoire de base';
+  document.getElementById('tb-sub').textContent=(u.city?u.city+' · ':'')+'Base trajectory';
   // Loading step
-  document.getElementById('ob-nw-step').textContent='Patrimoine net calculé : '+fk(NETWORTH);
+  document.getElementById('ob-nw-step').textContent='Net worth calculated: '+fk(NETWORTH);
   // SVG twin
   const t=e=>document.getElementById(e);
   if(t('twin-salary-val')) t('twin-salary-val').textContent=fk(Math.round(income/1000)*1000);
@@ -2629,7 +2629,7 @@ function buildTwinData(){
   if(t('twin-net-val')) t('twin-net-val').textContent=fk(NETWORTH);
   // Typing text
   const ytr=RETIRE_AGE-age;
-  window.INIT_TYPING='Jumeau financier activé, '+name+' ! Il te reste '+ytr+' ans pour atteindre la retraite à '+RETIRE_AGE+' ans. '+(BASE_CONF>70?'Tu es sur la bonne voie — continue à optimiser.':'Ajuste ta stratégie pour améliorer ton score de confiance.');
+  window.INIT_TYPING='Financial twin activated, '+name+'! You have '+ytr+' years left to reach retirement at '+RETIRE_AGE+'. '+(BASE_CONF>70?'You\'re on the right track — keep optimizing.':'Adjust your strategy to improve your confidence score.');
   // Personalized overview banner
   updateOverviewProfile();
 }
@@ -2644,7 +2644,7 @@ function updateOverviewProfile(){
   const investments=parseNum(u.investments)||0;
   const mNet=income/12*0.72;
   const saveRate=Math.round(Math.min(99,MONTHLY_CON/Math.max(1,mNet)*100));
-  const riskLbl={conservative:'Prudent',balanced:'Équilibré',aggressive:'Agressif'}[u.risk||'balanced']||'Équilibré';
+  const riskLbl={conservative:'Conservative',balanced:'Balanced',aggressive:'Aggressive'}[u.risk||'balanced']||'Balanced';
   const riskClr={conservative:'#63b3ed',balanced:'#f6ad55',aggressive:'#fc8181'}[u.risk||'balanced']||'#f6ad55';
   const riskBg={conservative:'rgba(99,179,237,0.08)',balanced:'rgba(246,173,85,0.08)',aggressive:'rgba(252,129,129,0.08)'}[u.risk||'balanced']||'rgba(246,173,85,0.08)';
   const riskBr={conservative:'rgba(99,179,237,0.12)',balanced:'rgba(246,173,85,0.12)',aggressive:'rgba(252,129,129,0.12)'}[u.risk||'balanced']||'rgba(246,173,85,0.12)';
@@ -2654,8 +2654,8 @@ function updateOverviewProfile(){
   const g=id=>document.getElementById(id);
   const gx=(id,fn)=>{const e=g(id);if(e)fn(e);};
   gx('pf-avatar',e=>e.textContent=initials);
-  gx('pf-hello',e=>e.textContent='Bonjour '+(name||'')+(age?' · '+age+' ans':''));
-  gx('pf-location',e=>e.textContent=cityFlag+' '+(u.city||'—')+' · épargne '+saveRate+'%');
+  gx('pf-hello',e=>e.textContent='Hi '+(name||'')+(age?' · '+age+' yrs':''));
+  gx('pf-location',e=>e.textContent=cityFlag+' '+(u.city||'—')+' · savings '+saveRate+'%');
   gx('pf-income',e=>e.textContent=fk(Math.round(income/1000)*1000));
   gx('pf-exp',e=>e.textContent=fk(expenses)+'/mo');
   gx('pf-save',e=>e.textContent=fk(Math.round(MONTHLY_CON))+'/mo');
@@ -2665,13 +2665,13 @@ function updateOverviewProfile(){
   gx('home-score',e=>e.textContent=score);
   // Topbar sync
   gx('tb-avatar',e=>e.textContent=initials);
-  const months=['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Aoû','Sep','Oct','Nov','Déc'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const now=new Date();
   gx('tb-date',e=>e.textContent=months[now.getMonth()]+' '+now.getFullYear());
   // Sidebar sync
   gx('sb-avatar',e=>e.textContent=initials);
-  gx('sb-name',e=>e.textContent=name||'Toi');
-  gx('sb-role',e=>e.textContent=u.city||'Ton Financial Twin');
+  gx('sb-name',e=>e.textContent=name||'You');
+  gx('sb-role',e=>e.textContent=u.city||'Your Financial Twin');
   gx('sb-age',e=>e.textContent=age||'—');
   gx('sb-score',e=>e.textContent=score);
 }
@@ -2710,18 +2710,18 @@ function launchDashboard(){
 </script>
 
 <!-- ===== MOBILE BOTTOM NAV ===== -->
-<nav id="mob-nav" role="navigation" aria-label="Navigation principale">
+<nav id="mob-nav" role="navigation" aria-label="Main navigation">
   <div class="mob-tab on" onclick="setNav('overview',this)">
-    <span class="mt-ic">◆</span><span>Accueil</span>
+    <span class="mt-ic">◆</span><span>Home</span>
   </div>
   <div class="mob-tab" onclick="setNav('scenarios',this)">
-    <span class="mt-ic">⬡</span><span>Scénarios</span>
+    <span class="mt-ic">⬡</span><span>Scenarios</span>
   </div>
   <div class="mob-tab" onclick="setNav('live',this)">
     <span class="mt-ic">⚡</span><span>Live</span>
   </div>
   <div class="mob-tab" onclick="setNav('compare',this)">
-    <span class="mt-ic">⚖</span><span>Mon Plan</span>
+    <span class="mt-ic">⚖</span><span>My Plan</span>
   </div>
   <div class="mob-tab" onclick="setNav('insights',this)">
     <span class="mt-ic">✦</span><span>Insights</span>
