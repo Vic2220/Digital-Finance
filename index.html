@@ -570,123 +570,61 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
     <!-- SCENARIOS -->
     <div id="sec-scenarios" style="padding:16px 20px 0">
 
-      <!-- Header compact -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-        <div>
-          <div style="font-size:15px;font-weight:800;color:#f0f4ff;letter-spacing:-0.3px">Simulator</div>
-          <div style="font-size:11px;color:#4a5568;margin-top:1px">Combine scenarios · real-time impact</div>
-        </div>
-        <span id="sc-count" style="font-size:10px;color:#3a4a5e;padding:4px 10px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)">15</span>
+      <!-- Header -->
+      <div style="margin-bottom:16px">
+        <div style="font-size:18px;font-weight:800;color:#f0f4ff;letter-spacing:-0.4px">Scenario Simulator</div>
+        <div style="font-size:12px;color:#8899b0;margin-top:3px;line-height:1.4">Pick a change in each category. The graph shows your future net worth <b style="color:#68d391">with your choices</b> vs your <b style="color:#8899b0">current path</b>.</div>
       </div>
 
-      <!-- Category tabs -->
-      <div style="display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch" id="cat-tabs"></div>
+      <!-- Category dropdowns -->
+      <div id="s2-dropdowns" style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px"></div>
 
-      <!-- Active chips bar -->
-      <div id="sc-active-chips" style="display:none;flex-wrap:wrap;gap:6px;margin-bottom:14px;padding:10px 14px;background:rgba(99,179,237,0.04);border-radius:12px;border:1px solid rgba(99,179,237,0.12)"></div>
+      <!-- Reset -->
+      <div id="s2-reset-wrap" style="display:none;margin-bottom:16px">
+        <button onclick="s2Reset()" style="font-size:12px;font-weight:600;color:#8899b0;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:9px;padding:8px 14px;cursor:pointer;font-family:'Inter',sans-serif">✕ Reset all choices</button>
+      </div>
 
-      <!-- IMPACT PANEL — appears above the grid as soon as a scenario is selected -->
-      <div id="sc-impact" style="display:none;margin-bottom:16px">
-        <div id="sc-impact-glass" class="glass" style="padding:24px;border:1px solid rgba(99,179,237,0.2)">
-          <!-- Header row -->
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-            <div style="display:flex;align-items:center;gap:12px">
-              <div id="si-flag" style="font-size:28px;line-height:1"></div>
-              <div>
-                <div id="si-title" style="font-size:15px;font-weight:700;color:#f0f4ff;margin-bottom:3px"></div>
-                <div id="si-sub" style="font-size:11px;color:#8899b0;line-height:1.4;max-width:480px"></div>
-              </div>
-            </div>
-            <button onclick="clearSim()" style="font-size:11px;font-weight:600;color:#8899b0;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:7px 14px;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap">✕ Clear</button>
+      <!-- HERO: current path vs with your choices (25y) -->
+      <div style="position:relative;overflow:hidden;border-radius:16px;padding:18px;margin-bottom:16px;background:linear-gradient(135deg,rgba(104,211,145,0.08),rgba(99,179,237,0.05));border:1px solid rgba(104,211,145,0.18)">
+        <div style="font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#68d391;margin-bottom:14px">Your net worth in 25 years</div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <div style="flex:1;min-width:90px">
+            <div style="font-size:9px;color:#8899b0;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px">Current path</div>
+            <div id="s2-base" style="font-size:24px;font-weight:800;color:#8899b0;letter-spacing:-1px;line-height:1">—</div>
           </div>
-
-          <!-- HERO: baseline vs with your choices (25 yrs) -->
-          <div id="si-hero" style="position:relative;overflow:hidden;border-radius:16px;padding:18px;margin-bottom:20px;background:linear-gradient(135deg,rgba(104,211,145,0.08),rgba(99,179,237,0.05));border:1px solid rgba(104,211,145,0.18)">
-            <div style="font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#68d391;margin-bottom:14px">Your net worth in 25 years</div>
-            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-              <div style="flex:1;min-width:90px">
-                <div style="font-size:9px;color:#8899b0;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px">No change</div>
-                <div id="si-hero-base" style="font-size:24px;font-weight:800;color:#8899b0;letter-spacing:-1px;line-height:1">—</div>
-              </div>
-              <div style="font-size:22px;color:#4a5568;font-weight:300">→</div>
-              <div style="flex:1;min-width:90px">
-                <div style="font-size:9px;color:#68d391;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px;font-weight:700">With your choices</div>
-                <div id="si-hero-new" class="grad-bl" style="font-size:28px;font-weight:900;letter-spacing:-1.2px;line-height:1">—</div>
-              </div>
-              <div id="si-hero-delta" style="padding:8px 14px;border-radius:12px;background:rgba(104,211,145,0.15);border:1px solid rgba(104,211,145,0.3);font-size:15px;font-weight:800;color:#68d391;white-space:nowrap">—</div>
-            </div>
+          <div style="font-size:22px;color:#4a5568;font-weight:300">→</div>
+          <div style="flex:1;min-width:90px">
+            <div style="font-size:9px;color:#68d391;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px;font-weight:700">With your choices</div>
+            <div id="s2-new" class="grad-bl" style="font-size:28px;font-weight:900;letter-spacing:-1.2px;line-height:1">—</div>
           </div>
-
-          <!-- 4 KPI comparison tiles -->
-          <div id="sc-impact-tiles" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px">
-            <!-- Net worth -->
-            <div style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
-              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Net worth</div>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-                <span style="font-size:10px;color:#8899b0">Current</span>
-                <span id="si-nw-base" style="font-size:13px;font-weight:700;color:#f0f4ff"></span>
-              </div>
-              <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:5px"></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-                <span id="si-nw-label" style="font-size:10px;font-weight:600"></span>
-                <span id="si-nw" style="font-size:13px;font-weight:700"></span>
-              </div>
-              <div id="si-nw-d" style="font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px"></div>
-            </div>
-            <!-- Retirement -->
-            <div style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
-              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Retirement</div>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-                <span style="font-size:10px;color:#8899b0">Current</span>
-                <span id="si-ret-base" style="font-size:13px;font-weight:700;color:#f0f4ff"></span>
-              </div>
-              <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:5px"></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-                <span id="si-ret-label" style="font-size:10px;font-weight:600"></span>
-                <span id="si-ret" style="font-size:13px;font-weight:700"></span>
-              </div>
-              <div id="si-ret-d" style="font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px"></div>
-            </div>
-            <!-- Confidence -->
-            <div style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
-              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Confidence</div>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-                <span style="font-size:10px;color:#8899b0">Current</span>
-                <span id="si-conf-base" style="font-size:13px;font-weight:700;color:#f0f4ff"></span>
-              </div>
-              <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:5px"></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-                <span id="si-conf-label" style="font-size:10px;font-weight:600"></span>
-                <span id="si-conf" style="font-size:13px;font-weight:700"></span>
-              </div>
-              <div id="si-conf-d" style="font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px"></div>
-            </div>
-            <!-- Stress -->
-            <div style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
-              <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">Financial stress</div>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-                <span style="font-size:10px;color:#8899b0">Current</span>
-                <span id="si-str-base" style="font-size:13px;font-weight:700;color:#f0f4ff"></span>
-              </div>
-              <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:5px"></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-                <span id="si-str-label" style="font-size:10px;font-weight:600"></span>
-                <span id="si-str" style="font-size:13px;font-weight:700"></span>
-              </div>
-              <div id="si-str-d" style="font-size:11px;font-weight:700;text-align:center;padding:5px 0;border-radius:7px"></div>
-            </div>
-          </div>
-
-          <!-- Wealth projection chart -->
-          <div>
-            <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4a5568;margin-bottom:10px">Net worth projection — 25 yrs</div>
-            <canvas id="sc-impact-chart" height="120"></canvas>
-          </div>
+          <div id="s2-delta" style="padding:8px 14px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);font-size:15px;font-weight:800;color:#8899b0;white-space:nowrap">—</div>
         </div>
       </div>
 
-      <!-- Scenario grid — EN DESSOUS du panel d'impact -->
-      <div class="sg" id="sc-grid" style="padding-bottom:8px"></div>
+      <!-- Comparison graph -->
+      <div class="glass" style="padding:16px;margin-bottom:16px">
+        <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4a5568;margin-bottom:12px">Net worth projection — 25 yrs</div>
+        <div style="position:relative;height:200px"><canvas id="s2-chart"></canvas></div>
+      </div>
+
+      <!-- KPI chips -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding-bottom:8px">
+        <div style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
+          <div style="font-size:8px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#8899b0;margin-bottom:7px">Retirement</div>
+          <div id="s2-ret" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
+          <div id="s2-ret-d" style="font-size:10px;font-weight:600;margin-top:3px;color:#4a5568">unchanged</div>
+        </div>
+        <div style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
+          <div style="font-size:8px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#8899b0;margin-bottom:7px">Confidence</div>
+          <div id="s2-conf" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
+          <div id="s2-conf-d" style="font-size:10px;font-weight:600;margin-top:3px;color:#4a5568">unchanged</div>
+        </div>
+        <div style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
+          <div style="font-size:8px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#8899b0;margin-bottom:7px">Stress</div>
+          <div id="s2-str" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
+          <div id="s2-str-d" style="font-size:10px;font-weight:600;margin-top:3px;color:#4a5568">unchanged</div>
+        </div>
+      </div>
     </div>
 
     <!-- 3-COL: Timeline | Insights | Investment -->
@@ -752,6 +690,43 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
     <!-- INSIGHTS & HEALTH -->
     <div id="sec-health" style="padding:16px 20px 0">
 
+      <!-- ═══════ CONNECTED ACCOUNTS (demo bank) ═══════ -->
+      <div style="margin-bottom:18px">
+        <div style="font-size:18px;font-weight:800;color:#f0f4ff;letter-spacing:-0.4px;margin-bottom:3px">Insights &amp; Wealth</div>
+        <div style="font-size:12px;color:#8899b0;line-height:1.4;margin-bottom:14px">Connect your accounts and fine-tune the base conditions that power every projection.</div>
+
+        <!-- Login card -->
+        <div id="bank-login" class="glass" style="padding:20px">
+          <div style="display:flex;align-items:center;gap:11px;margin-bottom:16px">
+            <div style="width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,#63b3ed,#9f7aea);display:flex;align-items:center;justify-content:center;font-size:19px">&#127974;</div>
+            <div>
+              <div style="font-size:14px;font-weight:800;color:#f0f4ff">Connect your bank</div>
+              <div style="font-size:10px;color:#8899b0">Secure demo &mdash; nothing leaves your phone</div>
+            </div>
+          </div>
+          <input id="bank-user" placeholder="Username" autocomplete="off" style="width:100%;padding:12px 14px;border-radius:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);color:#f0f4ff;font-size:13px;font-family:'Inter',sans-serif;margin-bottom:10px;box-sizing:border-box">
+          <input id="bank-pass" type="password" placeholder="Password" autocomplete="off" style="width:100%;padding:12px 14px;border-radius:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);color:#f0f4ff;font-size:13px;font-family:'Inter',sans-serif;margin-bottom:14px;box-sizing:border-box">
+          <button onclick="bankConnect()" style="width:100%;padding:13px;border-radius:11px;border:none;background:linear-gradient(135deg,#63b3ed,#9f7aea);color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif">&#128274; Connect securely</button>
+          <div style="font-size:9px;color:#4a5568;text-align:center;margin-top:9px">Demo only &mdash; any credentials work</div>
+        </div>
+
+        <!-- Accounts (revealed once connected) -->
+        <div id="bank-accounts" style="display:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:0 2px">
+            <span style="font-size:11px;font-weight:700;color:#68d391;display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:#68d391;box-shadow:0 0 8px #68d391"></span>Connected &middot; FinTwin Bank</span>
+            <span style="font-size:11px;color:#8899b0">Net worth <b id="bank-nw" style="color:#f0f4ff"></b></span>
+          </div>
+          <div id="bank-cards" style="display:flex;flex-direction:column;gap:10px"></div>
+        </div>
+      </div>
+
+      <!-- ═══════ BASE CONDITIONS EDITOR ═══════ -->
+      <div class="glass" style="padding:18px;margin-bottom:18px">
+        <div style="font-size:13px;font-weight:800;color:#f0f4ff;margin-bottom:3px">&#9881;&#65039; Base conditions</div>
+        <div style="font-size:11px;color:#8899b0;margin-bottom:16px;line-height:1.4">Editing these instantly updates your net worth and every projection across the app.</div>
+        <div id="base-editor" style="display:flex;flex-direction:column;gap:18px"></div>
+      </div>
+
       <!-- ═══════ AI INSIGHTS SECTION ═══════ -->
       <div style="margin-bottom:18px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
@@ -796,256 +771,152 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
     </div>
 
     <!-- LIVE SIMULATOR -->
-    <div id="sec-live" style="padding:16px 28px 0;display:none">
-      <div class="glass" style="padding:24px">
-        <!-- Header -->
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-          <div>
-            <div class="lbl" style="margin-bottom:4px">&#9889; Live Simulator</div>
-            <div style="font-size:12px;color:#8899b0">Change your current situation — each slider represents a change from today</div>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px">
-            <span id="live-count" class="tag" style="background:rgba(99,179,237,0.1);color:#63b3ed;border:1px solid rgba(99,179,237,0.2)">0 active choices</span>
-            <button onclick="resetLiveSim()" style="font-size:11px;font-weight:600;color:#8899b0;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:7px 14px;cursor:pointer;font-family:'Inter',sans-serif">Reset</button>
-          </div>
-        </div>
+    <div id="sec-live" style="padding:16px 20px 0;display:none">
 
-        <!-- Baseline reference row -->
-        <div id="live-baseline-row" style="display:flex;align-items:center;gap:20px;padding:10px 16px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid rgba(255,255,255,0.06);margin-bottom:14px;font-size:11px">
-          <span style="font-size:9px;font-weight:800;letter-spacing:1.2px;color:#4a5568;text-transform:uppercase;white-space:nowrap">Current situation</span>
-          <span style="color:#8899b0">Net worth: <strong id="live-bl-nw" style="color:#f0f4ff">—</strong></span>
-          <span style="color:#8899b0">Retirement: <strong id="live-bl-ret" style="color:#f0f4ff">—</strong></span>
-          <span style="color:#8899b0">Confidence: <strong id="live-bl-conf" style="color:#f0f4ff">—</strong></span>
-          <span style="color:#8899b0">Stress: <strong id="live-bl-str" style="color:#f0f4ff">—</strong></span>
-        </div>
-
-        <!-- Live Impact Cards -->
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px">
-          <div style="padding:16px;border-radius:14px;background:rgba(99,179,237,0.06);border:1px solid rgba(99,179,237,0.15)">
-            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#63b3ed;text-transform:uppercase;margin-bottom:8px">Net worth</div>
-            <div id="live-nw" style="font-size:22px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
-            <div id="live-nw-d" style="font-size:12px;margin-top:4px;font-weight:600">vs baseline</div>
-          </div>
-          <div style="padding:16px;border-radius:14px;background:rgba(104,211,145,0.06);border:1px solid rgba(104,211,145,0.15)">
-            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#68d391;text-transform:uppercase;margin-bottom:8px">Retirement</div>
-            <div id="live-ret" style="font-size:22px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
-            <div id="live-ret-d" style="font-size:12px;margin-top:4px;font-weight:600">vs baseline</div>
-          </div>
-          <div style="padding:16px;border-radius:14px;background:rgba(246,173,85,0.06);border:1px solid rgba(246,173,85,0.15)">
-            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#f6ad55;text-transform:uppercase;margin-bottom:8px">Financial stress</div>
-            <div id="live-stress" style="font-size:22px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
-            <div id="live-stress-d" style="font-size:12px;margin-top:4px;font-weight:600">level</div>
-          </div>
-          <div style="padding:16px;border-radius:14px;background:rgba(159,122,234,0.06);border:1px solid rgba(159,122,234,0.15)">
-            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#9f7aea;text-transform:uppercase;margin-bottom:8px">Confidence</div>
-            <div id="live-conf" style="font-size:22px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">—</div>
-            <div id="live-conf-d" style="font-size:12px;margin-top:4px;font-weight:600">probability</div>
-          </div>
-        </div>
-
-        <!-- Sliders -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px;padding:16px;background:rgba(255,255,255,0.03);border-radius:12px;border:1px solid rgba(255,255,255,0.06)">
-          <div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-              <span style="font-size:11px;color:#8899b0;font-weight:600">Additional savings</span>
-              <span id="live-sv" style="font-size:11px;font-weight:700;color:#68d391"></span>
-            </div>
-            <input type="range" id="sl-savings" min="0" max="5000" step="50" value="500"
-              style="width:100%;accent-color:#68d391;cursor:pointer" oninput="updateLiveSliders()">
-            <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5k/mo</span></div>
-          </div>
-          <div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-              <span style="font-size:11px;color:#8899b0;font-weight:600">Additional investment</span>
-              <span id="live-iv" style="font-size:11px;font-weight:700;color:#63b3ed"></span>
-            </div>
-            <input type="range" id="sl-invest" min="0" max="5000" step="50" value="300"
-              style="width:100%;accent-color:#63b3ed;cursor:pointer" oninput="updateLiveSliders()">
-            <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5k/mo</span></div>
-          </div>
-          <div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-              <span style="font-size:11px;color:#8899b0;font-weight:600">Target retirement age</span>
-              <span id="live-rv" style="font-size:11px;font-weight:700;color:#9f7aea"></span>
-            </div>
-            <input type="range" id="sl-retire" min="35" max="75" step="1" value="55"
-              style="width:100%;accent-color:#9f7aea;cursor:pointer" oninput="updateLiveSliders()">
-            <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>35</span><span>75 yrs</span></div>
-          </div>
-        </div>
-
-        <!-- Category tabs -->
-        <div style="display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px" id="live-cat-tabs"></div>
-
-        <!-- Multi-select scenario grid -->
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px" id="live-sc-grid"></div>
-
-        <!-- Selected chips -->
-        <div id="live-chips" style="display:flex;flex-wrap:wrap;gap:6px;min-height:28px"></div>
+      <!-- Header -->
+      <div style="margin-bottom:16px">
+        <div style="font-size:18px;font-weight:800;color:#f0f4ff;letter-spacing:-0.4px">&#9889; Live Simulator</div>
+        <div style="font-size:12px;color:#8899b0;margin-top:3px;line-height:1.4">Adjust your real-life parameters and watch your future react. <b style="color:#68d391">With changes</b> vs your <b style="color:#8899b0">current path</b>.</div>
       </div>
 
-      <!-- Live chart -->
-      <div class="glass" style="padding:24px;margin-top:16px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:16px">
-          <div>
-            <div class="lbl" style="margin-bottom:4px">Combined projection</div>
-            <div style="font-size:12px;color:#8899b0">25-year trajectory with all your active choices</div>
+      <!-- Sliders -->
+      <div class="glass" style="padding:18px;margin-bottom:16px;display:flex;flex-direction:column;gap:20px">
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+            <span style="font-size:12px;font-weight:700;color:#63b3ed;display:flex;align-items:center;gap:6px">&#128181; Monthly net income</span>
+            <span id="lv-income-v" style="font-size:14px;font-weight:800;color:#f0f4ff">&#8212;</span>
           </div>
-          <div style="display:flex;gap:12px;align-items:center">
-            <div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:2px;background:#68d391;border-radius:1px"></div><span style="font-size:10px;color:#8899b0">Combined</span></div>
-            <div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:2px;background:rgba(99,179,237,0.4);border-radius:1px;border-top:1px dashed #63b3ed"></div><span style="font-size:10px;color:#8899b0">Baseline</span></div>
-          </div>
+          <input type="range" id="lv-income" min="800" max="15000" step="100" style="width:100%;accent-color:#63b3ed;cursor:pointer" oninput="lvUpdate()">
+          <div id="lv-income-d" style="font-size:10px;font-weight:600;color:#4a5568;margin-top:5px">baseline</div>
         </div>
-        <canvas id="live-chart" height="200"></canvas>
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+            <span style="font-size:12px;font-weight:700;color:#fc8181;display:flex;align-items:center;gap:6px">&#128722; Monthly expenses</span>
+            <span id="lv-exp-v" style="font-size:14px;font-weight:800;color:#f0f4ff">&#8212;</span>
+          </div>
+          <input type="range" id="lv-exp" min="300" max="12000" step="100" style="width:100%;accent-color:#fc8181;cursor:pointer" oninput="lvUpdate()">
+          <div id="lv-exp-d" style="font-size:10px;font-weight:600;color:#4a5568;margin-top:5px">baseline</div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+            <span style="font-size:12px;font-weight:700;color:#f6ad55;display:flex;align-items:center;gap:6px">&#128640; Investment strategy</span>
+            <span id="lv-risk-v" style="font-size:14px;font-weight:800;color:#f0f4ff">&#8212;</span>
+          </div>
+          <input type="range" id="lv-risk" min="0" max="2" step="1" style="width:100%;accent-color:#f6ad55;cursor:pointer" oninput="lvUpdate()">
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:5px"><span>Conservative</span><span>Balanced</span><span>Aggressive</span></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+            <span style="font-size:12px;font-weight:700;color:#9f7aea;display:flex;align-items:center;gap:6px">&#127958; Target retirement age</span>
+            <span id="lv-ret-v" style="font-size:14px;font-weight:800;color:#f0f4ff">&#8212;</span>
+          </div>
+          <input type="range" id="lv-ret" min="35" max="75" step="1" style="width:100%;accent-color:#9f7aea;cursor:pointer" oninput="lvUpdate()">
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:5px"><span>35</span><span>75 yrs</span></div>
+        </div>
+        <div><button onclick="lvReset()" style="font-size:12px;font-weight:600;color:#8899b0;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:9px;padding:8px 14px;cursor:pointer;font-family:'Inter',sans-serif">&#10005; Reset to my real situation</button></div>
+      </div>
+
+      <!-- Monthly surplus chip -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-radius:13px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);margin-bottom:16px">
+        <span style="font-size:11px;font-weight:700;color:#8899b0;text-transform:uppercase;letter-spacing:0.6px">Saved &amp; invested / month</span>
+        <span id="lv-surplus" style="font-size:18px;font-weight:800;color:#68d391">&#8212;</span>
+      </div>
+
+      <!-- HERO -->
+      <div style="position:relative;overflow:hidden;border-radius:16px;padding:18px;margin-bottom:16px;background:linear-gradient(135deg,rgba(104,211,145,0.08),rgba(99,179,237,0.05));border:1px solid rgba(104,211,145,0.18)">
+        <div style="font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#68d391;margin-bottom:14px">Your net worth in 25 years</div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <div style="flex:1;min-width:90px">
+            <div style="font-size:9px;color:#8899b0;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px">Current path</div>
+            <div id="lv-base" style="font-size:24px;font-weight:800;color:#8899b0;letter-spacing:-1px;line-height:1">&#8212;</div>
+          </div>
+          <div style="font-size:22px;color:#4a5568;font-weight:300">&#8594;</div>
+          <div style="flex:1;min-width:90px">
+            <div style="font-size:9px;color:#68d391;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px;font-weight:700">With changes</div>
+            <div id="lv-new" class="grad-bl" style="font-size:28px;font-weight:900;letter-spacing:-1.2px;line-height:1">&#8212;</div>
+          </div>
+          <div id="lv-delta" style="padding:8px 14px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);font-size:15px;font-weight:800;color:#8899b0;white-space:nowrap">&#8212;</div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="glass" style="padding:16px;margin-bottom:16px">
+        <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4a5568;margin-bottom:12px">Net worth projection &#8212; 25 yrs</div>
+        <div style="position:relative;height:200px"><canvas id="live-chart"></canvas></div>
+      </div>
+
+      <!-- KPI chips -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding-bottom:8px">
+        <div style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
+          <div style="font-size:8px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#8899b0;margin-bottom:7px">Retirement</div>
+          <div id="lv-k-ret" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">&#8212;</div>
+          <div id="lv-k-ret-d" style="font-size:10px;font-weight:600;margin-top:3px;color:#4a5568">unchanged</div>
+        </div>
+        <div style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
+          <div style="font-size:8px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#8899b0;margin-bottom:7px">Confidence</div>
+          <div id="lv-k-conf" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">&#8212;</div>
+          <div id="lv-k-conf-d" style="font-size:10px;font-weight:600;margin-top:3px;color:#4a5568">unchanged</div>
+        </div>
+        <div style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07)">
+          <div style="font-size:8px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#8899b0;margin-bottom:7px">Savings rate</div>
+          <div id="lv-k-sr" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px">&#8212;</div>
+          <div id="lv-k-sr-d" style="font-size:10px;font-weight:600;margin-top:3px;color:#4a5568">of income</div>
+        </div>
       </div>
     </div>
 
     <!-- ===== MON PLAN — Comparateur interactif ===== -->
-    <div id="sec-compare" style="padding:16px 28px 0;display:none">
+    <!-- ===== MY PLAN — Goal-based recommendation engine ===== -->
+    <div id="sec-compare" style="padding:16px 20px 0;display:none">
 
-      <!-- TOP: BARRE DE COMPARAISON -->
-      <div style="display:grid;grid-template-columns:1fr 110px 1fr;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);margin-bottom:16px">
-        <!-- MAINTENANT -->
-        <div style="padding:20px 24px;background:rgba(255,255,255,0.02)">
-          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4a5568;margin-bottom:14px">📍 Now</div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">NET WORTH</div><div id="cnow-nw" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">RETIREMENT</div><div id="cnow-ret" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">10-YR PROJ.</div><div id="cnow-p10" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">CONFIDENCE</div><div id="cnow-conf" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px"></div></div>
+      <!-- Header -->
+      <div style="margin-bottom:16px">
+        <div style="font-size:18px;font-weight:800;color:#f0f4ff;letter-spacing:-0.4px">&#9878; My Plan</div>
+        <div style="font-size:12px;color:#8899b0;margin-top:3px;line-height:1.4">Set a goal and a deadline. FinTwin tells you exactly what to change to get there.</div>
+      </div>
+
+      <!-- Goal inputs -->
+      <div class="glass" style="padding:18px;margin-bottom:16px;display:flex;flex-direction:column;gap:20px">
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+            <span style="font-size:12px;font-weight:700;color:#9f7aea;display:flex;align-items:center;gap:6px">&#127919; Target net worth</span>
+            <span id="pl-goal-v" style="font-size:16px;font-weight:800;color:#f0f4ff">&#8212;</span>
           </div>
+          <input type="range" id="pl-goal" min="50000" max="5000000" step="25000" style="width:100%;accent-color:#9f7aea;cursor:pointer" oninput="planUpdate()">
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:5px"><span>50k</span><span>5M</span></div>
         </div>
-        <!-- ARROW + DELTA -->
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:rgba(104,211,145,0.04);border-left:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);padding:12px 0">
-          <div style="font-size:22px;color:#68d391">→</div>
-          <div id="cmp-delta-badge" style="font-size:9px;font-weight:700;padding:3px 8px;border-radius:12px;background:rgba(104,211,145,0.15);color:#68d391;text-align:center"></div>
-        </div>
-        <!-- WITH YOUR CHOICES -->
-        <div style="padding:20px 24px;background:rgba(104,211,145,0.03)">
-          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#68d391;margin-bottom:14px">✨ With your choices</div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">NET WORTH</div><div id="csc-nw" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-nw-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">RETIREMENT</div><div id="csc-ret" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-ret-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">10-YR PROJ.</div><div id="csc-p10" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-p10-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
-            <div><div style="font-size:9px;color:#8899b0;margin-bottom:5px;letter-spacing:0.5px">CONFIDENCE</div><div id="csc-conf" style="font-size:19px;font-weight:800;letter-spacing:-0.5px"></div><div id="csc-conf-d" style="font-size:10px;font-weight:600;margin-top:2px"></div></div>
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+            <span style="font-size:12px;font-weight:700;color:#63b3ed;display:flex;align-items:center;gap:6px">&#9203; In how many years</span>
+            <span id="pl-years-v" style="font-size:16px;font-weight:800;color:#f0f4ff">&#8212;</span>
           </div>
+          <input type="range" id="pl-years" min="3" max="40" step="1" style="width:100%;accent-color:#63b3ed;cursor:pointer" oninput="planUpdate()">
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:5px"><span>3 yrs</span><span>40 yrs</span></div>
         </div>
       </div>
 
-      <!-- BUILDER + CHART -->
-      <div style="display:grid;grid-template-columns:380px 1fr;gap:16px;padding-bottom:24px">
-
-        <!-- LEFT: PARAMETERS -->
-        <div style="display:flex;flex-direction:column;gap:12px">
-
-          <!-- 🏠 LOGEMENT -->
-          <div class="glass" style="padding:18px">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-              <span style="font-size:15px">🏠</span>
-              <span style="font-size:12px;font-weight:700;color:#f0f4ff">Housing</span>
-            </div>
-            <div style="font-size:9px;font-weight:700;letter-spacing:1px;color:#4a5568;text-transform:uppercase;margin-bottom:8px">Residence</div>
-            <div id="cmp-city-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-              <span style="font-size:11px;color:#8899b0">Rent / monthly payment</span>
-              <span id="cmp-rent-val" style="font-size:12px;font-weight:700;color:#63b3ed"></span>
-            </div>
-            <input type="range" id="cmp-rent" min="0" max="5000" step="50" style="width:100%;accent-color:#63b3ed;cursor:pointer" oninput="updateCompare()">
-            <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5,000/mo</span></div>
+      <!-- Status banner -->
+      <div id="pl-status" style="border-radius:16px;padding:18px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03)">
+        <div id="pl-status-label" style="font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#8899b0;margin-bottom:10px">Your forecast</div>
+        <div style="display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap">
+          <div style="flex:1;min-width:90px">
+            <div style="font-size:9px;color:#8899b0;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px">On your current path</div>
+            <div id="pl-proj" style="font-size:26px;font-weight:900;letter-spacing:-1px;line-height:1;color:#f0f4ff">&#8212;</div>
           </div>
-
-          <!-- 📈 INVESTISSEMENTS -->
-          <div class="glass" style="padding:18px">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-              <div style="display:flex;align-items:center;gap:8px">
-                <span style="font-size:15px">📈</span>
-                <span style="font-size:12px;font-weight:700;color:#f0f4ff">Investments</span>
-              </div>
-              <div id="cmp-total-alloc" style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;background:rgba(255,255,255,0.05);color:#8899b0">0% allocated</div>
-            </div>
-            <div style="font-size:9px;font-weight:700;letter-spacing:1px;color:#4a5568;text-transform:uppercase;margin-bottom:10px">% of your net worth</div>
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;color:#8899b0">📊 Stocks / ETF <span style="font-size:9px;color:#4a5568">8.7%/yr</span></span>
-                  <span id="cmp-eq-val" style="font-size:12px;font-weight:700;color:#63b3ed"></span>
-                </div>
-                <input type="range" id="cmp-eq" min="0" max="100" step="5" style="width:100%;accent-color:#63b3ed;cursor:pointer" oninput="updateCompare()">
-              </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;color:#8899b0">🏢 Real estate <span style="font-size:9px;color:#4a5568">5.5%/yr</span></span>
-                  <span id="cmp-re-val" style="font-size:12px;font-weight:700;color:#9f7aea"></span>
-                </div>
-                <input type="range" id="cmp-re" min="0" max="100" step="5" style="width:100%;accent-color:#9f7aea;cursor:pointer" oninput="updateCompare()">
-              </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;color:#8899b0">₿ Crypto <span style="font-size:9px;color:#4a5568">20%/yr</span></span>
-                  <span id="cmp-cr-val" style="font-size:12px;font-weight:700;color:#f6ad55"></span>
-                </div>
-                <input type="range" id="cmp-cr" min="0" max="50" step="5" style="width:100%;accent-color:#f6ad55;cursor:pointer" oninput="updateCompare()">
-              </div>
-              <div style="padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center">
-                <span style="font-size:11px;color:#8899b0">💵 Cash (remainder) <span style="font-size:9px;color:#4a5568">2%/yr</span></span>
-                <span id="cmp-cash-val" style="font-size:12px;font-weight:700;color:#68d391"></span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 💼 INCOME & SAVINGS -->
-          <div class="glass" style="padding:18px">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-              <span style="font-size:15px">💼</span>
-              <span style="font-size:12px;font-weight:700;color:#f0f4ff">Income & Savings</span>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:12px">
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;color:#8899b0">Salary increase</span>
-                  <span id="cmp-sal-val" style="font-size:12px;font-weight:700;color:#68d391"></span>
-                </div>
-                <input type="range" id="cmp-sal" min="0" max="100" step="5" style="width:100%;accent-color:#68d391;cursor:pointer" oninput="updateCompare()">
-                <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>+0%</span><span>+100%</span></div>
-              </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;color:#8899b0">Side income</span>
-                  <span id="cmp-side-val" style="font-size:12px;font-weight:700;color:#63b3ed"></span>
-                </div>
-                <input type="range" id="cmp-side" min="0" max="5000" step="100" style="width:100%;accent-color:#63b3ed;cursor:pointer" oninput="updateCompare()">
-                <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5,000/mo</span></div>
-              </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;color:#8899b0">Additional monthly savings</span>
-                  <span id="cmp-save-val" style="font-size:12px;font-weight:700;color:#9f7aea"></span>
-                </div>
-                <input type="range" id="cmp-save" min="0" max="5000" step="100" style="width:100%;accent-color:#9f7aea;cursor:pointer" oninput="updateCompare()">
-                <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:3px"><span>0</span><span>5,000/mo</span></div>
-              </div>
-            </div>
-          </div>
-
+          <div id="pl-gap-badge" style="padding:8px 14px;border-radius:12px;font-size:13px;font-weight:800;white-space:nowrap">&#8212;</div>
         </div>
-
-        <!-- RIGHT: CHART + JALONS -->
-        <div style="display:flex;flex-direction:column;gap:12px">
-
-          <!-- Projection chart -->
-          <div class="glass" style="padding:20px">
-            <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4a5568;margin-bottom:12px">Net worth projection — 25 yrs</div>
-            <canvas id="compare-chart" height="200"></canvas>
-          </div>
-
-          <!-- Key milestones -->
-          <div class="glass" style="padding:20px">
-            <div style="font-size:11px;font-weight:700;color:#f0f4ff;margin-bottom:12px;letter-spacing:0.3px">Impact of your choices</div>
-            <div id="cmp-milestones"></div>
-          </div>
-
-        </div>
+        <div id="pl-status-msg" style="font-size:12px;color:#c8d8e8;line-height:1.5;margin-top:12px"></div>
       </div>
+
+      <!-- Recommendations -->
+      <div id="pl-recs" style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px"></div>
+
+      <!-- Chart -->
+      <div class="glass" style="padding:16px;margin-bottom:16px">
+        <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4a5568;margin-bottom:12px">Path to your goal</div>
+        <div style="position:relative;height:200px"><canvas id="compare-chart"></canvas></div>
+      </div>
+
     </div>
 
     <div style="padding:20px 28px 0;text-align:center">
@@ -1511,64 +1382,133 @@ function renderHealthGrid(){
   });
 }
 
-/* ===== SCENARIO CARDS ===== */
-function renderCatTabs(){
-  const el=document.getElementById('cat-tabs');
+/* ===== SCENARIO SIMULATOR — dropdown per category ===== */
+let s2Chart=null;
+const S2_CAT_OF={}; // scId -> catId
+
+function s2Build(){
+  CATS.forEach(cat=>cat.sc.forEach(sc=>{S2_CAT_OF[sc.id]=cat.id;}));
+}
+
+function renderS2Dropdowns(){
+  const el=document.getElementById('s2-dropdowns');
+  if(!el)return;
   el.innerHTML='';
   CATS.forEach(cat=>{
-    const btn=document.createElement('button');
-    btn.className='cat-tab'+(activeCat===cat.id?' on':'');
-    if(activeCat===cat.id) btn.style.cssText=`background:${cat.c}15;border-color:${cat.c}40;color:${cat.c}`;
-    btn.innerHTML=cat.e+' '+cat.label;
-    btn.onclick=()=>selectCat(cat.id);
-    el.appendChild(btn);
+    let cur='';
+    for(const sc of cat.sc){ if(activeScs.has(sc.id)){cur=sc.id;break;} }
+    const opts=cat.sc.map(sc=>{
+      const sign=sc.w>0?'+':'';
+      return `<option value="${sc.id}" ${cur===sc.id?'selected':''}>${sc.t} (${sign}${sc.w}% wealth)</option>`;
+    }).join('');
+    const wrap=document.createElement('div');
+    wrap.style.cssText='display:flex;flex-direction:column;gap:6px';
+    wrap.innerHTML=`
+      <label style="font-size:11px;font-weight:700;color:${cat.c};letter-spacing:0.3px;display:flex;align-items:center;gap:6px">
+        <span style="font-size:14px">${cat.e}</span>${cat.label}
+      </label>
+      <select onchange="s2Pick('${cat.id}',this.value)" style="width:100%;padding:12px 14px;border-radius:11px;background:${cur?cat.c+'14':'rgba(255,255,255,0.04)'};border:1px solid ${cur?cat.c+'55':'rgba(255,255,255,0.09)'};color:#f0f4ff;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%238899b0%22 stroke-width=%223%22><path d=%22M6 9l6 6 6-6%22/></svg>');background-repeat:no-repeat;background-position:right 14px center">
+        <option value="">No change — current path</option>
+        ${opts}
+      </select>`;
+    el.appendChild(wrap);
   });
 }
 
-function renderScenarioGrid(){
-  const el=document.getElementById('sc-grid');
-  el.innerHTML='';
-  el.style.animation='none';
-  setTimeout(()=>{el.style.animation='slideIn 0.3s ease forwards';},10);
-  const cat=CATS.find(c=>c.id===activeCat);
-  cat.sc.forEach(sc=>{
-    const isOn=activeScs.has(sc.id);
-    const rAge=52+(sc.r||0);
-    const wPos=sc.w>0,wZero=sc.w===0;
-    const wC=wZero?'#63b3ed':wPos?'#68d391':'#fc8181';
-    const wBg=wZero?'rgba(99,179,237,0.1)':wPos?'rgba(104,211,145,0.1)':'rgba(252,129,129,0.1)';
-    const wBr=wZero?'rgba(99,179,237,0.2)':wPos?'rgba(104,211,145,0.2)':'rgba(252,129,129,0.2)';
-    const card=document.createElement('div');
-    card.className='sc-card'+(isOn?' on':'');
-    card.style.cssText=`border-color:${isOn?sc.c+'45':'var(--br)'};background:${isOn?sc.c+'09':'var(--bg2)'}`;
-    card.innerHTML=`
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:9px">
-        <span style="font-size:18px">${sc.f}</span>
-        <span class="tag" style="background:${wBg};color:${wC};border:1px solid ${wBr};font-size:10px">${sc.w>0?'+':''}${sc.w}%</span>
-      </div>
-      <div style="font-size:12px;font-weight:700;color:#f0f4ff;margin-bottom:2px;line-height:1.2">${sc.t}</div>
-      <div style="font-size:10px;color:#8899b0;margin-bottom:9px;line-height:1.3">${sc.s}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
-        <div style="padding:5px 6px;border-radius:6px;background:rgba(255,255,255,0.04)">
-          <div style="font-size:7px;color:#4a5568;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:2px">Retire</div>
-          <div style="font-size:11px;font-weight:700;color:${(sc.r||0)<=0?'#68d391':'#fc8181'}">${rAge}</div>
-        </div>
-        <div style="padding:5px 6px;border-radius:6px;background:rgba(255,255,255,0.04)">
-          <div style="font-size:7px;color:#4a5568;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:2px">Stress</div>
-          <div style="font-size:11px;font-weight:700;color:${(sc.x||0)<0?'#68d391':(sc.x||0)===0?'#f0f4ff':'#fc8181'}">${(sc.x||0)>0?'+':''}${sc.x||0}</div>
-        </div>
-      </div>
-      ${isOn?`<div style="margin-top:8px;font-size:10px;color:${sc.c};border-top:1px solid ${sc.c}20;padding-top:8px;line-height:1.5">${sc.i}</div>`:''}`;
-    card.onclick=()=>selectScenario(sc);
-    el.appendChild(card);
-  });
+function s2Pick(catId,val){
+  const cat=CATS.find(c=>c.id===catId);
+  cat.sc.forEach(sc=>{ if(activeScs.has(sc.id)) activeScs.delete(sc.id); });
+  if(val){
+    const sc=cat.sc.find(s=>s.id===val);
+    if(sc) activeScs.set(sc.id,sc);
+  }
+  s2Sync();
 }
 
-function selectCat(id){
-  activeCat=id;
-  renderCatTabs();
-  renderScenarioGrid();
-  document.getElementById('sc-count').textContent=CATS.find(c=>c.id===id).sc.length+' in this category';
+function s2Reset(){
+  activeScs.clear();
+  s2Sync();
+}
+
+// Sync everything that depends on activeScs (scenario tab + cross-tab state)
+function s2Sync(){
+  const combo=getCombinedSc();
+  activeSc=combo;
+  s2Refresh();
+  renderS2Dropdowns();
+  updateHero(combo);
+  renderTimeline(combo);
+  if(typeof renderActiveScChips==='function') renderActiveScChips();
+  const rw=document.getElementById('s2-reset-wrap');
+  if(rw) rw.style.display=activeScs.size?'block':'none';
+}
+
+// 26-element yearly net-worth projection (Y0..Y25)
+function s2Series(mult){
+  const rate=0.087*Math.max(0.3,Math.min(3,mult));
+  const arr=[]; let v=NETWORTH;
+  for(let y=0;y<=25;y++){ arr.push(Math.round(v)); v=v*(1+rate)+MONTHLY_CON*12; }
+  return arr;
+}
+
+function s2SetKpi(valId,dId,val,delta,lowerIsBetter,suffix){
+  const v=document.getElementById(valId); if(v) v.textContent=val;
+  const d=document.getElementById(dId); if(!d) return;
+  if(!delta){ d.textContent='unchanged'; d.style.color='#4a5568'; return; }
+  const good=lowerIsBetter?delta<0:delta>0;
+  d.textContent=(delta>0?'+':'')+delta+(suffix||'');
+  d.style.color=good?'#68d391':'#fc8181';
+}
+
+function s2Refresh(){
+  const combo=getCombinedSc();
+  const baseSeries=s2Series(RISK_MULT);
+  const newMult=combo?Math.max(0.3,Math.min(3,RISK_MULT*(1+combo.w/100*0.42))):RISK_MULT;
+  const newSeries=s2Series(newMult);
+  const baseEnd=baseSeries[25], newEnd=newSeries[25], delta=newEnd-baseEnd, pos=delta>=0;
+
+  const bEl=document.getElementById('s2-base'); if(bEl) bEl.textContent=fk(baseEnd);
+  const nEl=document.getElementById('s2-new'); if(nEl) nEl.textContent=fk(newEnd);
+  const dEl=document.getElementById('s2-delta');
+  if(dEl){
+    dEl.textContent=combo?((pos?'+':'−')+fk(Math.abs(delta))):'—';
+    dEl.style.color=combo?(pos?'#68d391':'#fc8181'):'#8899b0';
+    dEl.style.background=combo?(pos?'rgba(104,211,145,0.12)':'rgba(252,129,129,0.12)'):'rgba(255,255,255,0.05)';
+    dEl.style.borderColor=combo?(pos?'rgba(104,211,145,0.3)':'rgba(252,129,129,0.3)'):'rgba(255,255,255,0.1)';
+  }
+
+  const ret=combo?(RETIRE_AGE+(combo.r||0)):RETIRE_AGE;
+  const conf=combo?Math.max(40,Math.min(98,Math.round(BASE_CONF+combo.w/3))):BASE_CONF;
+  const str=combo?Math.max(15,Math.min(90,Math.round(BASE_STRESS+(combo.x||0)))):BASE_STRESS;
+  s2SetKpi('s2-ret','s2-ret-d',ret+' yrs', combo?(combo.r||0):0, true, ' yr');
+  s2SetKpi('s2-conf','s2-conf-d',Math.round(conf)+'%', combo?Math.round(conf-BASE_CONF):0, false);
+  s2SetKpi('s2-str','s2-str-d',Math.round(str), combo?Math.round(str-BASE_STRESS):0, true);
+
+  s2DrawChart(baseSeries,newSeries);
+}
+
+function s2DrawChart(baseSeries,newSeries){
+  const cv=document.getElementById('s2-chart');
+  if(!cv||typeof Chart==='undefined')return;
+  if(s2Chart){ s2Chart.destroy(); s2Chart=null; }
+  const ctx=cv.getContext('2d');
+  const g=ctx.createLinearGradient(0,0,0,170);
+  g.addColorStop(0,'rgba(104,211,145,0.35)');
+  g.addColorStop(1,'rgba(104,211,145,0.01)');
+  s2Chart=new Chart(ctx,{
+    type:'line',
+    data:{labels:baseSeries.map((_,i)=>'Y'+i),datasets:[
+      {label:'Current path',data:baseSeries,borderColor:'#8899b0',borderWidth:2,borderDash:[5,4],fill:false,tension:0.35,pointRadius:0},
+      {label:'With your choices',data:newSeries,borderColor:'#68d391',borderWidth:2.5,backgroundColor:g,fill:true,tension:0.35,pointRadius:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:true,position:'top',labels:{color:'#8899b0',font:{size:10},boxWidth:16,padding:10}},
+        tooltip:{callbacks:{title:items=>'Year '+items[0].dataIndex,label:c=>c.dataset.label+': '+fk(c.parsed.y)}}},
+      scales:{
+        x:{ticks:{color:'#4a5568',font:{size:9},maxTicksLimit:6,callback:(v,i)=>i%5===0?'Y'+i:''},grid:{display:false},border:{display:false}},
+        y:{ticks:{color:'#4a5568',font:{size:9},callback:v=>fk(v),maxTicksLimit:5},grid:{color:'rgba(255,255,255,0.04)'},border:{display:false}}
+      }}
+  });
 }
 
 /* ===== HERO UPDATE ===== */
@@ -1837,10 +1777,12 @@ function selectScenario(sc){
   const combo=getCombinedSc();
   activeSc=combo;
   updateHero(combo);
-  updateScImpact(combo);
-  renderScenarioGrid();
+  s2Refresh();
+  renderS2Dropdowns();
   renderTimeline(combo);
   renderActiveScChips();
+  const rw=document.getElementById('s2-reset-wrap');
+  if(rw) rw.style.display=activeScs.size?'block':'none';
   if(!combo){
     typeText('Your financial twin is on the right track. Select one or more scenarios to see their combined impact.');
   } else {
@@ -1884,10 +1826,12 @@ function clearSim(){
   activeScs.clear();
   activeSc=null;
   updateHero(null);
-  updateScImpact(null);
-  renderScenarioGrid();
+  s2Refresh();
+  renderS2Dropdowns();
   renderTimeline(null);
   renderActiveScChips();
+  const rw=document.getElementById('s2-reset-wrap');
+  if(rw) rw.style.display='none';
   typeText('Your financial twin is on the right track. Select one or more scenarios to see their combined impact.');
 }
 
@@ -1937,7 +1881,8 @@ function setNav(id,el){
   document.getElementById('tb-title').textContent=t;
   if(!activeScs.size||id!=='scenarios') document.getElementById('tb-sub').textContent=sub;
   if(id==='live') initLiveSim();
-  if(id==='compare') initCompare();
+  if(id==='compare'){ initPlan(); setTimeout(()=>{ if(planChart) planChart.resize(); },60); }
+  if(id==='scenarios'){ s2Refresh(); setTimeout(()=>{ if(s2Chart) s2Chart.resize(); },60); }
   // Re-apply mobile layout after section switch (some sections init lazily)
   applyMobileLayout();
 }
@@ -2000,12 +1945,14 @@ function initNavState(){
 
 /* ===== INIT DASHBOARD (called after onboarding) ===== */
 function initDashboard(){
-  renderCatTabs();
-  renderScenarioGrid();
+  s2Build();
+  renderS2Dropdowns();
+  s2Refresh();
   renderTimeline(null);
   renderInsights();
   renderHealthMini();
   renderHealthGrid();
+  renderBaseEditor();
   initCharts();
   updateHero(null);
   initNavState();
@@ -2018,411 +1965,374 @@ document.addEventListener('DOMContentLoaded',()=>{
   // Onboarding handles initialization — nothing here
 });
 
-/* ===== COMPARATEUR — MON PLAN ===== */
-let cmpCity=null;
-let cmpChart=null;
-const CITY_OPTIONS=[
-  {id:'paris',    label:'Paris',     boost:0,  c:'#8899b0',f:'🇫🇷',rent:1800},
-  {id:'dubai',    label:'Dubai',     boost:23, c:'#f6ad55',f:'🇦🇪',rent:1400},
-  {id:'lisbon',   label:'Lisbon',    boost:15, c:'#68d391',f:'🇵🇹',rent:1200},
-  {id:'singapore',label:'Singapore', boost:19, c:'#63b3ed',f:'🇸🇬',rent:2500},
-  {id:'zurich',   label:'Zurich',    boost:22, c:'#9f7aea',f:'🇨🇭',rent:2800},
-  {id:'hk',       label:'Hong Kong', boost:20, c:'#fc8181',f:'🇭🇰',rent:2200}
+/* ===== INSIGHTS & WEALTH — bank login + base-conditions editor ===== */
+function bankConnect(){
+  const login=document.getElementById('bank-login');
+  const acc=document.getElementById('bank-accounts');
+  if(!login||!acc)return;
+  const btn=login.querySelector('button');
+  if(btn){ btn.textContent='🔒 Connecting…'; btn.style.opacity='0.7'; }
+  setTimeout(()=>{
+    login.style.display='none';
+    acc.style.display='block';
+    renderBankAccounts();
+  },650);
+}
+
+function renderBankAccounts(){
+  const wrap=document.getElementById('bank-cards');
+  if(!wrap)return;
+  const savings=parseNum(obData.savings)||0;
+  const investments=parseNum(obData.investments)||0;
+  const debt=parseNum(obData.debt)||0;
+  const current=Math.round(savings*0.35);
+  const livretA=savings-current;
+  const accounts=[
+    {i:'💳',c:'#63b3ed',n:'Current account',s:'Everyday spending · ****4021',v:current,neg:false},
+    {i:'🏦',c:'#68d391',n:'Livret A',s:'Tax-free savings · 3.0% APY',v:livretA,neg:false},
+    {i:'📈',c:'#9f7aea',n:'Investments',s:'Stocks & ETFs · '+( {conservative:'Conservative',balanced:'Balanced',aggressive:'Aggressive'}[obData.risk||'balanced'] ),v:investments,neg:false},
+    {i:'💰',c:'#fc8181',n:'Debt',s:'Loans & credit',v:debt,neg:true}
+  ];
+  const nwEl=document.getElementById('bank-nw');
+  if(nwEl) nwEl.textContent=fk(savings+investments-debt);
+  wrap.innerHTML='';
+  accounts.forEach(a=>{
+    const d=document.createElement('div');
+    d.className='glass';
+    d.style.cssText='padding:14px 16px;display:flex;align-items:center;gap:13px';
+    const amtColor=a.neg?(a.v>0?'#fc8181':'#4a5568'):'#f0f4ff';
+    const amtTxt=(a.neg&&a.v>0?'−':'')+fk(a.v);
+    d.innerHTML=`<div style="width:38px;height:38px;border-radius:11px;background:${a.c}1f;display:flex;align-items:center;justify-content:center;font-size:17px">${a.i==='💳'?'&#128179;':a.i==='🏦'?'&#127974;':a.i==='📈'?'&#128200;':'&#128176;'}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:700;color:#f0f4ff">${a.n}</div>
+        <div style="font-size:10px;color:#8899b0;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.s}</div>
+      </div>
+      <div style="font-size:16px;font-weight:800;color:${amtColor};white-space:nowrap;letter-spacing:-0.4px">${amtTxt}</div>`;
+    wrap.appendChild(d);
+  });
+}
+
+const BASE_FIELDS=[
+  {k:'income', lbl:'Annual gross income', e:'&#128176;', c:'#63b3ed', min:10000, max:300000, step:1000, fmt:v=>fk(v)+'/yr'},
+  {k:'expenses', lbl:'Monthly expenses', e:'&#128722;', c:'#fc8181', min:300, max:15000, step:50, fmt:v=>fk(v)+'/mo'},
+  {k:'savings', lbl:'Cash savings', e:'&#127974;', c:'#68d391', min:0, max:500000, step:1000, fmt:v=>fk(v)},
+  {k:'investments', lbl:'Investments', e:'&#128200;', c:'#9f7aea', min:0, max:1000000, step:1000, fmt:v=>fk(v)},
+  {k:'debt', lbl:'Total debt', e:'&#128184;', c:'#f6ad55', min:0, max:500000, step:1000, fmt:v=>fk(v)},
+  {k:'retireAge', lbl:'Target retirement age', e:'&#127958;', c:'#38b2ac', min:35, max:75, step:1, fmt:v=>v+' yrs'}
 ];
-const ASSET_RET={eq:0.087,re:0.055,cr:0.20,cash:0.02};
+const RISK_LIST=['conservative','balanced','aggressive'];
+const RISK_LBL={conservative:'Conservative',balanced:'Balanced',aggressive:'Aggressive'};
 
-function initCompare(){
-  // Baseline column
-  const g=id=>document.getElementById(id);
-  // Compute P10 baseline with the same model as the scenario for consistency
-  const bEq0=RISK_MULT>=1.3?70:RISK_MULT>=1.0?45:20;
-  const bRe0=RISK_MULT>=1.3?15:25;
-  const bCash0=100-bEq0-bRe0;
-  const br0=Math.max(0.01,(bEq0/100*0.087*RISK_MULT)+(bRe0/100*0.055)+(bCash0/100*0.02));
-  const cmpP10=Math.round(NETWORTH*Math.pow(1+br0,10)+MONTHLY_CON*12*(Math.pow(1+br0,10)-1)/br0);
-  if(g('cnow-nw')) g('cnow-nw').textContent=fk(NETWORTH);
-  if(g('cnow-ret')) g('cnow-ret').textContent=RETIRE_AGE+' yrs';
-  if(g('cnow-p10')) g('cnow-p10').textContent=fk(cmpP10);
-  if(g('cnow-conf')) g('cnow-conf').textContent=Math.round(BASE_CONF)+'%';
-  window._cmpP10Base=cmpP10; // store for delta calc
-  // Init sliders
-  const baseRent=Math.min(4950,Math.round((parseNum(obData.expenses)||1500)/50)*50);
-  if(g('cmp-rent')) g('cmp-rent').value=baseRent;
-  // Pre-populate based on risk profile
-  const defEq=RISK_MULT>=1.3?70:RISK_MULT>=1.0?45:20;
-  const defRe=RISK_MULT>=1.3?15:RISK_MULT>=1.0?25:30;
-  const defCr=RISK_MULT>=1.3?5:0;
-  if(g('cmp-eq')) g('cmp-eq').value=defEq;
-  if(g('cmp-re')) g('cmp-re').value=defRe;
-  if(g('cmp-cr')) g('cmp-cr').value=defCr;
-  if(g('cmp-sal')) g('cmp-sal').value=0;
-  if(g('cmp-side')) g('cmp-side').value=0;
-  if(g('cmp-save')) g('cmp-save').value=0;
-  // City default = user's city
-  cmpCity=detectUserCity();
-  renderCmpCityChips();
-  updateCompare();
-  if(!cmpChart) initCmpChart();
-}
-
-function detectUserCity(){
-  const c=(obData.city||'').toLowerCase();
-  const found=CITY_OPTIONS.find(x=>c.includes(x.id)||c.includes(x.label.toLowerCase()));
-  return found?found.id:'paris';
-}
-
-function renderCmpCityChips(){
-  const el=document.getElementById('cmp-city-chips');
+function renderBaseEditor(){
+  const el=document.getElementById('base-editor');
   if(!el)return;
   el.innerHTML='';
-  CITY_OPTIONS.forEach(c=>{
-    const on=cmpCity===c.id;
-    const btn=document.createElement('button');
-    btn.style.cssText=`padding:5px 11px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;border:1px solid ${on?c.c+'55':'rgba(255,255,255,0.08)'};background:${on?c.c+'18':'rgba(255,255,255,0.03)'};color:${on?c.c:'#8899b0'};transition:all 0.18s`;
-    btn.innerHTML=c.f+' '+c.label+(c.boost>0?` <span style="font-size:9px;opacity:0.6">+${c.boost}%</span>`:'');
-    btn.onclick=()=>{
-      cmpCity=c.id;
-      const city=CITY_OPTIONS.find(x=>x.id===c.id);
-      if(city) document.getElementById('cmp-rent').value=city.rent;
-      renderCmpCityChips();
-      updateCompare();
-    };
-    el.appendChild(btn);
+  BASE_FIELDS.forEach(f=>{
+    const val=f.k==='retireAge'?(parseInt(obData.retireAge)||55):(parseNum(obData[f.k])||f.min);
+    const clamped=Math.max(f.min,Math.min(f.max,val));
+    const d=document.createElement('div');
+    d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+        <span style="font-size:12px;font-weight:700;color:${f.c};display:flex;align-items:center;gap:6px">${f.e} ${f.lbl}</span>
+        <span id="base-v-${f.k}" style="font-size:14px;font-weight:800;color:#f0f4ff">${f.fmt(clamped)}</span>
+      </div>
+      <input type="range" id="base-r-${f.k}" min="${f.min}" max="${f.max}" step="${f.step}" value="${clamped}" style="width:100%;accent-color:${f.c};cursor:pointer" oninput="baseEdit('${f.k}',this.value)">`;
+    el.appendChild(d);
   });
+  // Risk strategy selector
+  const ri=RISK_LIST.indexOf(obData.risk||'balanced');
+  const r=document.createElement('div');
+  r.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+      <span style="font-size:12px;font-weight:700;color:#f6ad55;display:flex;align-items:center;gap:6px">&#128640; Investment strategy</span>
+      <span id="base-v-risk" style="font-size:14px;font-weight:800;color:#f0f4ff">${RISK_LBL[obData.risk||'balanced']}</span>
+    </div>
+    <input type="range" id="base-r-risk" min="0" max="2" step="1" value="${ri<0?1:ri}" style="width:100%;accent-color:#f6ad55;cursor:pointer" oninput="baseEdit('risk',this.value)">
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:5px"><span>Conservative</span><span>Balanced</span><span>Aggressive</span></div>`;
+  el.appendChild(r);
 }
 
-function computeCmpValues(){
-  const g=id=>parseInt(document.getElementById(id)?.value)||0;
-  const rent=g('cmp-rent');
-  const eqPct=Math.min(100,g('cmp-eq'));
-  const rePct=Math.min(100-eqPct,g('cmp-re'));
-  const crPct=Math.min(50,Math.min(100-eqPct-rePct,g('cmp-cr')));
-  const cashPct=Math.max(0,100-eqPct-rePct-crPct);
-  const salBoost=g('cmp-sal');
-  const sideInc=g('cmp-side');
-  const addSave=g('cmp-save');
-  const city=CITY_OPTIONS.find(c=>c.id===cmpCity)||CITY_OPTIONS[0];
-  const cityBoost=city.boost;
-  // Weighted returns — equities scaled with the risk profile
-  const wr=(eqPct/100*0.087*RISK_MULT)+(rePct/100*0.055)+(crPct/100*0.20)+(cashPct/100*0.02);
-  const rate=Math.max(0.01,Math.min(0.28,wr*(1+cityBoost/100*0.2)));
-  // Annual contribution
-  const baseIncome=parseNum(obData.income)||60000;
-  const newMonthly=(baseIncome*(1+salBoost/100)/12*0.72)+sideInc;
-  const baseRent=parseNum(obData.expenses)||1500;
-  const rentSaving=Math.max(0,baseRent-rent);
-  const ac=(MONTHLY_CON+rentSaving+addSave+sideInc*0.5)*12;
-  // 10Y & 25Y projections
-  let v10=NETWORTH,v25=NETWORTH;
-  for(let y=1;y<=10;y++) v10=v10*(1+rate)+ac/10;
-  for(let y=1;y<=25;y++) v25=v25*(1+rate)+ac/25;
-  // Simpler annual compound
-  v10=NETWORTH*Math.pow(1+rate,10)+ac*(Math.pow(1+rate,10)-1)/rate;
-  v25=NETWORTH*Math.pow(1+rate,25)+ac*(Math.pow(1+rate,25)-1)/rate;
-  // Retire age: earlier if more savings
-  const savingsPower=(ac-MONTHLY_CON*12)/Math.max(1,MONTHLY_CON*12);
-  const retAccel=Math.round(savingsPower*3)+(cityBoost>15?3:cityBoost>8?1:0);
-  const newRet=Math.max(30,RETIRE_AGE-retAccel);
-  // Confidence
-  const newConf=Math.min(98,Math.max(30,BASE_CONF+cityBoost/3+salBoost/8+eqPct/8+addSave/200));
-  // NW immediate
-  const newNW=Math.round(NETWORTH*(1+cityBoost/100*0.08));
-  return{nw:newNW,p10:Math.round(v10),p25:Math.round(v25),ret:newRet,conf:Math.round(newConf),
-    rate,ac,eqPct,rePct,crPct,cashPct,rent,salBoost,sideInc,addSave,cityBoost,city};
+function baseEdit(key,raw){
+  if(key==='risk'){
+    obData.risk=RISK_LIST[parseInt(raw)]||'balanced';
+    const v=document.getElementById('base-v-risk');
+    if(v) v.textContent=RISK_LBL[obData.risk];
+  } else {
+    const f=BASE_FIELDS.find(x=>x.k===key);
+    const val=parseInt(raw)||0;
+    obData[key]=String(val);
+    const v=document.getElementById('base-v-'+key);
+    if(v&&f) v.textContent=f.fmt(val);
+  }
+  refreshAll();
 }
 
-function updateCompare(){
-  const v=computeCmpValues();
+function refreshAll(){
+  buildTwinData();
+  updateHero(null);
+  s2Build();
+  renderS2Dropdowns();
+  s2Sync();
+  s2Refresh();
+  renderInsights();
+  renderHealthMini();
+  renderHealthGrid();
+  renderBankAccounts();
+}
+
+/* ===== MY PLAN — goal-based recommendation engine ===== */
+let planChart=null;
+
+function initPlan(){
   const g=id=>document.getElementById(id);
-  // Labels
-  if(g('cmp-rent-val')) g('cmp-rent-val').textContent=fk(parseInt(g('cmp-rent')?.value||0))+'/mo';
-  if(g('cmp-eq-val')) g('cmp-eq-val').textContent=v.eqPct+'%';
-  if(g('cmp-re-val')) g('cmp-re-val').textContent=v.rePct+'%';
-  if(g('cmp-cr-val')) g('cmp-cr-val').textContent=v.crPct+'%';
-  if(g('cmp-cash-val')) g('cmp-cash-val').textContent=v.cashPct+'%';
-  if(g('cmp-sal-val')) g('cmp-sal-val').textContent='+'+(parseInt(g('cmp-sal')?.value)||0)+'%';
-  if(g('cmp-side-val')) g('cmp-side-val').textContent=fk(v.sideInc)+'/mo';
-  if(g('cmp-save-val')) g('cmp-save-val').textContent=fk(v.addSave)+'/mo';
-  if(g('cmp-total-alloc')){
-    const tot=v.eqPct+v.rePct+v.crPct;
-    g('cmp-total-alloc').textContent=tot+'% allocated';
-    g('cmp-total-alloc').style.color=tot>0?'#63b3ed':'#8899b0';
-    g('cmp-total-alloc').style.background=tot>0?'rgba(99,179,237,0.1)':'rgba(255,255,255,0.05)';
+  if(!g('pl-goal'))return;
+  g('pl-goal').max=Math.max(5000000,Math.round(projectWealth(40)/25000)*25000);
+  if(!g('pl-goal').dataset.init){
+    const def=Math.max(100000,Math.round(projectWealth(10)*1.5/25000)*25000);
+    g('pl-goal').value=Math.min(parseInt(g('pl-goal').max),def);
+    g('pl-years').value=10;
+    g('pl-goal').dataset.init='1';
   }
-  // Deltas (comparison vs consistent comparator baseline)
-  const cmpB0=window._cmpP10Base||P10_BASE;
-  const nwD=v.nw-NETWORTH;
-  const p10D=v.p10-cmpB0;
-  const retD=v.ret-RETIRE_AGE;
-  const confD=v.conf-Math.round(BASE_CONF);
-  const pos=x=>x>=0;
-  const col=x=>pos(x)?'#68d391':'#fc8181';
-  const retCol=x=>x<=0?'#68d391':'#f6ad55';
-  const fmt=(x,pfx='')=>x>=0?'▲ +'+(pfx||'')+fk(Math.abs(x)):'▼ '+(pfx||'')+fk(Math.abs(x));
-  if(g('csc-nw')){g('csc-nw').textContent=fk(v.nw);g('csc-nw').style.color=col(nwD);}
-  if(g('csc-nw-d')){g('csc-nw-d').textContent=fmt(nwD);g('csc-nw-d').style.color=col(nwD);}
-  if(g('csc-p10')){g('csc-p10').textContent=fk(v.p10);g('csc-p10').style.color=col(p10D);}
-  if(g('csc-p10-d')){g('csc-p10-d').textContent=fmt(p10D);g('csc-p10-d').style.color=col(p10D);}
-  if(g('csc-ret')){g('csc-ret').textContent=v.ret+' yrs';g('csc-ret').style.color=retCol(retD);}
-  if(g('csc-ret-d')){g('csc-ret-d').textContent=retD===0?'Unchanged':(retD<0?'▲ ':'▼ +')+Math.abs(retD)+' yrs';g('csc-ret-d').style.color=retCol(retD);}
-  if(g('csc-conf')){g('csc-conf').textContent=v.conf+'%';g('csc-conf').style.color=col(confD);}
-  if(g('csc-conf-d')){g('csc-conf-d').textContent=(confD>=0?'▲ +':'▼ ')+Math.abs(confD)+'%';g('csc-conf-d').style.color=col(confD);}
-  // Delta badge (vs consistent baseline)
-  const cmpBase=window._cmpP10Base||P10_BASE;
-  const p10pct=Math.round((v.p10-cmpBase)/Math.max(1,cmpBase)*100);
-  if(g('cmp-delta-badge')){
-    g('cmp-delta-badge').textContent=(p10pct>=0?'+':'')+p10pct+'% over 10 yrs';
-    g('cmp-delta-badge').style.background=pos(p10pct)?'rgba(104,211,145,0.15)':'rgba(252,129,129,0.15)';
-    g('cmp-delta-badge').style.color=pos(p10pct)?'#68d391':'#fc8181';
-  }
-  renderCmpMilestones(v);
-  if(cmpChart) updateCmpChart(v);
+  planUpdate();
 }
 
-function renderCmpMilestones(v){
-  const el=document.getElementById('cmp-milestones');
-  if(!el)return;
-  const items=[];
-  const cmpB=window._cmpP10Base||P10_BASE;
-  const p10pct=Math.round((v.p10-cmpB)/Math.max(1,cmpB)*100);
-  if(p10pct!==0) items.push({c:p10pct>0?'#68d391':'#fc8181',text:`Net worth × ${(v.p10/Math.max(1,cmpB)).toFixed(1)} vs baseline over 10 yrs (${p10pct>0?'+':''}${p10pct}%)`});
-  if(v.ret<RETIRE_AGE) items.push({c:'#63b3ed',text:`Retire at ${v.ret} — ${RETIRE_AGE-v.ret} year${RETIRE_AGE-v.ret>1?'s':''} earlier than now`});
-  if(v.cityBoost>0) items.push({c:v.city.c,text:`${v.city.f} ${v.city.label} — tax advantage +${v.cityBoost}% on your long-term wealth`});
-  if(v.eqPct>=20) items.push({c:'#63b3ed',text:`${v.eqPct}% in stocks → estimated average return ${(v.rate*100).toFixed(1)}%/yr`});
-  if(v.crPct>=10) items.push({c:'#f6ad55',text:`₿ ${v.crPct}% Crypto — high return but significant volatility`});
-  if(v.sideInc>0) items.push({c:'#9f7aea',text:`Side income ${fk(v.sideInc)}/mo → ${fk(v.sideInc*12)}/yr on your projections`});
-  if(v.addSave>0) items.push({c:'#68d391',text:`+${fk(v.addSave)}/mo in savings → ${fk(v.addSave*12)}/yr reinvested`});
-  if(items.length===0){
-    el.innerHTML='<div style="font-size:11px;color:#4a5568;font-style:italic">Adjust the parameters on the left to see the impact on your future.</div>';
-    return;
-  }
-  el.innerHTML=items.map(m=>`<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04)"><div style="width:6px;height:6px;border-radius:50%;background:${m.c};flex-shrink:0;margin-top:4px"></div><div style="font-size:11px;color:#c4d0e0;line-height:1.4">${m.text}</div></div>`).join('');
+// Net worth after `years` with annual rate `rate` and monthly contribution `monthly`
+function planFV(years,rate,monthly){
+  let v=NETWORTH;
+  for(let y=0;y<years;y++) v=v*(1+rate)+monthly*12;
+  return v;
+}
+// Smallest monthly contribution that reaches `target` in `years` at `rate`
+function planReqMonthly(target,years,rate){
+  let lo=0,hi=1e6;
+  for(let i=0;i<60;i++){ const mid=(lo+hi)/2; if(planFV(years,rate,mid)<target) lo=mid; else hi=mid; }
+  return Math.max(0,(lo+hi)/2);
+}
+function planSeries(years,rate,monthly){
+  const arr=[]; let v=NETWORTH;
+  for(let y=0;y<=years;y++){ arr.push(Math.round(v)); v=v*(1+rate)+monthly*12; }
+  return arr;
 }
 
-function genCmpWealth(rate,ac){
-  // Baseline = same model as scenario but with the user's current allocation
-  const bEq=RISK_MULT>=1.3?70:RISK_MULT>=1.0?45:20;
-  const bRe=RISK_MULT>=1.3?15:25;
-  const bCash=100-bEq-bRe;
-  const br=Math.max(0.01,(bEq/100*0.087*RISK_MULT)+(bRe/100*0.055)+(bCash/100*0.02));
-  const bac=MONTHLY_CON*12;
-  const labels=[];const sc=[];const base=[];
-  let vb=NETWORTH,vs=NETWORTH;
-  for(let y=0;y<=25;y++){
-    labels.push(String(2026+y));
-    if(y>0){vb=vb*(1+br)+bac;vs=vs*(1+rate)+ac;}
-    base.push(Math.round(vb));sc.push(Math.round(vs));
+function planUpdate(){
+  const g=id=>document.getElementById(id);
+  const target=parseInt(g('pl-goal').value);
+  const years=parseInt(g('pl-years').value);
+  g('pl-goal-v').textContent=fk(target);
+  g('pl-years-v').textContent=years+' yrs';
+  const rate=0.087*RISK_MULT;
+  const proj=Math.round(planFV(years,rate,MONTHLY_CON));
+  g('pl-proj').textContent=fk(proj);
+  const gap=target-proj, onTrack=gap<=0;
+  const badge=g('pl-gap-badge'), status=g('pl-status'), msg=g('pl-status-msg');
+  if(onTrack){
+    badge.textContent='On track ✓';
+    badge.style.cssText='padding:8px 14px;border-radius:12px;font-size:13px;font-weight:800;white-space:nowrap;background:rgba(104,211,145,0.15);color:#68d391;border:1px solid rgba(104,211,145,0.3)';
+    status.style.borderColor='rgba(104,211,145,0.25)';
+    status.style.background='linear-gradient(135deg,rgba(104,211,145,0.08),rgba(99,179,237,0.04))';
+    let hitYear=years; for(let y=1;y<=45;y++){ if(planFV(y,rate,MONTHLY_CON)>=target){ hitYear=y; break; } }
+    msg.innerHTML=`You're on pace to <b style="color:#68d391">beat this goal by ${fk(-gap)}</b>. At your current rate you'll cross ${fk(target)} in about <b style="color:#68d391">${hitYear} years</b>${hitYear<years?' — sooner than your '+years+'-year target':''}.`;
+  } else {
+    badge.textContent='Gap '+fk(gap);
+    badge.style.cssText='padding:8px 14px;border-radius:12px;font-size:13px;font-weight:800;white-space:nowrap;background:rgba(252,129,129,0.15);color:#fc8181;border:1px solid rgba(252,129,129,0.3)';
+    status.style.borderColor='rgba(252,129,129,0.22)';
+    status.style.background='linear-gradient(135deg,rgba(252,129,129,0.07),rgba(246,173,85,0.04))';
+    msg.innerHTML=`On your current path you'll be <b style="color:#fc8181">${fk(gap)} short</b> of ${fk(target)} in ${years} years. Here's how to close the gap:`;
   }
-  return{labels,sc,base};
+  buildPlanRecs(target,years,rate,proj,onTrack);
+  const reqMonthly=onTrack?MONTHLY_CON:planReqMonthly(target,years,rate);
+  planDrawChart(years,rate,MONTHLY_CON,reqMonthly,target,onTrack);
 }
 
-function initCmpChart(){
-  const ctx=document.getElementById('compare-chart');
-  if(!ctx)return;
-  const v=computeCmpValues();
-  const{labels,sc,base}=genCmpWealth(v.rate,v.ac,25);
-  cmpChart=new Chart(ctx.getContext('2d'),{
-    type:'line',
-    data:{labels,datasets:[
-      {label:'With your choices',data:sc,borderColor:'#68d391',borderWidth:2.5,fill:{target:'origin',above:'rgba(104,211,145,0.08)'},tension:0.4,pointRadius:0},
-      {label:'Now (baseline)',data:base,borderColor:'rgba(255,255,255,0.3)',borderWidth:1.5,borderDash:[5,3],fill:false,tension:0.4,pointRadius:0}
-    ]},
-    options:{responsive:true,plugins:{
-      legend:{position:'top',labels:{color:'#8899b0',font:{size:10,family:'Inter'},boxWidth:16,padding:12}},
-      tooltip:{callbacks:{label:c=>c.dataset.label+': '+fk(c.raw)}}
-    },scales:{
-      x:{ticks:{color:'#4a5568',font:{size:9},maxTicksLimit:7},grid:{display:false},border:{display:false}},
-      y:{ticks:{color:'#4a5568',font:{size:9},callback:v=>fk(v),maxTicksLimit:5},grid:{color:'rgba(255,255,255,0.04)'},border:{display:false}}
-    }}
+function buildPlanRecs(target,years,rate,proj,onTrack){
+  const el=document.getElementById('pl-recs');
+  el.innerHTML='';
+  const recs=[];
+  if(onTrack){
+    recs.push({i:'🎉',c:'#68d391',t:'Keep doing what you do',d:`Maintain your ${fk(MONTHLY_CON)}/mo contribution and you'll reach this goal comfortably. Try raising the target to stretch yourself.`});
+    const aggrFV=Math.round(planFV(years,0.087*1.32,MONTHLY_CON));
+    if(RISK_MULT<1.32 && aggrFV>target*1.05) recs.push({i:'🚀',c:'#f6ad55',t:'Push further',d:`Switch to an Aggressive strategy and the same effort grows to <b>${fk(aggrFV)}</b> — ${fk(aggrFV-target)} above target.`});
+  } else {
+    const req=planReqMonthly(target,years,rate);
+    const extra=Math.max(0,req-MONTHLY_CON);
+    recs.push({i:'💰',c:'#9f7aea',t:'Invest more each month',d:`Raise your contribution to <b>${fk(req)}/mo</b> — that's <b style="color:#fc8181">${fk(extra)}/mo more</b> than today.`});
+    const curExp=parseNum(obData.expenses)||2000;
+    const cutPct=Math.round(extra/Math.max(1,curExp)*100);
+    recs.push({i:'✂️',c:'#fc8181',t:'Where to find it',d:`Trim your ${fk(curExp)}/mo spending by <b>${fk(extra)}</b> (${cutPct}%), or earn a gross raise of about <b>${fk(extra*12/0.72)}/yr</b>.`});
+    if(RISK_MULT<1.32){
+      const reqA=planReqMonthly(target,years,0.087*1.32);
+      const saveMo=Math.max(0,req-reqA);
+      recs.push({i:'📈',c:'#63b3ed',t:'Or invest more boldly',d:`Move to an Aggressive strategy (returns 8.7%→11.5%) and the required contribution drops to <b>${fk(reqA)}/mo</b> — ${fk(saveMo)}/mo easier.`});
+    }
+    let needYears=0; for(let y=years;y<=60;y++){ if(planFV(y,rate,MONTHLY_CON)>=target){ needYears=y; break; } }
+    if(needYears>years) recs.push({i:'🗓️',c:'#38b2ac',t:'Or give it more time',d:`Keep saving exactly as you do now and you'll still reach ${fk(target)} — it just takes <b>${needYears} years</b> instead of ${years}.`});
+  }
+  recs.forEach(r=>{
+    const d=document.createElement('div');
+    d.className='glass';
+    d.style.cssText=`padding:14px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid ${r.c}`;
+    d.innerHTML=`<div style="font-size:20px;line-height:1">${r.i}</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:${r.c};margin-bottom:4px">${r.t}</div><div style="font-size:12px;color:#c8d8e8;line-height:1.55">${r.d}</div></div>`;
+    el.appendChild(d);
   });
 }
 
-function updateCmpChart(v){
-  if(!cmpChart)return;
-  const{labels,sc,base}=genCmpWealth(v.rate,v.ac,25);
-  cmpChart.data.datasets[0].data=sc;
-  cmpChart.data.datasets[1].data=base;
-  cmpChart.update('none');
+function planDrawChart(years,rate,curMonthly,reqMonthly,target,onTrack){
+  const cv=document.getElementById('compare-chart');
+  if(!cv||typeof Chart==='undefined')return;
+  if(planChart){ planChart.destroy(); planChart=null; }
+  const cur=planSeries(years,rate,curMonthly);
+  const rec=planSeries(years,rate,reqMonthly);
+  const targetLine=cur.map(()=>target);
+  const ctx=cv.getContext('2d');
+  const grad=ctx.createLinearGradient(0,0,0,170);
+  grad.addColorStop(0,'rgba(159,122,234,0.30)');
+  grad.addColorStop(1,'rgba(159,122,234,0.01)');
+  const datasets=[
+    {label:'Current path',data:cur,borderColor:'#8899b0',borderWidth:2,borderDash:[5,4],fill:false,tension:0.35,pointRadius:0},
+    {label:'Target',data:targetLine,borderColor:'rgba(246,173,85,0.7)',borderWidth:1.5,borderDash:[2,3],fill:false,pointRadius:0}
+  ];
+  if(!onTrack) datasets.splice(1,0,{label:'Plan to hit goal',data:rec,borderColor:'#9f7aea',borderWidth:2.5,backgroundColor:grad,fill:true,tension:0.35,pointRadius:0});
+  const step=Math.max(1,Math.round(years/5));
+  planChart=new Chart(ctx,{
+    type:'line',
+    data:{labels:cur.map((_,i)=>'Y'+i),datasets},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:true,position:'top',labels:{color:'#8899b0',font:{size:10},boxWidth:16,padding:8}},
+        tooltip:{callbacks:{title:items=>'Year '+items[0].dataIndex,label:c=>c.dataset.label+': '+fk(c.parsed.y)}}},
+      scales:{
+        x:{ticks:{color:'#4a5568',font:{size:9},maxTicksLimit:6,callback:(v,i)=>i%step===0?'Y'+i:''},grid:{display:false},border:{display:false}},
+        y:{ticks:{color:'#4a5568',font:{size:9},callback:v=>fk(v),maxTicksLimit:5},grid:{color:'rgba(255,255,255,0.04)'},border:{display:false}}
+      }}
+  });
 }
 
 /* ===== LIVE SIMULATOR ===== */
-let liveSelections=new Set();
-let liveCat='relocate';
 let liveChart=null;
-let lSliders={savings:500,invest:300,retire:55};
+const LV_MULTS=[0.78,1.0,1.32];
+const LV_RISK_LBL=['Conservative','Balanced','Aggressive'];
+let lvBase={income:0,exp:0,riskIdx:1,retire:55};
+let lvState={income:0,exp:0,riskIdx:1,retire:55};
+
+function lvRiskIdxFromMult(m){
+  let best=1,bd=9;
+  LV_MULTS.forEach((v,i)=>{const d=Math.abs(v-m); if(d<bd){bd=d;best=i;}});
+  return best;
+}
 
 function initLiveSim(){
-  const sv=Math.min(4950,Math.round(MONTHLY_CON/50)*50)||500;
-  const iv=Math.min(4950,Math.round(USER_INV/10/50)*50)||300;
-  document.getElementById('sl-savings').value=sv;
-  document.getElementById('sl-invest').value=iv;
-  document.getElementById('sl-retire').value=RETIRE_AGE;
-  lSliders={savings:sv,invest:iv,retire:RETIRE_AGE};
-  // Populate baseline reference row
-  const bl=id=>document.getElementById(id);
-  if(bl('live-bl-nw')) bl('live-bl-nw').textContent=fk(NETWORTH);
-  if(bl('live-bl-ret')) bl('live-bl-ret').textContent=RETIRE_AGE+' yrs';
-  if(bl('live-bl-conf')) bl('live-bl-conf').textContent=Math.round(BASE_CONF)+'%';
-  if(bl('live-bl-str')) bl('live-bl-str').textContent=getLbl(BASE_STRESS);
-  renderLiveCatTabs();
-  renderLiveGrid();
-  renderLiveChips();
-  updateLiveResults();
-  if(!liveChart) initLiveChart();
+  const incomeNet=Math.round((parseNum(obData.income)||60000)/12*0.72);
+  const exp=parseNum(obData.expenses)||2000;
+  lvBase={income:incomeNet,exp:exp,riskIdx:lvRiskIdxFromMult(RISK_MULT),retire:RETIRE_AGE};
+  lvState={...lvBase};
+  const g=id=>document.getElementById(id);
+  g('lv-income').min=Math.max(500,Math.round(incomeNet*0.4/100)*100);
+  g('lv-income').max=Math.max(15000,Math.round(incomeNet*2.2/100)*100);
+  g('lv-exp').max=Math.max(12000,Math.round(exp*2.2/100)*100);
+  g('lv-income').value=lvState.income;
+  g('lv-exp').value=lvState.exp;
+  g('lv-risk').value=lvState.riskIdx;
+  g('lv-ret').value=lvState.retire;
+  lvDraw(true);
 }
 
-function renderLiveCatTabs(){
-  const el=document.getElementById('live-cat-tabs');
-  if(!el)return;
-  el.innerHTML='';
-  CATS.forEach(cat=>{
-    const btn=document.createElement('button');
-    btn.style.cssText='padding:8px 14px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid;font-family:Inter,sans-serif;transition:all 0.2s;';
-    btn.style.cssText+=liveCat===cat.id?`background:${cat.c}18;border-color:${cat.c}40;color:${cat.c}`:'background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08);color:#8899b0';
-    btn.innerHTML=cat.e+' '+cat.label;
-    btn.onclick=()=>{liveCat=cat.id;renderLiveCatTabs();renderLiveGrid();};
-    el.appendChild(btn);
-  });
+function lvReset(){
+  lvState={...lvBase};
+  const g=id=>document.getElementById(id);
+  g('lv-income').value=lvState.income;
+  g('lv-exp').value=lvState.exp;
+  g('lv-risk').value=lvState.riskIdx;
+  g('lv-ret').value=lvState.retire;
+  lvUpdate();
 }
 
-function renderLiveGrid(){
-  const el=document.getElementById('live-sc-grid');
-  if(!el)return;
-  el.innerHTML='';
-  const cat=CATS.find(c=>c.id===liveCat);
-  cat.sc.forEach(sc=>{
-    const on=liveSelections.has(sc.id);
-    const wC=sc.w===0?'#63b3ed':sc.w>0?'#68d391':'#fc8181';
-    const card=document.createElement('div');
-    card.style.cssText=`padding:11px;border-radius:12px;cursor:pointer;transition:all 0.25s;border:1px solid ${on?sc.c+'50':'rgba(255,255,255,0.07)'};background:${on?sc.c+'12':'rgba(255,255,255,0.03)'};position:relative;`;
-    if(on) card.style.boxShadow=`0 0 18px ${sc.c}25`;
-    card.innerHTML=`${on?`<div style="position:absolute;top:7px;right:7px;width:16px;height:16px;border-radius:50%;background:${sc.c};display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;font-weight:800">✓</div>`:''}
-      <div style="font-size:16px;margin-bottom:6px">${sc.f}</div>
-      <div style="font-size:11px;font-weight:700;color:#f0f4ff;margin-bottom:2px;line-height:1.2">${sc.t}</div>
-      <div style="font-size:9px;color:#8899b0;margin-bottom:7px">${sc.s}</div>
-      <div style="font-size:11px;font-weight:700;color:${wC}">${sc.w>0?'+':''}${sc.w}%</div>`;
-    card.onclick=()=>{
-      liveSelections.has(sc.id)?liveSelections.delete(sc.id):liveSelections.add(sc.id);
-      renderLiveGrid();renderLiveChips();updateLiveResults();
-    };
-    el.appendChild(card);
-  });
+function lvUpdate(){
+  const g=id=>document.getElementById(id);
+  lvState.income=parseInt(g('lv-income').value)||0;
+  lvState.exp=parseInt(g('lv-exp').value)||0;
+  lvState.riskIdx=parseInt(g('lv-risk').value);
+  lvState.retire=parseInt(g('lv-ret').value)||RETIRE_AGE;
+  lvDraw(false);
 }
 
-function renderLiveChips(){
-  const el=document.getElementById('live-chips');
-  if(!el)return;
-  el.innerHTML='';
-  if(liveSelections.size===0){
-    el.innerHTML='<span style="font-size:11px;color:#4a5568">No scenario selected — tap the cards above to add some</span>';
+function lvSeries(income,exp,riskIdx){
+  const contrib=Math.max(0,income-exp)*12;
+  const rate=0.087*LV_MULTS[riskIdx];
+  const arr=[]; let v=NETWORTH;
+  for(let y=0;y<=25;y++){ arr.push(Math.round(v)); v=v*(1+rate)+contrib; }
+  return arr;
+}
+
+function lvSavingsRate(income,exp){
+  if(income<=0) return 0;
+  return Math.max(0,Math.min(99,Math.round((income-exp)/income*100)));
+}
+
+function lvDraw(redraw){
+  const g=id=>document.getElementById(id);
+  if(!g('lv-income'))return;
+  g('lv-income-v').textContent=fk(lvState.income)+'/mo';
+  g('lv-exp-v').textContent=fk(lvState.exp)+'/mo';
+  g('lv-risk-v').textContent=LV_RISK_LBL[lvState.riskIdx];
+  g('lv-ret-v').textContent=lvState.retire+' yrs';
+  const incD=lvState.income-lvBase.income, expD=lvState.exp-lvBase.exp;
+  g('lv-income-d').textContent=incD===0?'baseline':(incD>0?'+':'−')+fk(Math.abs(incD))+'/mo vs now';
+  g('lv-income-d').style.color=incD===0?'#4a5568':(incD>0?'#68d391':'#fc8181');
+  g('lv-exp-d').textContent=expD===0?'baseline':(expD>0?'+':'−')+fk(Math.abs(expD))+'/mo vs now';
+  g('lv-exp-d').style.color=expD===0?'#4a5568':(expD>0?'#fc8181':'#68d391');
+  const surplus=Math.max(0,lvState.income-lvState.exp);
+  g('lv-surplus').textContent=fk(surplus)+'/mo';
+  g('lv-surplus').style.color=surplus>0?'#68d391':'#fc8181';
+  const baseSeries=lvSeries(lvBase.income,lvBase.exp,lvBase.riskIdx);
+  const newSeries=lvSeries(lvState.income,lvState.exp,lvState.riskIdx);
+  const baseEnd=baseSeries[25], newEnd=newSeries[25], delta=newEnd-baseEnd, pos=delta>=0;
+  g('lv-base').textContent=fk(baseEnd);
+  g('lv-new').textContent=fk(newEnd);
+  const changed=lvState.income!==lvBase.income||lvState.exp!==lvBase.exp||lvState.riskIdx!==lvBase.riskIdx||lvState.retire!==lvBase.retire;
+  const dEl=g('lv-delta');
+  dEl.textContent=changed?((pos?'+':'−')+fk(Math.abs(delta))):'—';
+  dEl.style.color=changed?(pos?'#68d391':'#fc8181'):'#8899b0';
+  dEl.style.background=changed?(pos?'rgba(104,211,145,0.12)':'rgba(252,129,129,0.12)'):'rgba(255,255,255,0.05)';
+  dEl.style.borderColor=changed?(pos?'rgba(104,211,145,0.3)':'rgba(252,129,129,0.3)'):'rgba(255,255,255,0.1)';
+  const retD=lvState.retire-lvBase.retire;
+  s2SetKpi('lv-k-ret','lv-k-ret-d',lvState.retire+' yrs', retD, true, ' yr');
+  const srBase=lvSavingsRate(lvBase.income,lvBase.exp);
+  const srNew=lvSavingsRate(lvState.income,lvState.exp);
+  const conf=Math.max(20,Math.min(98,Math.round(BASE_CONF+(srNew-srBase)*0.6+(lvState.riskIdx-lvBase.riskIdx)*6-retD*0.4)));
+  s2SetKpi('lv-k-conf','lv-k-conf-d',conf+'%', conf-BASE_CONF, false);
+  g('lv-k-sr').textContent=srNew+'%';
+  const srd=g('lv-k-sr-d');
+  const srDelta=srNew-srBase;
+  if(srDelta===0){ srd.textContent='of income'; srd.style.color='#4a5568'; }
+  else { srd.textContent=(srDelta>0?'+':'')+srDelta+'% vs now'; srd.style.color=srDelta>0?'#68d391':'#fc8181'; }
+  lvDrawChart(baseSeries,newSeries,redraw);
+}
+
+function lvDrawChart(baseSeries,newSeries,redraw){
+  const cv=document.getElementById('live-chart');
+  if(!cv||typeof Chart==='undefined')return;
+  if(liveChart && !redraw){
+    liveChart.data.datasets[0].data=baseSeries;
+    liveChart.data.datasets[1].data=newSeries;
+    liveChart.update('none');
     return;
   }
-  liveSelections.forEach(id=>{
-    let sc=null;
-    CATS.forEach(cat=>cat.sc.forEach(s=>{if(s.id===id)sc=s;}));
-    if(!sc)return;
-    const chip=document.createElement('span');
-    chip.style.cssText=`display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;background:${sc.c}18;border:1px solid ${sc.c}35;font-size:11px;font-weight:600;color:${sc.c};cursor:pointer`;
-    chip.innerHTML=sc.f+' '+sc.t+' <span style="opacity:0.6;font-size:10px">✕</span>';
-    chip.onclick=()=>{liveSelections.delete(id);renderLiveGrid();renderLiveChips();updateLiveResults();};
-    el.appendChild(chip);
-  });
-}
-
-function updateLiveSliders(){
-  lSliders.savings=parseInt(document.getElementById('sl-savings').value)||0;
-  lSliders.invest=parseInt(document.getElementById('sl-invest').value)||0;
-  lSliders.retire=parseInt(document.getElementById('sl-retire').value)||RETIRE_AGE;
-  updateLiveResults();
-}
-
-function computeLiveImpact(){
-  let tw=0,tr=0,tx=0,tm=1;
-  liveSelections.forEach(id=>{
-    CATS.forEach(cat=>cat.sc.forEach(s=>{if(s.id===id){tw+=s.w;tr+=(s.r||0);tx+=(s.x||0);tm*=s.m;}}));
-  });
-  const savingsImpact=(lSliders.savings-MONTHLY_CON)/Math.max(1,MONTHLY_CON)*15;
-  const investImpact=(lSliders.invest/Math.max(1,USER_INV/10))*3;
-  const retireDelta=lSliders.retire-RETIRE_AGE;
-  tw=Math.max(-80,Math.min(150,tw+savingsImpact+investImpact));
-  tr=Math.max(-25,Math.min(25,tr+retireDelta));
-  tx=Math.max(-60,Math.min(70,tx));
-  tm=Math.max(0.3,Math.min(3.0,tm));
-  return{tw,tr,tx,tm};
-}
-
-function updateLiveResults(){
-  const{tw,tr,tx,tm}=computeLiveImpact();
-  const newNW=Math.round(NETWORTH*(1+tw/100*0.8)+(lSliders.savings+lSliders.invest)*12*2);
-  const newRet=RETIRE_AGE+Math.round(tr);
-  const newStr=Math.max(5,Math.min(95,BASE_STRESS+tx));
-  const newConf=Math.max(10,Math.min(98,BASE_CONF+tw/3));
-  const nwDelta=newNW-NETWORTH;
-  const retDelta=newRet-RETIRE_AGE;
-  const strC=newStr<35?'#68d391':newStr<60?'#f6ad55':'#fc8181';
-  const confC=newConf>70?'#68d391':newConf>50?'#f6ad55':'#fc8181';
-  const g=id=>document.getElementById(id);
-  if(!g('live-nw'))return;
-  g('live-nw').textContent=fk(newNW);g('live-nw').style.color=nwDelta>=0?'#68d391':'#fc8181';
-  g('live-nw-d').textContent=(nwDelta>=0?'+':'')+fk(nwDelta)+' vs baseline';g('live-nw-d').style.color=nwDelta>=0?'#68d391':'#fc8181';
-  g('live-ret').textContent=newRet+' yrs';g('live-ret').style.color=retDelta<=0?'#68d391':'#f6ad55';
-  g('live-ret-d').textContent=(retDelta===0?'Unchanged':(retDelta>0?'+':'')+retDelta+' yrs vs baseline');g('live-ret-d').style.color=retDelta<=0?'#68d391':'#f6ad55';
-  g('live-stress').textContent=getLbl(newStr);g('live-stress').style.color=strC;
-  g('live-stress-d').textContent='score: '+Math.round(newStr);
-  g('live-conf').textContent=Math.round(newConf)+'%';g('live-conf').style.color=confC;
-  const cd=Math.round(newConf-BASE_CONF);
-  g('live-conf-d').textContent=(cd>=0?'+':'')+cd+'% vs baseline';g('live-conf-d').style.color=confC;
-  g('live-count').textContent=liveSelections.size+' active choice'+(liveSelections.size>1?'s':'');
-  g('live-sv').textContent=fk(lSliders.savings)+'/mo';
-  g('live-iv').textContent=fk(lSliders.invest)+'/mo';
-  g('live-rv').textContent=lSliders.retire+' yrs';
-  if(liveChart) updateLiveChart(tm);
-}
-
-function genLiveWealth(mult){
-  const{tw,tm}=computeLiveImpact();
-  const rate=0.087*Math.max(0.3,Math.min(3,mult*tm));
-  const ac=(MONTHLY_CON+lSliders.savings+lSliders.invest)*12;
-  const data=[];let v=NETWORTH;
-  for(let y=0;y<=25;y++){
-    if(y>0) v=v*(1+rate)*(1+Math.sin(y*1.8)*0.04)+ac;
-    data.push(Math.round(v));
-  }
-  return data;
-}
-
-function initLiveChart(){
-  const ctx=document.getElementById('live-chart');
-  if(!ctx)return;
-  const wd=genWealth(RISK_MULT);
-  const combo=genLiveWealth(RISK_MULT);
-  liveChart=new Chart(ctx.getContext('2d'),{
+  if(liveChart){ liveChart.destroy(); liveChart=null; }
+  const ctx=cv.getContext('2d');
+  const grad=ctx.createLinearGradient(0,0,0,170);
+  grad.addColorStop(0,'rgba(104,211,145,0.35)');
+  grad.addColorStop(1,'rgba(104,211,145,0.01)');
+  liveChart=new Chart(ctx,{
     type:'line',
-    data:{labels:wd.lbl,datasets:[
-      {label:'Combined',data:combo,borderColor:'#68d391',borderWidth:2.5,fill:{target:'origin',above:'rgba(104,211,145,0.06)'},tension:0.4,pointRadius:0},
-      {label:'Baseline',data:wd.base,borderColor:'rgba(99,179,237,0.5)',borderWidth:1.5,borderDash:[5,3],fill:false,tension:0.4,pointRadius:0}
+    data:{labels:baseSeries.map((_,i)=>'Y'+i),datasets:[
+      {label:'Current path',data:baseSeries,borderColor:'#8899b0',borderWidth:2,borderDash:[5,4],fill:false,tension:0.35,pointRadius:0},
+      {label:'With changes',data:newSeries,borderColor:'#68d391',borderWidth:2.5,backgroundColor:grad,fill:true,tension:0.35,pointRadius:0}
     ]},
-    options:{responsive:true,animation:{duration:300},...chartDefaults}
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:true,position:'top',labels:{color:'#8899b0',font:{size:10},boxWidth:16,padding:10}},
+        tooltip:{callbacks:{title:items=>'Year '+items[0].dataIndex,label:c=>c.dataset.label+': '+fk(c.parsed.y)}}},
+      scales:{
+        x:{ticks:{color:'#4a5568',font:{size:9},maxTicksLimit:6,callback:(v,i)=>i%5===0?'Y'+i:''},grid:{display:false},border:{display:false}},
+        y:{ticks:{color:'#4a5568',font:{size:9},callback:v=>fk(v),maxTicksLimit:5},grid:{color:'rgba(255,255,255,0.04)'},border:{display:false}}
+      }}
   });
-}
-
-function updateLiveChart(tm){
-  if(!liveChart)return;
-  const wd=genWealth(RISK_MULT);
-  liveChart.data.datasets[0].data=genLiveWealth(tm);
-  liveChart.data.datasets[1].data=wd.base;
-  liveChart.update('active');
-}
-
-function resetLiveSim(){
-  liveSelections.clear();
-  const sv=Math.min(4950,Math.round(MONTHLY_CON/50)*50)||500;
-  const iv=Math.min(4950,Math.round(USER_INV/10/50)*50)||300;
-  document.getElementById('sl-savings').value=sv;
-  document.getElementById('sl-invest').value=iv;
-  document.getElementById('sl-retire').value=RETIRE_AGE;
-  lSliders={savings:sv,invest:iv,retire:RETIRE_AGE};
-  renderLiveGrid();renderLiveChips();updateLiveResults();
 }
 
 /* ===== ONBOARDING ===== */
