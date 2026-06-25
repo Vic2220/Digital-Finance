@@ -297,6 +297,24 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
   </div>
 </div>
 
+<!-- ===== FIRST-USE TAB INTRO (coach mark) ===== -->
+<div id="tab-intro" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(4,6,10,0.84);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center;padding:0">
+  <div style="width:100%;max-width:440px;border-radius:22px 22px 0 0;background:linear-gradient(160deg,#0d1420,#080c14);border:1px solid rgba(255,255,255,0.08);border-bottom:none;box-shadow:0 -20px 70px rgba(0,0,0,0.55);padding:24px 22px calc(24px + env(safe-area-inset-bottom,0px));max-height:90vh;overflow-y:auto">
+    <div style="width:38px;height:4px;border-radius:2px;background:rgba(255,255,255,0.14);margin:0 auto 18px"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+      <div id="ti-icon" style="width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;background:rgba(99,179,237,0.14);border:1px solid rgba(99,179,237,0.3)">&#9889;</div>
+      <div>
+        <div style="font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#63b3ed">Quick guide</div>
+        <div id="ti-title" style="font-size:19px;font-weight:800;color:#f0f4ff;letter-spacing:-0.4px">&mdash;</div>
+      </div>
+    </div>
+    <div id="ti-what" style="font-size:13px;color:#c8d8e8;line-height:1.6;margin-bottom:18px">&mdash;</div>
+    <div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:12px">How it works</div>
+    <div id="ti-steps" style="display:flex;flex-direction:column;gap:12px;margin-bottom:22px"></div>
+    <button onclick="closeIntro()" style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#63b3ed,#9f7aea);color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif">Got it &mdash; let&rsquo;s go</button>
+  </div>
+</div>
+
 <!-- ===== DASHBOARD ===== -->
 <div id="app" style="display:none">
 
@@ -755,7 +773,10 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
 
       <!-- ═══════ CONNECTED ACCOUNTS (demo bank) ═══════ -->
       <div style="margin-bottom:18px">
-        <div style="font-size:18px;font-weight:800;color:#f0f4ff;letter-spacing:-0.4px;margin-bottom:3px">Insights &amp; Wealth</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:3px">
+          <div style="font-size:18px;font-weight:800;color:#f0f4ff;letter-spacing:-0.4px">Insights &amp; Wealth</div>
+          <button onclick="openIntro('insights')" style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#8899b0;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:5px 11px;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap">&#8505; How it works</button>
+        </div>
         <div style="font-size:12px;color:#8899b0;line-height:1.4;margin-bottom:14px">Connect your accounts and fine-tune the base conditions that power every projection.</div>
 
         <!-- Login card -->
@@ -844,7 +865,10 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
 
       <!-- Header -->
       <div style="margin-bottom:16px">
-        <div style="font-size:18px;font-weight:800;color:#f0f4ff;letter-spacing:-0.4px">&#9889; Live Simulator</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <div style="font-size:18px;font-weight:800;color:#f0f4ff;letter-spacing:-0.4px">&#9889; Live Simulator</div>
+          <button onclick="openIntro('live')" style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#8899b0;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:5px 11px;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap">&#8505; How it works</button>
+        </div>
         <div style="font-size:12px;color:#8899b0;margin-top:3px;line-height:1.4">Adjust your real-life parameters and watch your future react. <b style="color:#68d391">With changes</b> vs your <b style="color:#8899b0">current path</b>.</div>
       </div>
 
@@ -985,7 +1009,10 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
 
       <!-- Header -->
       <div style="margin-bottom:16px">
-        <div style="font-size:18px;font-weight:800;color:#f0f4ff;letter-spacing:-0.4px">&#9878; My Plan</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <div style="font-size:18px;font-weight:800;color:#f0f4ff;letter-spacing:-0.4px">&#9878; My Plan</div>
+          <button onclick="openIntro('compare')" style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#8899b0;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:5px 11px;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap">&#8505; How it works</button>
+        </div>
         <div style="font-size:12px;color:#8899b0;margin-top:3px;line-height:1.4">Set a goal and a deadline. FinTwin tells you exactly what to change to get there.</div>
       </div>
 
@@ -1999,6 +2026,8 @@ function setNav(id,el){
   if(id==='scenarios'){ s2Refresh(); setTimeout(()=>{ if(s2Chart) s2Chart.resize(); },60); }
   // Re-apply mobile layout after section switch (some sections init lazily)
   applyMobileLayout();
+  // First-use guided micro-page for the simulation tabs
+  if(TAB_INTROS[id]) setTimeout(()=>maybeShowIntro(id),260);
 }
 
 /* ===== MOBILE LAYOUT: fix inline-style grids ===== */
@@ -2790,6 +2819,80 @@ function toggleTip(id){
   const el=document.getElementById(id);
   if(!el) return;
   el.style.display=el.style.display==='none'?'block':'none';
+}
+
+/* ===== FIRST-USE TAB INTROS (coach marks) ===== */
+const TAB_INTROS={
+  live:{
+    icon:'&#9889;', color:'#f6ad55',
+    title:'Live Simulator',
+    what:'A what-if playground. Slide your income, spending, investing style or retirement age and watch your <b style="color:#f0f4ff">25-year future react instantly</b>.',
+    steps:[
+      {n:'1',t:'Drag any slider',d:'The green line is your new path; the grey dashed line is where you&rsquo;re heading today.'},
+      {n:'2',t:'Read the gap',d:'The +/&minus; figure is what that single change is worth over 25 years.'},
+      {n:'3',t:'Stress-test it',d:'Tick &ldquo;irregular income&rdquo; to see how FinTwin handles uncertainty honestly.'}
+    ]
+  },
+  compare:{
+    icon:'&#9878;', color:'#9f7aea',
+    title:'My Plan',
+    what:'Work <b style="color:#f0f4ff">backwards from a goal</b>. Tell FinTwin how much you want and by when &mdash; it figures out what to change to get you there.',
+    steps:[
+      {n:'1',t:'Set goal & deadline',d:'Use the two sliders to pick a target net worth and the number of years.'},
+      {n:'2',t:'See the gap',d:'FinTwin compares it to your current path and shows whether you&rsquo;re on track.'},
+      {n:'3',t:'Follow the plan',d:'Tailored moves &mdash; save more, cut spending, invest bolder, or allow more time.'}
+    ]
+  },
+  insights:{
+    icon:'&#128202;', color:'#63b3ed',
+    title:'Insights & Wealth',
+    what:'Your <b style="color:#f0f4ff">control room</b>. Connect a demo bank to see your accounts, then fine-tune the numbers behind every projection in the app.',
+    steps:[
+      {n:'1',t:'Connect the demo bank',d:'View your current account, Livret A, investments and debt in one place.'},
+      {n:'2',t:'Edit base conditions',d:'Change income, savings, risk and more &mdash; net worth and every chart update live.'},
+      {n:'3',t:'Read your insights',d:'Scroll for AI recommendations and your overall financial health score.'}
+    ]
+  }
+};
+
+function introSeen(id){
+  try{ return localStorage.getItem('ft_intro_'+id)==='1'; }catch(e){ return false; }
+}
+function markIntroSeen(id){
+  try{ localStorage.setItem('ft_intro_'+id,'1'); }catch(e){}
+}
+function maybeShowIntro(id){
+  if(!TAB_INTROS[id] || introSeen(id)) return;
+  openIntro(id);
+}
+let _introCurrent=null;
+function openIntro(id){
+  const cfg=TAB_INTROS[id];
+  if(!cfg) return;
+  _introCurrent=id;
+  const g=x=>document.getElementById(x);
+  const ic=g('ti-icon');
+  ic.innerHTML=cfg.icon;
+  ic.style.background=cfg.color+'24';
+  ic.style.borderColor=cfg.color+'4d';
+  g('ti-title').textContent=cfg.title;
+  g('ti-what').innerHTML=cfg.what;
+  const steps=g('ti-steps');
+  steps.innerHTML='';
+  cfg.steps.forEach(s=>{
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;gap:12px;align-items:flex-start';
+    row.innerHTML=`<div style="width:26px;height:26px;border-radius:9px;background:${cfg.color}1f;border:1px solid ${cfg.color}40;color:${cfg.color};font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">${s.n}</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#f0f4ff;margin-bottom:2px">${s.t}</div><div style="font-size:11.5px;color:#a9bcd0;line-height:1.5">${s.d}</div></div>`;
+    steps.appendChild(row);
+  });
+  g('tab-intro').style.display='flex';
+}
+function closeIntro(){
+  if(_introCurrent) markIntroSeen(_introCurrent);
+  const m=document.getElementById('tab-intro');
+  if(m){ m.style.transition='opacity 0.25s'; m.style.opacity='0'; setTimeout(()=>{m.style.display='none';m.style.opacity='1';},250); }
+  _introCurrent=null;
 }
 
 /* ===== MEMORY (persists across visits, so it genuinely compounds) ===== */
