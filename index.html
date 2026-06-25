@@ -230,6 +230,10 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
     <div class="ob-logo-big">FT</div>
     <h1 class="ob-h1">Build your<br><span class="grad-bl">Financial Twin</span></h1>
     <p class="ob-wsub">Answer 10 questions. Get a personalized AI financial twin. Test every major life decision before you make it.</p>
+    <div style="display:flex;align-items:center;gap:10px;justify-content:center;max-width:320px;margin:0 auto 22px;padding:11px 14px;border-radius:12px;background:rgba(99,179,237,0.07);border:1px solid rgba(99,179,237,0.16)">
+      <span style="font-size:18px;line-height:1">&#128101;</span>
+      <span style="font-size:11.5px;color:#a9bcd0;line-height:1.45;text-align:left">For the <b style="color:#63b3ed">12.3 million UK adults</b> who need financial planning but can&rsquo;t afford an adviser.</span>
+    </div>
     <button class="ob-start" onclick="startOnboarding()">Get started &#8594;</button>
     <div class="ob-feats">
       <span class="ob-feat">100% personalized</span>
@@ -265,6 +269,32 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
     <li class="ob-ls"><div class="ob-ls-ic">5</div><span>AI insights generated</span></li>
     <li class="ob-ls"><div class="ob-ls-ic">&#8594;</div><span>Launching your Financial Twin</span></li>
   </ul>
+</div>
+
+<!-- ===== GUARDRAIL / CONSENT MODAL (shown once before the dashboard) ===== -->
+<div id="guardrail-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(4,6,10,0.86);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px">
+  <div style="width:100%;max-width:380px;border-radius:20px;background:linear-gradient(160deg,#0d1420,#080c14);border:1px solid rgba(246,173,85,0.3);box-shadow:0 24px 80px rgba(0,0,0,0.6);padding:24px;max-height:88vh;overflow-y:auto">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:16px">
+      <div style="width:44px;height:44px;border-radius:13px;background:rgba(246,173,85,0.14);border:1px solid rgba(246,173,85,0.3);display:flex;align-items:center;justify-content:center;font-size:22px">&#9888;&#65039;</div>
+      <div>
+        <div style="font-size:16px;font-weight:800;color:#f0f4ff;letter-spacing:-0.3px">Before you explore your twin</div>
+        <div style="font-size:11px;color:#f6ad55;font-weight:600">Please read &mdash; this is a simulation</div>
+      </div>
+    </div>
+    <div style="font-size:12.5px;color:#c8d8e8;line-height:1.65;margin-bottom:16px">
+      FinTwin shows <b style="color:#f0f4ff">simulated outcomes</b> based on synthetic data and stated assumptions about historical average returns. <b style="color:#f6ad55">This is not financial advice.</b>
+    </div>
+    <div style="border-radius:13px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);padding:14px;margin-bottom:18px">
+      <div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:10px">What FinTwin cannot determine</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:11.5px;color:#a9bcd0;line-height:1.4">
+        <div style="display:flex;gap:8px"><span style="color:#fc8181">&#10005;</span><span>Future tax changes or new regulation</span></div>
+        <div style="display:flex;gap:8px"><span style="color:#fc8181">&#10005;</span><span>Market shocks, recessions or crashes</span></div>
+        <div style="display:flex;gap:8px"><span style="color:#fc8181">&#10005;</span><span>Personal circumstances not in your data</span></div>
+      </div>
+      <div style="font-size:11px;color:#8899b0;line-height:1.5;margin-top:12px;border-top:1px solid rgba(255,255,255,0.06);padding-top:10px">Past performance is not a guide to future results. For advice tailored to you, consult an <b style="color:#63b3ed">FCA-regulated financial adviser</b>.</div>
+    </div>
+    <button onclick="acceptGuardrail()" style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#63b3ed,#9f7aea);color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif">I understand &mdash; show my twin</button>
+  </div>
 </div>
 
 <!-- ===== DASHBOARD ===== -->
@@ -359,6 +389,18 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
           <div id="pf-score-badge" style="padding:7px 14px;border-radius:20px;background:rgba(104,211,145,0.1);border:1px solid rgba(104,211,145,0.2);font-size:12px;font-weight:700;color:#68d391">— pts</div>
         </div>
 
+        <!-- Memory / learning indicator -->
+        <div style="display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:13px;background:rgba(159,122,234,0.07);border:1px solid rgba(159,122,234,0.18);margin-bottom:18px;position:relative">
+          <span style="font-size:17px;line-height:1">&#129504;</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:11.5px;color:#d7c9f0;line-height:1.4">Your twin has been learning for <b id="mem-days" style="color:#b794f4">1 day</b> &mdash; projections sharpen as you add data.</div>
+            <div style="display:flex;align-items:center;gap:7px;margin-top:6px">
+              <div style="flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.07);overflow:hidden"><div id="mem-bar" style="height:100%;width:62%;background:linear-gradient(90deg,#9f7aea,#63b3ed);border-radius:2px"></div></div>
+              <span id="mem-acc" style="font-size:10px;font-weight:800;color:#b794f4;white-space:nowrap">62% accuracy</span>
+            </div>
+          </div>
+        </div>
+
         <!-- Net worth BIG -->
         <div style="margin-bottom:18px;position:relative">
           <div style="font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#3a4a5e;margin-bottom:8px">Net worth</div>
@@ -388,12 +430,18 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
       <!-- ═══════════ WEALTH CHART ═══════════ -->
       <div style="padding:0 20px;margin-bottom:22px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#3a4a5e;text-transform:uppercase">Your trajectory · 25 yrs</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#3a4a5e;text-transform:uppercase">Your trajectory · 25 yrs</div>
+            <button onclick="toggleTip('tip-trajectory')" aria-label="Explain the range" style="font-size:10px;color:#63b3ed;background:rgba(99,179,237,0.08);border:1px solid rgba(99,179,237,0.2);border-radius:50%;width:16px;height:16px;line-height:1;cursor:pointer;font-family:'Inter',sans-serif;padding:0">&#8505;</button>
+          </div>
           <div style="display:flex;gap:10px">
             <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:2px;background:#9f7aea;border-radius:1px"></div><span style="font-size:9px;color:#4a5568">Optimistic</span></div>
             <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:2px;background:#63b3ed;border-radius:1px"></div><span style="font-size:9px;color:#4a5568">Base</span></div>
             <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:2px;background:#38b2ac;border-radius:1px"></div><span style="font-size:9px;color:#4a5568">Conservative</span></div>
           </div>
+        </div>
+        <div id="tip-trajectory" style="display:none;font-size:11px;color:#a9bcd0;line-height:1.6;padding:11px 13px;border-radius:11px;background:rgba(99,179,237,0.06);border:1px solid rgba(99,179,237,0.16);margin-bottom:11px">
+          The three lines are a <b style="color:#f0f4ff">range of futures</b>, not a promise. <b style="color:#38b2ac">Conservative</b> assumes weaker markets, <b style="color:#63b3ed">Base</b> is the most likely path, and <b style="color:#9f7aea">Optimistic</b> assumes strong returns. Your real result will land somewhere in between.
         </div>
         <canvas id="wealth-chart" height="185"></canvas>
       </div>
@@ -669,18 +717,33 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
             <div style="font-size:10px;color:#8899b0">at 10 years</div>
           </div>
         </div>
+        <!-- Visible guardrail (inline, always on with the projection) -->
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:11px 13px;border-radius:11px;background:rgba(246,173,85,0.07);border:1px solid rgba(246,173,85,0.22);margin-bottom:16px">
+          <span style="font-size:15px;line-height:1.3">&#9888;&#65039;</span>
+          <div style="font-size:10.5px;color:#d4b483;line-height:1.5">These projections use <b>synthetic data</b> and historical average returns. Not financial advice &mdash; FinTwin can&rsquo;t account for tax changes, market shocks or circumstances it doesn&rsquo;t know.</div>
+        </div>
         <canvas id="invest-chart" height="180"></canvas>
-        <div style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;margin-bottom:9px">
+          <div style="font-size:8px;color:#4a5568;letter-spacing:0.6px;text-transform:uppercase;font-weight:700">3 market scenarios</div>
+          <button onclick="toggleTip('tip-scenarios')" style="display:flex;align-items:center;gap:4px;font-size:9px;font-weight:700;color:#63b3ed;background:rgba(99,179,237,0.08);border:1px solid rgba(99,179,237,0.2);border-radius:20px;padding:3px 9px;cursor:pointer;font-family:'Inter',sans-serif">&#8505;&#65039; What do these mean?</button>
+        </div>
+        <div id="tip-scenarios" style="display:none;font-size:11px;color:#a9bcd0;line-height:1.6;padding:12px 14px;border-radius:11px;background:rgba(99,179,237,0.06);border:1px solid rgba(99,179,237,0.16);margin-bottom:11px">
+          We run thousands of randomized market simulations (a <b style="color:#f0f4ff">Monte Carlo</b> model) and sort the outcomes:<br>
+          &bull; <b style="color:#fc8181">Bear (10%)</b> &mdash; a bad run of markets. Only 1 in 10 outcomes were worse.<br>
+          &bull; <b style="color:#63b3ed">Base (50%)</b> &mdash; the most likely, middle-of-the-road outcome.<br>
+          &bull; <b style="color:#68d391">Bull (90%)</b> &mdash; markets do well. Only 1 in 10 outcomes were better.
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
           <div style="padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);text-align:center">
-            <div style="font-size:8px;color:#4a5568;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px">Bear (10%)</div>
+            <div style="font-size:8px;color:#4a5568;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px">Bear &middot; bad market</div>
             <div id="inv-bear" style="font-size:15px;font-weight:800;color:#fc8181">£172k</div>
           </div>
           <div style="padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);text-align:center">
-            <div style="font-size:8px;color:#4a5568;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px">Base (50%)</div>
+            <div style="font-size:8px;color:#4a5568;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px">Base &middot; most likely</div>
             <div id="inv-base" style="font-size:15px;font-weight:800;color:#63b3ed">£312k</div>
           </div>
           <div style="padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);text-align:center">
-            <div style="font-size:8px;color:#4a5568;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px">Bull (90%)</div>
+            <div style="font-size:8px;color:#4a5568;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px">Bull &middot; good market</div>
             <div id="inv-bull" style="font-size:15px;font-weight:800;color:#68d391">£515k</div>
           </div>
         </div>
@@ -706,8 +769,14 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
           </div>
           <input id="bank-user" placeholder="Username" autocomplete="off" style="width:100%;padding:12px 14px;border-radius:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);color:#f0f4ff;font-size:13px;font-family:'Inter',sans-serif;margin-bottom:10px;box-sizing:border-box">
           <input id="bank-pass" type="password" placeholder="Password" autocomplete="off" style="width:100%;padding:12px 14px;border-radius:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);color:#f0f4ff;font-size:13px;font-family:'Inter',sans-serif;margin-bottom:14px;box-sizing:border-box">
+          <!-- Trust bullets -->
+          <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:16px">
+            <div style="display:flex;align-items:center;gap:9px;font-size:11px;color:#a9bcd0"><span style="font-size:14px">&#128272;</span><span><b style="color:#68d391">Read-only</b> &mdash; FinTwin can see balances but can never move your money.</span></div>
+            <div style="display:flex;align-items:center;gap:9px;font-size:11px;color:#a9bcd0"><span style="font-size:14px">&#127974;</span><span><b style="color:#63b3ed">FCA-regulated</b> Open Banking connection, encrypted end to end.</span></div>
+            <div style="display:flex;align-items:center;gap:9px;font-size:11px;color:#a9bcd0"><span style="font-size:14px">&#128465;&#65039;</span><span><b style="color:#f0f4ff">Disconnect anytime</b> &mdash; your data is deleted immediately.</span></div>
+          </div>
           <button onclick="bankConnect()" style="width:100%;padding:13px;border-radius:11px;border:none;background:linear-gradient(135deg,#63b3ed,#9f7aea);color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif">&#128274; Connect securely</button>
-          <div style="font-size:9px;color:#4a5568;text-align:center;margin-top:9px">Demo only &mdash; any credentials work</div>
+          <div style="font-size:9px;color:#4a5568;text-align:center;margin-top:9px">Prototype demo &mdash; synthetic data, any credentials work. No real bank is contacted.</div>
         </div>
 
         <!-- Accounts (revealed once connected) -->
@@ -813,14 +882,57 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
           <input type="range" id="lv-ret" min="35" max="75" step="1" style="width:100%;accent-color:#9f7aea;cursor:pointer" oninput="lvUpdate()">
           <div style="display:flex;justify-content:space-between;font-size:9px;color:#4a5568;margin-top:5px"><span>35</span><span>75 yrs</span></div>
         </div>
+        <!-- Irregular income toggle (triggers the low-confidence state) -->
+        <label style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-radius:11px;background:rgba(246,173,85,0.06);border:1px solid rgba(246,173,85,0.18);cursor:pointer">
+          <input type="checkbox" id="lv-irregular" onchange="lvUpdate()" style="width:17px;height:17px;accent-color:#f6ad55;cursor:pointer;flex-shrink:0">
+          <span style="font-size:11.5px;color:#d4b483;line-height:1.4">My income is <b>irregular</b> (freelance / commission / variable hours)</span>
+        </label>
         <div><button onclick="lvReset()" style="font-size:12px;font-weight:600;color:#8899b0;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:9px;padding:8px 14px;cursor:pointer;font-family:'Inter',sans-serif">&#10005; Reset to my real situation</button></div>
       </div>
 
       <!-- Monthly surplus chip -->
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-radius:13px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);margin-bottom:16px">
+      <div id="lv-surplus-chip" style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-radius:13px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);margin-bottom:16px">
         <span style="font-size:11px;font-weight:700;color:#8899b0;text-transform:uppercase;letter-spacing:0.6px">Saved &amp; invested / month</span>
         <span id="lv-surplus" style="font-size:18px;font-weight:800;color:#68d391">&#8212;</span>
       </div>
+
+      <!-- ===== LOW-CONFIDENCE / CAN'T-DETERMINE STATE (screen 6) ===== -->
+      <div id="lv-error" style="display:none">
+        <div style="border-radius:16px;padding:18px;margin-bottom:16px;background:linear-gradient(135deg,rgba(246,173,85,0.1),rgba(252,129,129,0.05));border:1px solid rgba(246,173,85,0.3)">
+          <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px">
+            <div style="width:38px;height:38px;border-radius:11px;background:rgba(246,173,85,0.16);border:1px solid rgba(246,173,85,0.3);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0">&#9888;&#65039;</div>
+            <div>
+              <div style="font-size:14px;font-weight:800;color:#f0f4ff;line-height:1.3">FinTwin couldn&rsquo;t build a confident projection</div>
+              <div style="font-size:11.5px;color:#d4b483;margin-top:3px;line-height:1.45">Your income pattern shows <b>high month-to-month variability</b>, so a single number would be misleading.</div>
+            </div>
+          </div>
+          <div style="border-radius:11px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);padding:13px;margin-bottom:14px">
+            <div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#8899b0;margin-bottom:9px">What we&rsquo;d need to improve accuracy</div>
+            <div style="display:flex;flex-direction:column;gap:7px;font-size:11.5px;color:#a9bcd0;line-height:1.4">
+              <div style="display:flex;gap:8px"><span style="color:#f6ad55">&bull;</span><span>3&ndash;6 months of bank transactions to learn your real income floor</span></div>
+              <div style="display:flex;gap:8px"><span style="color:#f6ad55">&bull;</span><span>Your typical lowest-earning month (your safety baseline)</span></div>
+              <div style="display:flex;gap:8px"><span style="color:#f6ad55">&bull;</span><span>Whether you hold an emergency buffer for lean months</span></div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:#8899b0;line-height:1.5">In the meantime, here&rsquo;s a deliberately <b style="color:#f0f4ff">conservative estimate</b> with wide bands &mdash; treat it as a floor, not a forecast.</div>
+        </div>
+        <!-- Conservative wide-band estimate -->
+        <div class="glass" style="padding:16px;margin-bottom:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4a5568">Conservative range &mdash; 25 yrs</div>
+            <div style="font-size:9px;color:#f6ad55;font-weight:700">Low confidence</div>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+            <div id="lv-err-low" style="font-size:22px;font-weight:900;color:#fc8181;letter-spacing:-0.8px">&#8212;</div>
+            <span style="font-size:13px;color:#4a5568">to</span>
+            <div id="lv-err-high" style="font-size:22px;font-weight:900;color:#68d391;letter-spacing:-0.8px">&#8212;</div>
+          </div>
+          <div style="position:relative;height:170px"><canvas id="lv-err-chart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- ===== NORMAL OUTPUT (hidden in low-confidence state) ===== -->
+      <div id="lv-normal">
 
       <!-- HERO -->
       <div style="position:relative;overflow:hidden;border-radius:16px;padding:18px;margin-bottom:16px;background:linear-gradient(135deg,rgba(104,211,145,0.08),rgba(99,179,237,0.05));border:1px solid rgba(104,211,145,0.18)">
@@ -863,6 +975,8 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
           <div id="lv-k-sr-d" style="font-size:10px;font-weight:600;margin-top:3px;color:#4a5568">of income</div>
         </div>
       </div>
+
+      </div><!-- /lv-normal -->
     </div>
 
     <!-- ===== MON PLAN — Comparateur interactif ===== -->
@@ -1953,6 +2067,7 @@ function initDashboard(){
   renderHealthMini();
   renderHealthGrid();
   renderBaseEditor();
+  renderMemory();
   initCharts();
   updateHero(null);
   initNavState();
@@ -2206,6 +2321,7 @@ function planDrawChart(years,rate,curMonthly,reqMonthly,target,onTrack){
 
 /* ===== LIVE SIMULATOR ===== */
 let liveChart=null;
+let lvErrChart=null;
 const LV_MULTS=[0.78,1.0,1.32];
 const LV_RISK_LBL=['Conservative','Balanced','Aggressive'];
 let lvBase={income:0,exp:0,riskIdx:1,retire:55};
@@ -2240,6 +2356,7 @@ function lvReset(){
   g('lv-exp').value=lvState.exp;
   g('lv-risk').value=lvState.riskIdx;
   g('lv-ret').value=lvState.retire;
+  if(g('lv-irregular')) g('lv-irregular').checked=false;
   lvUpdate();
 }
 
@@ -2277,6 +2394,13 @@ function lvDraw(redraw){
   g('lv-income-d').style.color=incD===0?'#4a5568':(incD>0?'#68d391':'#fc8181');
   g('lv-exp-d').textContent=expD===0?'baseline':(expD>0?'+':'−')+fk(Math.abs(expD))+'/mo vs now';
   g('lv-exp-d').style.color=expD===0?'#4a5568':(expD>0?'#fc8181':'#68d391');
+  // Low-confidence branch: irregular income → can't build a confident single projection
+  const irregular=g('lv-irregular')&&g('lv-irregular').checked;
+  const normalEl=g('lv-normal'), errEl=g('lv-error'), chip=g('lv-surplus-chip');
+  if(normalEl) normalEl.style.display=irregular?'none':'block';
+  if(errEl) errEl.style.display=irregular?'block':'none';
+  if(chip) chip.style.display=irregular?'none':'flex';
+  if(irregular){ lvDrawError(); return; }
   const surplus=Math.max(0,lvState.income-lvState.exp);
   g('lv-surplus').textContent=fk(surplus)+'/mo';
   g('lv-surplus').style.color=surplus>0?'#68d391':'#fc8181';
@@ -2324,6 +2448,38 @@ function lvDrawChart(baseSeries,newSeries,redraw){
     data:{labels:baseSeries.map((_,i)=>'Y'+i),datasets:[
       {label:'Current path',data:baseSeries,borderColor:'#8899b0',borderWidth:2,borderDash:[5,4],fill:false,tension:0.35,pointRadius:0},
       {label:'With changes',data:newSeries,borderColor:'#68d391',borderWidth:2.5,backgroundColor:grad,fill:true,tension:0.35,pointRadius:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:true,position:'top',labels:{color:'#8899b0',font:{size:10},boxWidth:16,padding:10}},
+        tooltip:{callbacks:{title:items=>'Year '+items[0].dataIndex,label:c=>c.dataset.label+': '+fk(c.parsed.y)}}},
+      scales:{
+        x:{ticks:{color:'#4a5568',font:{size:9},maxTicksLimit:6,callback:(v,i)=>i%5===0?'Y'+i:''},grid:{display:false},border:{display:false}},
+        y:{ticks:{color:'#4a5568',font:{size:9},callback:v=>fk(v),maxTicksLimit:5},grid:{color:'rgba(255,255,255,0.04)'},border:{display:false}}
+      }}
+  });
+}
+
+/* ===== LOW-CONFIDENCE WIDE-BAND ESTIMATE ===== */
+function lvDrawError(){
+  // Conservative floor: 60% of stated income at conservative returns.
+  // Optimistic edge: stated income at balanced returns. The gap = our uncertainty.
+  const lowSeries=lvSeries(Math.round(lvState.income*0.6),lvState.exp,0);
+  const highSeries=lvSeries(lvState.income,lvState.exp,1);
+  const lowEl=document.getElementById('lv-err-low'), highEl=document.getElementById('lv-err-high');
+  if(lowEl) lowEl.textContent=fk(lowSeries[25]);
+  if(highEl) highEl.textContent=fk(highSeries[25]);
+  const cv=document.getElementById('lv-err-chart');
+  if(!cv||typeof Chart==='undefined')return;
+  if(lvErrChart){ lvErrChart.destroy(); lvErrChart=null; }
+  const ctx=cv.getContext('2d');
+  const band=ctx.createLinearGradient(0,0,0,150);
+  band.addColorStop(0,'rgba(246,173,85,0.22)');
+  band.addColorStop(1,'rgba(246,173,85,0.02)');
+  lvErrChart=new Chart(ctx,{
+    type:'line',
+    data:{labels:lowSeries.map((_,i)=>'Y'+i),datasets:[
+      {label:'Optimistic edge',data:highSeries,borderColor:'#68d391',borderWidth:2,borderDash:[4,3],fill:false,tension:0.35,pointRadius:0},
+      {label:'Conservative floor',data:lowSeries,borderColor:'#fc8181',borderWidth:2,backgroundColor:band,fill:'-1',tension:0.35,pointRadius:0}
     ]},
     options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
       plugins:{legend:{display:true,position:'top',labels:{color:'#8899b0',font:{size:10},boxWidth:16,padding:10}},
@@ -2615,7 +2771,41 @@ function launchDashboard(){
     app.style.display='flex';
     initDashboard();
     app.style.opacity='1';
+    showGuardrail();
   },500);
+}
+
+/* ===== GUARDRAIL ===== */
+function showGuardrail(){
+  const m=document.getElementById('guardrail-modal');
+  if(m) m.style.display='flex';
+}
+function acceptGuardrail(){
+  const m=document.getElementById('guardrail-modal');
+  if(m){ m.style.transition='opacity 0.3s'; m.style.opacity='0'; setTimeout(()=>{m.style.display='none';m.style.opacity='1';},300); }
+}
+
+/* ===== PLAIN-LANGUAGE TOOLTIPS ===== */
+function toggleTip(id){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.style.display=el.style.display==='none'?'block':'none';
+}
+
+/* ===== MEMORY (persists across visits, so it genuinely compounds) ===== */
+function renderMemory(){
+  const KEY='ft_first_seen';
+  let first=0;
+  try{ first=parseInt(localStorage.getItem(KEY)||'0'); }catch(e){}
+  const now=Date.now();
+  if(!first){ first=now; try{ localStorage.setItem(KEY,String(first)); }catch(e){} }
+  const days=Math.max(1,Math.floor((now-first)/86400000)+1);
+  const daysEl=document.getElementById('mem-days');
+  if(daysEl) daysEl.textContent=days+(days===1?' day':' days');
+  // Accuracy starts at 62% and climbs as the twin sees more days of data (capped 95%)
+  const acc=Math.min(95,Math.round(62+Math.min(days-1,30)*1.1));
+  const bar=document.getElementById('mem-bar'); if(bar) bar.style.width=acc+'%';
+  const accEl=document.getElementById('mem-acc'); if(accEl) accEl.textContent=acc+'% accuracy';
 }
 </script>
 
