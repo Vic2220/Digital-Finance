@@ -460,7 +460,10 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
               <div id="pf-location" style="font-size:11px;color:#8899b0;margin-top:2px">📍 —</div>
             </div>
           </div>
-          <div id="pf-score-badge" style="padding:7px 14px;border-radius:20px;background:rgba(104,211,145,0.1);border:1px solid rgba(104,211,145,0.2);font-size:12px;font-weight:700;color:#68d391">— pts</div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+            <div id="pf-score-badge" style="padding:7px 14px;border-radius:20px;background:rgba(104,211,145,0.1);border:1px solid rgba(104,211,145,0.2);font-size:12px;font-weight:700;color:#68d391">— pts</div>
+            <button onclick="openIntro('overview')" style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#63b3ed;background:rgba(99,179,237,0.12);border:1px solid rgba(99,179,237,0.3);border-radius:20px;padding:5px 11px;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap">&#9432; How it works</button>
+          </div>
         </div>
 
         <!-- Memory / learning indicator -->
@@ -2964,7 +2967,10 @@ function showGuardrail(){
 }
 function acceptGuardrail(){
   const m=document.getElementById('guardrail-modal');
-  if(m){ m.style.transition='opacity 0.3s'; m.style.opacity='0'; setTimeout(()=>{m.style.display='none';m.style.opacity='1';},300); }
+  if(m){ m.style.transition='opacity 0.3s'; m.style.opacity='0'; setTimeout(()=>{m.style.display='none';m.style.opacity='1';
+    // Now that the guardrail is dismissed, show the Home page guide (first use only)
+    setTimeout(()=>maybeShowIntro('overview'),350);
+  },300); }
 }
 
 /* ===== PLAIN-LANGUAGE TOOLTIPS ===== */
@@ -2976,6 +2982,16 @@ function toggleTip(id){
 
 /* ===== FIRST-USE TAB INTROS (coach marks) ===== */
 const TAB_INTROS={
+  overview:{
+    icon:'&#127968;', color:'#63b3ed',
+    title:'Your Home dashboard',
+    what:'Your <b style="color:#f0f4ff">financial snapshot</b> at a glance — what you&rsquo;re worth today, where it&rsquo;s heading, and how healthy your money is.',
+    steps:[
+      {n:'1',t:'Net worth & projections',d:'Your figure today, plus where it lands in 5, 10 and 25 years on your current path.'},
+      {n:'2',t:'Your trajectory',d:'Three lines show a <b>range of futures</b> (conservative → optimistic) — tap the ⓘ to see what they mean.'},
+      {n:'3',t:'Explore the tabs',d:'Use the bottom bar: <b>Scenarios</b>, <b>Live</b>, <b>My Plan</b> and <b>Insights</b>. Each has its own quick guide.'}
+    ]
+  },
   scenarios:{
     icon:'&#129518;', color:'#68d391',
     title:'Scenario Simulator',
@@ -3026,6 +3042,9 @@ function markIntroSeen(id){
 }
 function maybeShowIntro(id){
   if(!TAB_INTROS[id] || introSeen(id)) return;
+  // Don't stack on top of the guardrail modal — it will be shown after acceptance
+  const gm=document.getElementById('guardrail-modal');
+  if(gm && gm.style.display==='flex') return;
   openIntro(id);
 }
 let _introCurrent=null;
