@@ -27,6 +27,32 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
 #statusbar .sb-time{font-size:13px;font-weight:700;letter-spacing:0.4px}
 #statusbar .sb-icons{display:flex;align-items:center;gap:6px}
 #statusbar svg{display:block}
+
+/* ===== SPLASH / LAUNCH SCREEN ===== */
+#splash{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;height:100vh;z-index:1800;background:radial-gradient(ellipse 90% 60% at 50% 42%,rgba(99,179,237,0.12),transparent 60%),#04060a;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#splash.hide{opacity:0;pointer-events:none;transition:opacity 0.55s ease}
+.splash-stage{position:relative;width:120px;height:120px;display:flex;align-items:center;justify-content:center}
+.splash-ring{position:absolute;inset:0;border-radius:32px;border:2px solid rgba(99,179,237,0.5);animation:splashRing 1.8s ease-out infinite}
+.splash-ring.r2{animation-delay:0.9s}
+@keyframes splashRing{0%{transform:scale(0.7);opacity:0.8}100%{transform:scale(1.5);opacity:0}}
+.splash-logo{width:92px;height:92px;border-radius:26px;background:linear-gradient(135deg,#63b3ed,#9f7aea);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;color:#fff;box-shadow:0 0 60px rgba(99,179,237,0.45),0 0 110px rgba(159,122,234,0.2);animation:splashPop 0.9s cubic-bezier(0.22,1,0.36,1) both,splashFloat 3s ease-in-out 0.9s infinite}
+@keyframes splashPop{0%{transform:scale(0.4) rotate(-12deg);opacity:0}60%{transform:scale(1.08) rotate(2deg);opacity:1}100%{transform:scale(1) rotate(0)}}
+@keyframes splashFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.splash-name{margin-top:26px;font-size:26px;font-weight:900;letter-spacing:-0.6px;opacity:0;animation:splashFade 0.6s ease 0.55s forwards}
+.splash-tag{margin-top:7px;font-size:12.5px;color:#8899b0;letter-spacing:0.3px;opacity:0;animation:splashFade 0.6s ease 0.85s forwards}
+.splash-dots{position:absolute;bottom:64px;display:flex;gap:7px;opacity:0;animation:splashFade 0.5s ease 1.1s forwards}
+.splash-dots span{width:7px;height:7px;border-radius:50%;background:#63b3ed;animation:splashDot 1.2s ease-in-out infinite}
+.splash-dots span:nth-child(2){animation-delay:0.2s}
+.splash-dots span:nth-child(3){animation-delay:0.4s}
+@keyframes splashDot{0%,100%{opacity:0.25;transform:scale(0.8)}50%{opacity:1;transform:scale(1.15)}}
+@keyframes splashFade{to{opacity:1}}
+
+/* Country select (onboarding) */
+.ob-selwrap{position:relative;margin-bottom:8px}
+.ob-sel{width:100%;padding:16px 46px 16px 18px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);color:#f0f4ff;font-size:18px;font-weight:600;font-family:'Inter',sans-serif;appearance:none;-webkit-appearance:none;cursor:pointer;outline:none;transition:border-color 0.2s}
+.ob-sel:focus{border-color:#63b3ed}
+.ob-selwrap::after{content:'';position:absolute;right:18px;top:50%;width:10px;height:10px;border-right:2px solid #8899b0;border-bottom:2px solid #8899b0;transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.ob-sel option{background:#0d1420;color:#f0f4ff}
 #sidebar{width:220px;min-width:220px;height:100vh;position:sticky;top:0;display:flex;flex-direction:column;padding:20px 12px;border-right:1px solid var(--br);background:rgba(8,12,20,0.8);backdrop-filter:blur(20px);overflow-y:auto}
 #main{flex:1;overflow-y:auto;min-width:0}
 
@@ -229,6 +255,18 @@ html,body{background:#04060a;color:var(--tx);font-family:'Inter',-apple-system,s
     <!-- battery -->
     <svg width="26" height="13" viewBox="0 0 26 13" fill="none"><rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="#f0f4ff" stroke-opacity="0.45"/><rect x="2" y="2" width="17" height="9" rx="2" fill="#f0f4ff"/><rect x="24" y="4" width="1.5" height="5" rx="0.75" fill="#f0f4ff" fill-opacity="0.45"/></svg>
   </div>
+</div>
+
+<!-- ===== SPLASH / LAUNCH SCREEN ===== -->
+<div id="splash">
+  <div class="splash-stage">
+    <div class="splash-ring"></div>
+    <div class="splash-ring r2"></div>
+    <div class="splash-logo">FT</div>
+  </div>
+  <div class="splash-name grad-bl">FinTwin</div>
+  <div class="splash-tag">Your AI financial twin</div>
+  <div class="splash-dots"><span></span><span></span><span></span></div>
 </div>
 
 <!-- ===== ONBOARDING ===== -->
@@ -2177,6 +2215,11 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   setClock();
   setInterval(setClock,20000);
+  // Launch splash → reveal welcome
+  setTimeout(()=>{
+    const s=document.getElementById('splash');
+    if(s){ s.classList.add('hide'); setTimeout(()=>{s.style.display='none';},600); }
+  },2300);
 });
 
 /* ===== INSIGHTS & WEALTH — bank login + base-conditions editor ===== */
@@ -2591,10 +2634,31 @@ function lvDrawError(){
 }
 
 /* ===== ONBOARDING ===== */
+// Country list for the location step (flag · name · default currency)
+const COUNTRIES=[
+  {n:'United Kingdom',f:'🇬🇧',cur:'£'},
+  {n:'France',f:'🇫🇷',cur:'€'},
+  {n:'Germany',f:'🇩🇪',cur:'€'},
+  {n:'Spain',f:'🇪🇸',cur:'€'},
+  {n:'Italy',f:'🇮🇹',cur:'€'},
+  {n:'Portugal',f:'🇵🇹',cur:'€'},
+  {n:'Netherlands',f:'🇳🇱',cur:'€'},
+  {n:'Belgium',f:'🇧🇪',cur:'€'},
+  {n:'Ireland',f:'🇮🇪',cur:'€'},
+  {n:'Switzerland',f:'🇨🇭',cur:'€'},
+  {n:'United States',f:'🇺🇸',cur:'$'},
+  {n:'Canada',f:'🇨🇦',cur:'$'},
+  {n:'Australia',f:'🇦🇺',cur:'$'},
+  {n:'United Arab Emirates',f:'🇦🇪',cur:'$'},
+  {n:'Singapore',f:'🇸🇬',cur:'$'},
+  {n:'Hong Kong',f:'🇭🇰',cur:'$'},
+  {n:'Japan',f:'🇯🇵',cur:'$'},
+  {n:'Other',f:'🌍',cur:'£'}
+];
 const STEPS=[
   {id:'name',    lbl:'Welcome',            q:"What's your first name?",                                sub:"We'll personalize your FinTwin experience.",                                type:'text',     ph:'e.g. Alex',        key:'name',       opt:true},
   {id:'age',     lbl:'Your profile',       q:"How old are you?",                                       sub:"Your age shapes your trajectory and retirement date.",                       type:'number',   ph:'30',               key:'age',        unit:'yrs',min:18,max:75},
-  {id:'city',    lbl:'Location',           q:"Where do you currently live?",                           sub:"Your location affects your taxes and cost of living.",                       type:'text',     ph:'e.g. Paris, France',key:'city',       opt:true},
+  {id:'city',    lbl:'Location',           q:"Which country do you live in?",                          sub:"Your location shapes your taxes, currency and cost of living.",               type:'select',   ph:'Select your country',key:'city',     opt:false},
   {id:'income',  lbl:'Income',             q:"What's your gross annual income?",                       sub:"Salary before taxes + any regular side income.",                             type:'currency', ph:'60,000',           key:'income'},
   {id:'expenses',lbl:'Expenses',           q:"What's your total monthly budget?",                      sub:"Rent, food, subscriptions, transport — everything included.",                type:'currency', ph:'2,500',            key:'expenses'},
   {id:'savings', lbl:'Savings',            q:"How much do you have in savings / cash?",                sub:"Bank accounts, savings accounts, emergency fund.",                           type:'currency', ph:'15,000',           key:'savings'},
@@ -2646,6 +2710,14 @@ function showObStep(i){
       <input class="ob-inp" id="ob-inp" type="text" inputmode="numeric"
         placeholder="${step.ph}" autocomplete="off" value="${obData[step.key]||''}">
     </div>`;
+  } else if(step.type==='select'){
+    const cur=obData[step.key]||'';
+    inp=`<div class="ob-selwrap">
+      <select class="ob-sel" id="ob-inp" onchange="obCountryChange(this.value)">
+        <option value="" ${cur===''?'selected':''} disabled>${step.ph}</option>
+        ${COUNTRIES.map(c=>`<option value="${c.n}" ${cur===c.n?'selected':''}>${c.f}  ${c.n}</option>`).join('')}
+      </select>
+    </div>`;
   } else if(step.type==='choice'){
     inp=`<div class="ob-choices">${step.choices.map(c=>`
       <button class="ob-ch" style="${obData[step.key]===c.v?'border-color:'+c.c+'40;background:'+c.bg:''}"
@@ -2677,6 +2749,12 @@ function obSetCurr(c,btn){
   document.querySelectorAll('#ob-cs').forEach(el=>el.textContent=c);
 }
 
+function obCountryChange(val){
+  obData.city=val;
+  const c=COUNTRIES.find(x=>x.n===val);
+  if(c) CURRENCY=c.cur; // pre-set their currency for the income/savings steps
+}
+
 function obChoose(val,key,color,bg,container){
   obData[key]=val;
   container.querySelectorAll('.ob-ch').forEach(btn=>{
@@ -2702,7 +2780,12 @@ function obNext(){
     const el=document.getElementById('ob-inp');
     const val=el?el.value.trim():'';
     if(!val&&!step.opt){
-      if(el){el.closest('.ob-iw').style.borderBottomColor='#fc8181';setTimeout(()=>{el.closest('.ob-iw').style.borderBottomColor='';},1000);}
+      const wrap=el&&(el.closest('.ob-iw')||el.closest('.ob-selwrap'));
+      if(wrap){
+        const prop=el.closest('.ob-selwrap')?'borderColor':'borderBottomColor';
+        const tgt=el.closest('.ob-selwrap')?el:wrap;
+        tgt.style[prop]='#fc8181';setTimeout(()=>{tgt.style[prop]='';},1000);
+      }
       return;
     }
     if(val) obData[step.key]=val;
