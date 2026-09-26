@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Glow Mirror">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>Glow Mirror</title>
+<style>
+  :root {
+    --light: #ffffff;
+    --brightness: 1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    overscroll-behavior: none;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+  }
+  .app {
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- Top half : the light / flash ---------- */
+  .light {
+    position: relative;
+    flex: 1 1 50%;
+    background: var(--light);
+    filter: brightness(var(--brightness));
+    transition: background .25s ease;
+    padding-top: env(safe-area-inset-top);
+  }
+  .controls {
+    position: absolute;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(0,0,0,.06);
+    transition: opacity .3s ease;
+  }
+  .controls.hidden { opacity: 0; pointer-events: none; }
+  .swatch {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,.15);
+    cursor: pointer;
+  }
+  .swatch.active { border-color: #111; transform: scale(1.12); }
+  .icon-btn {
+    width: 32px; height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0,0,0,.08);
+    font-size: 16px;
+    line-height: 32px;
+    color: #111;
+    cursor: pointer;
+  }
+
+  /* ---------- Bottom half : the mirror ---------- */
+  .mirror {
+    position: relative;
+    flex: 1 1 50%;
+    background: #000;
+    overflow: hidden;
+  }
+  video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1) scale(var(--zoom, 1));   /* mirror effect */
+    transform-origin: center;
+  }
+  .start {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 24px;
+    text-align: center;
+    color: #fff;
+    background: linear-gradient(160deg, #2a1a24, #0d0a0c);
+  }
+  .start h1 { font-size: 22px; font-weight: 600; }
+  .start p { font-size: 14px; opacity: .7; max-width: 280px; line-height: 1.4; }
+  .start button {
+    border: none;
+    border-radius: 999px;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111;
+    background: #fff;
+    cursor: pointer;
+  }
+  .start .error { color: #ff9a9a; opacity: 1; }
+  .zoom {
+    position: absolute;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    display: flex;
+    gap: 6px;
+  }
+  .zoom button {
+    min-width: 40px; height: 32px;
+    padding: 0 10px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(0,0,0,.45);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .zoom button.active { background: #fff; color: #111; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Top: light panel -->
+  <section class="light" id="light">
+    <div class="controls" id="controls">
+      <div class="swatch active" data-color="#ffffff" style="background:#ffffff" title="Blanc"></div>
+      <div class="swatch" data-color="#fff1dc" style="background:#fff1dc" title="Chaud"></div>
+      <div class="swatch" data-color="#eaf3ff" style="background:#eaf3ff" title="Froid"></div>
+      <div class="swatch" data-color="#ffe3ea" style="background:#ffe3ea" title="Rosé"></div>
+      <button class="icon-btn" id="dimBtn" title="Luminosité">☀︎</button>
+    </div>
+  </section>
+
+  <!-- Bottom: front camera mirror -->
+  <section class="mirror">
+    <video id="video" autoplay playsinline muted></video>
+    <div class="start" id="start">
+      <h1>Glow Mirror ✨</h1>
+      <p>Ton miroir de maquillage : la moitié haute s'allume comme un flash, la moitié basse te montre ton visage.</p>
+      <button id="startBtn">Activer le miroir</button>
+      <p class="error hidden" id="error"></p>
+    </div>
+    <div class="zoom hidden" id="zoom">
+      <button data-zoom="1" class="active">1×</button>
+      <button data-zoom="1.5">1.5×</button>
+      <button data-zoom="2">2×</button>
+    </div>
+  </section>
+</div>
+
+<script>
+  const video = document.getElementById('video');
+  const start = document.getElementById('start');
+  const startBtn = document.getElementById('startBtn');
+  const errorEl = document.getElementById('error');
+  const light = document.getElementById('light');
+  const controls = document.getElementById('controls');
+  const zoom = document.getElementById('zoom');
+  const root = document.documentElement;
+
+  // ---- Camera ----
+  async function startCamera() {
+    errorEl.classList.add('hidden');
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      showError("Ton navigateur ne donne pas accès à la caméra. Ouvre la page dans Safari (en HTTPS).");
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user', width: { ideal: 1920 }, height: { ideal: 1080 } },
+        audio: false
+      });
+      video.srcObject = stream;
+      await video.play();
+      start.classList.add('hidden');
+      zoom.classList.remove('hidden');
+      keepAwake();
+      scheduleHideControls();
+    } catch (e) {
+      showError(e.name === 'NotAllowedError'
+        ? "Accès à la caméra refusé. Autorise-le dans Réglages › Safari › Caméra, puis réessaie."
+        : "Impossible d'ouvrir la caméra (" + e.name + ").");
+    }
+  }
+  function showError(msg) {
+    errorEl.textContent = msg;
+    errorEl.classList.remove('hidden');
+  }
+  startBtn.addEventListener('click', startCamera);
+
+  // ---- Keep the screen on (so the "flash" doesn't turn off) ----
+  let wakeLock = null;
+  async function keepAwake() {
+    try {
+      if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen');
+    } catch (_) { /* not supported / denied: ignore */ }
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && video.srcObject) keepAwake();
+  });
+
+  // ---- Light color ----
+  document.querySelectorAll('.swatch').forEach(s => {
+    s.addEventListener('click', e => {
+      e.stopPropagation();
+      document.querySelectorAll('.swatch').forEach(x => x.classList.remove('active'));
+      s.classList.add('active');
+      root.style.setProperty('--light', s.dataset.color);
+      scheduleHideControls();
+    });
+  });
+
+  // ---- Brightness (100% → 85% → 70% → back to 100%) ----
+  const levels = [1, .85, .7];
+  let level = 0;
+  document.getElementById('dimBtn').addEventListener('click', e => {
+    e.stopPropagation();
+    level = (level + 1) % levels.length;
+    root.style.setProperty('--brightness', levels[level]);
+    scheduleHideControls();
+  });
+
+  // ---- Zoom ----
+  zoom.querySelectorAll('button').forEach(b => {
+    b.addEventListener('click', () => {
+      zoom.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      root.style.setProperty('--zoom', b.dataset.zoom);
+    });
+  });
+
+  // ---- Auto-hide controls for a pure white light, tap the light to show them ----
+  let hideTimer;
+  function scheduleHideControls() {
+    controls.classList.remove('hidden');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => controls.classList.add('hidden'), 3000);
+  }
+  light.addEventListener('click', scheduleHideControls);
+</script>
+</body>
+</html>
